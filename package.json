@@ -1,7 +1,7 @@
 {
   "name": "edumind-privee",
   "productName": "EDUMIND Privée",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "EDUMIND Privée — Système de Gestion des Établissements Privés (Primaire, CEM, Lycée) - Algérie",
   "main": "main.js",
   "scripts": {

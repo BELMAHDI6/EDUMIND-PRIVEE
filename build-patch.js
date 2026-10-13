@@ -28,7 +28,7 @@ function incrementPatch(versionStr) {
 
 async function main() {
   console.log('\n========================================================');
-  console.log('   EDUMIND Scolaire — Générateur de Mise à Jour Cloud   ');
+  console.log('    EDUMIND Privée — Générateur de Mise à Jour Cloud    ');
   console.log('                (Cloud Auto-Patch Builder)              ');
   console.log('========================================================\n');
 
@@ -59,7 +59,7 @@ async function main() {
   console.log(`✅ 1. package.json mis à jour vers v${newVer}`);
 
   // 2. Prepare staging folder
-  const tempDir = path.join(os.tmpdir(), `edumind_scolaire_patch_${Date.now()}`);
+  const tempDir = path.join(os.tmpdir(), `edumind_privee_patch_${Date.now()}`);
   fs.mkdirSync(tempDir, { recursive: true });
 
   const filesToInclude = [
@@ -87,7 +87,7 @@ async function main() {
 
   // 3. Create ZIP archive in updates/
   if (!fs.existsSync(UPDATES_DIR)) fs.mkdirSync(UPDATES_DIR, { recursive: true });
-  const zipFileName = `edumind_scolaire_patch_v${newVer}.zip`;
+  const zipFileName = `edumind_privee_patch_v${newVer}.zip`;
   const zipPath = path.join(UPDATES_DIR, zipFileName);
 
   try {
@@ -116,7 +116,7 @@ async function main() {
   // 4. Update updates/version.json
   const versionJsonPath = path.join(UPDATES_DIR, 'version.json');
   const releaseDate = new Date().toISOString().split('T')[0];
-  const repoName = 'BELMAHDI6/EDUMIND-SCOLAIRE';
+  const repoName = 'BELMAHDI6/EDUMIND-PRIVEE';
   const zipUrl = `https://raw.githubusercontent.com/${repoName}/main/updates/${zipFileName}`;
 
   const manifest = {

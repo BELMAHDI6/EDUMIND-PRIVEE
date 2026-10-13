@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
-  "releaseDate": "2026-10-10",
-  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-SCOLAIRE/main/updates/edumind_scolaire_patch_v1.0.1.zip",
-  "notes": "عزل نظام التراخيص بالكامل وتخصيص مفاتيح مستقلة لـ EDUMIND Scolaire",
-  "notes_ar": "عزل نظام التراخيص بالكامل وتخصيص مفاتيح مستقلة لـ EDUMIND Scolaire"
+  "version": "1.0.2",
+  "releaseDate": "2026-10-13",
+  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.2.zip",
+  "notes": "إصلاح استيراد ملفات الإكسل والرقمنة بالكامل وعرض كافة التلاميذ، وإصلاح إضافة التلاميذ يدوياً وربط الأقسام والأفواج تلقائياً",
+  "notes_ar": "إصلاح استيراد ملفات الإكسل والرقمنة بالكامل وعرض كافة التلاميذ، وإصلاح إضافة التلاميذ يدوياً وربط الأقسام والأفواج تلقائياً"
 }

@@ -171,6 +171,55 @@ function sanitizeDecimal(val, min = 0, max = null) {
   return parseFloat(num.toFixed(2));
 }
 
+function getOrCreateDefaultTeacherId() {
+  try {
+    let teach = DB.queryOne("SELECT id FROM teachers WHERE active = 1 ORDER BY id ASC LIMIT 1");
+    if (!teach) teach = DB.queryOne("SELECT id FROM teachers ORDER BY id ASC LIMIT 1");
+    if (teach && teach.id) return teach.id;
+
+    const res = DB.run(`
+      INSERT INTO teachers (matricule, first_name, last_name, phone, subject_id, remuneration_type, remuneration_rate, active)
+      VALUES ('ENS-001', 'الأستاذ الرئيسي', 'إدارة المؤسسة', '0550000000', 1, 'percent', 0.0, 1)
+    `);
+    return res.lastInsertRowid;
+  } catch (e) {
+    const fallback = DB.queryOne("SELECT id FROM teachers LIMIT 1");
+    return fallback ? fallback.id : 1;
+  }
+}
+
+function getOrCreateDefaultSubjectId() {
+  try {
+    let sub = DB.queryOne("SELECT id FROM subjects ORDER BY id ASC LIMIT 1");
+    if (sub && sub.id) return sub.id;
+
+    const res = DB.run(`
+      INSERT INTO subjects (name, code, category, color, icon)
+      VALUES ('التعليم العام', 'GEN', 'all', '#2563eb', 'book')
+    `);
+    return res.lastInsertRowid;
+  } catch (e) {
+    const fallback = DB.queryOne("SELECT id FROM subjects LIMIT 1");
+    return fallback ? fallback.id : 1;
+  }
+}
+
+function getOrCreateDefaultLevelId() {
+  try {
+    let lvl = DB.queryOne("SELECT id FROM levels ORDER BY display_order ASC, id ASC LIMIT 1");
+    if (lvl && lvl.id) return lvl.id;
+
+    const res = DB.run(`
+      INSERT INTO levels (name, category, display_order)
+      VALUES ('1ère Année Moyenne (1AM)', 'CEM', 1)
+    `);
+    return res.lastInsertRowid;
+  } catch (e) {
+    const fallback = DB.queryOne("SELECT id FROM levels LIMIT 1");
+    return fallback ? fallback.id : 1;
+  }
+}
+
 // -------------------------------------------------------------
 // 1. DASHBOARD & STATS API
 // -------------------------------------------------------------
@@ -618,8 +667,13 @@ function resolveAndEnrollStudentGroup(studentId, targetGroupId, groupNum, target
   }
 
   // 2. Resolve by cleanNum and targetLevelId if needed
-  if (!resolvedGroupId && cleanNum && targetLevelId) {
-    const allLvlGroups = DB.queryAll("SELECT id, name FROM groups WHERE level_id = ?", [targetLevelId]);
+  if (!resolvedGroupId && cleanNum) {
+    let safeLevelId = toNullableId(targetLevelId);
+    if (!safeLevelId || !DB.queryOne("SELECT id FROM levels WHERE id = ?", [safeLevelId])) {
+      safeLevelId = getOrCreateDefaultLevelId();
+    }
+
+    const allLvlGroups = DB.queryAll("SELECT id, name FROM groups WHERE level_id = ?", [safeLevelId]);
     const numMatched = allLvlGroups.find(g => {
       const gnum = g.name.match(/\d+$/)?.[0] || g.name.match(/[-_](\d+)/)?.[1] || g.name.match(/\s(\d+)\s/)?.[1];
       return gnum === cleanNum || g.name.endsWith(cleanNum) || g.name.includes(`-${cleanNum})`) || g.name.includes(` ${cleanNum}`);
@@ -627,7 +681,7 @@ function resolveAndEnrollStudentGroup(studentId, targetGroupId, groupNum, target
     if (numMatched) {
       resolvedGroupId = numMatched.id;
     } else {
-      const lvl = DB.queryOne("SELECT name FROM levels WHERE id = ?", [targetLevelId]);
+      const lvl = DB.queryOne("SELECT name FROM levels WHERE id = ?", [safeLevelId]);
       let newName = `قسم ${cleanNum}`;
       if (lvl) {
         if (lvl.name.includes('1AM')) newName = `1 متوسط ${cleanNum} (1AM-${cleanNum})`;
@@ -643,11 +697,11 @@ function resolveAndEnrollStudentGroup(studentId, targetGroupId, groupNum, target
         else if (lvl.name.includes('4AP')) newName = `4 ابتدائي ${cleanNum} (4AP-${cleanNum})`;
         else if (lvl.name.includes('5AP')) newName = `5 ابتدائي ${cleanNum} (5AP-${cleanNum})`;
       }
-      const defaultSub = DB.queryOne("SELECT id FROM subjects LIMIT 1")?.id || 1;
-      const defaultTeach = DB.queryOne("SELECT id FROM teachers LIMIT 1")?.id || 1;
-      const defaultRm = DB.queryOne("SELECT id FROM rooms LIMIT 1")?.id || 1;
+      const defaultSub = getOrCreateDefaultSubjectId();
+      const defaultTeach = getOrCreateDefaultTeacherId();
+      const defaultRm = DB.queryOne("SELECT id FROM rooms LIMIT 1")?.id || null;
       const r = DB.run("INSERT INTO groups (name, level_id, subject_id, teacher_id, room_id, school_year, max_students, active) VALUES (?, ?, ?, ?, ?, ?, 35, 1)",
-        [newName, targetLevelId, defaultSub, defaultTeach, defaultRm, activeYear]);
+        [newName, safeLevelId, defaultSub, defaultTeach, defaultRm, activeYear]);
       resolvedGroupId = r.lastInsertRowid;
     }
   }
@@ -906,9 +960,13 @@ app.post('/api/students/import-batch', (req, res) => {
     }
 
     let allLevels = DB.queryAll("SELECT id, name FROM levels");
+    if (!allLevels || allLevels.length === 0) {
+      getOrCreateDefaultLevelId();
+      allLevels = DB.queryAll("SELECT id, name FROM levels");
+    }
     let allGroups = DB.queryAll("SELECT id, name, level_id FROM groups WHERE active = 1");
-    const defaultSubjectId = DB.queryOne("SELECT id FROM subjects ORDER BY id ASC LIMIT 1")?.id || 1;
-    const defaultTeacherId = DB.queryOne("SELECT id FROM teachers ORDER BY id ASC LIMIT 1")?.id || 1;
+    const defaultSubjectId = getOrCreateDefaultSubjectId();
+    const defaultTeacherId = getOrCreateDefaultTeacherId();
     const defaultRoomId = DB.queryOne("SELECT id FROM rooms ORDER BY id ASC LIMIT 1")?.id || null;
 
     let importedCount = 0;
@@ -1120,14 +1178,19 @@ app.post('/api/students/import-batch', (req, res) => {
               else if (levelObj.name.includes('3AS')) newGroupName = `3 ثانوي ${gNum}`;
             }
 
+            let safeLevelId = toNullableId(levelId);
+            if (!safeLevelId || !allLevels.some(l => l.id === safeLevelId)) {
+              safeLevelId = allLevels[0]?.id || getOrCreateDefaultLevelId();
+            }
+
             const resNewG = DB.run(`
               INSERT INTO groups (name, level_id, subject_id, teacher_id, room_id, school_year, day_of_week, start_time, end_time, price_monthly, max_students, active)
               VALUES (?, ?, ?, ?, ?, ?, 'Dimanche', '08:00', '16:30', 0, 40, 1)
-            `, [newGroupName, levelId || 1, defaultSubjectId, defaultTeacherId, defaultRoomId, activeYearSetting]);
+            `, [newGroupName, safeLevelId, defaultSubjectId, defaultTeacherId, defaultRoomId, activeYearSetting]);
 
             groupId = resNewG.lastInsertRowid;
             groupsCreatedCount++;
-            allGroups.push({ id: groupId, name: newGroupName, level_id: levelId || 1 });
+            allGroups.push({ id: groupId, name: newGroupName, level_id: safeLevelId });
           }
         }
 
@@ -1219,6 +1282,11 @@ app.post('/api/students/import-batch', (req, res) => {
           const finalMatricule = customMatricule || generateUniqueMatricule();
           const qrCode = finalMatricule;
 
+          let safeStudentLevelId = toNullableId(levelId);
+          if (safeStudentLevelId && !allLevels.some(l => l.id === safeStudentLevelId)) {
+            safeStudentLevelId = allLevels[0]?.id || null;
+          }
+
           const resInsert = DB.run(`
             INSERT INTO students (matricule, first_name, last_name, gender, birth_date, birth_place, phone, parent_id, parent_name, parent_phone, address, level_id, qr_code, notes, regime, canteen_active, national_id, active)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
@@ -1226,7 +1294,7 @@ app.post('/api/students/import-batch', (req, res) => {
             finalMatricule, firstName, lastName, gender,
             birthDate, birthPlace, phone,
             toNullableId(parentId), parentFullName, parentPhone, address,
-            toNullableId(levelId), qrCode, notes, regime, canteenActive, nationalId
+            safeStudentLevelId, qrCode, notes, regime, canteenActive, nationalId
           ]);
 
           studentId = resInsert.lastInsertRowid;
@@ -1862,16 +1930,29 @@ app.post('/api/groups', (req, res) => {
       }
     }
 
+    let finalTeacherId = toNullableId(teacher_id) || getOrCreateDefaultTeacherId();
+    if (!DB.queryOne("SELECT id FROM teachers WHERE id = ?", [finalTeacherId])) {
+      finalTeacherId = getOrCreateDefaultTeacherId();
+    }
+    let finalSubjectId = toNullableId(subject_id) || getOrCreateDefaultSubjectId();
+    if (!DB.queryOne("SELECT id FROM subjects WHERE id = ?", [finalSubjectId])) {
+      finalSubjectId = getOrCreateDefaultSubjectId();
+    }
+    let finalLevelId = toNullableId(level_id) || getOrCreateDefaultLevelId();
+    if (!DB.queryOne("SELECT id FROM levels WHERE id = ?", [finalLevelId])) {
+      finalLevelId = getOrCreateDefaultLevelId();
+    }
+
     const result = DB.run(`
       INSERT INTO groups (name, level_id, specialite, school_year, subject_id, teacher_id, room_id, day_of_week, start_time, end_time, price_monthly, max_students)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       name, 
-      toNullableId(level_id), 
+      finalLevelId, 
       specialite || null,
       school_year || '2026-2027',
-      toNullableId(subject_id) || 1, 
-      toNullableId(teacher_id) || 1, 
+      finalSubjectId, 
+      finalTeacherId, 
       toNullableId(room_id), 
       day_of_week || null, 
       start_time || null, 

@@ -4964,6 +4964,7 @@ class EdumindApp {
 
   resetImportFile() {
     this._importedStudentsData = [];
+    this._importShowAll = false;
     const fileInput = document.getElementById('importStudentFileInput');
     if (fileInput) fileInput.value = '';
 
@@ -5277,7 +5278,7 @@ class EdumindApp {
     const validCount = students.filter(s => s.isValid).length;
     const warnCount = students.filter(s => !s.isValid).length;
     const isAr = this.lang === 'ar';
-    if (badgeTotal) badgeTotal.textContent = isAr ? `الإجمالي: ${students.length}` : `Total : ${students.length}`;
+    if (badgeTotal) badgeTotal.textContent = isAr ? `الإجمالي في الملف: ${students.length}` : `Total fichier : ${students.length}`;
     if (badgeReady) badgeReady.textContent = isAr ? `جاهز للاستيراد: ${validCount}` : `Prêts : ${validCount}`;
     if (badgeWarn) {
       if (warnCount > 0) {
@@ -5288,7 +5289,10 @@ class EdumindApp {
       }
     }
 
-    tableBody.innerHTML = students.slice(0, 100).map((s, idx) => {
+    const displayLimit = this._importShowAll ? students.length : 500;
+    const displayedStudents = students.slice(0, displayLimit);
+
+    tableBody.innerHTML = displayedStudents.map((s, idx) => {
       const isM = String(s.gender).includes('ذكر') || String(s.gender).toUpperCase() === 'M' || String(s.gender).toLowerCase().includes('gar');
       const genderBadge = isM
         ? `<span style="color: #38bdf8; font-weight: 700;">${isAr ? 'ذكر' : 'M'}</span>`
@@ -5332,11 +5336,16 @@ class EdumindApp {
       `;
     }).join('');
 
-    if (students.length > 100) {
+    if (students.length > displayedStudents.length) {
       tableBody.innerHTML += `
         <tr>
-          <td colspan="13" style="text-align: center; color: var(--text-muted); padding: 10px; font-style: italic;">
-            ${isAr ? `... وعرض باقي التلاميذ (${students.length - 100} تلميذ إضافي سيتم استيرادهم بالكامل) ...` : `... et affichage des ${students.length - 100} autres élèves importés au total ...`}
+          <td colspan="13" style="text-align: center; color: var(--text-muted); padding: 12px; font-style: italic;">
+            <button type="button" class="btn-secondary" style="padding: 6px 14px; font-size: 12px; margin-bottom: 6px;" onclick="app._importShowAll = true; app.renderImportPreview(app._importedStudentsData);">
+              <i class="fa-solid fa-eye"></i> ${isAr ? `عرض باقي التلاميذ (${students.length - displayedStudents.length} تلميذ إضافي)` : `Afficher le reste (${students.length - displayedStudents.length} autres)`}
+            </button>
+            <div style="font-size: 11.5px; color: #10b981; font-weight: 600;">
+              ${isAr ? `(ملاحظة هامة: سيتم استيراد كافة الـ ${students.length} تلميذ بالكامل في قاعدة البيانات)` : `(Tous les ${students.length} élèves seront importés dans la base de données)`}
+            </div>
           </td>
         </tr>
       `;
@@ -5718,7 +5727,7 @@ class EdumindApp {
       return;
     }
 
-    const namePattern = /^[a-zA-Z\u00C0-\u024F\u0600-\u06FF\s'\-]+$/;
+    const namePattern = /^[a-zA-Z\u00C0-\u024F\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\s'\-\.\(\)]+$/;
     if (!namePattern.test(firstName)) {
       this.showToast(isAr ? 'اسم التلميذ يجب أن يحتوي على حروف فقط (بدون أرقام أو رموز)' : 'Le prénom de l’élève ne doit contenir que des lettres (sans chiffres)', 'warning');
       document.getElementById('studentFirstName')?.focus();

@@ -742,6 +742,16 @@ function initDatabase() {
     `);
   }
 
+  // Populate Default Teachers (Enseignants) if empty - Essential to avoid FOREIGN KEY errors
+  const teachersCount = DB.queryOne("SELECT COUNT(*) as count FROM teachers");
+  if (!teachersCount || teachersCount.count === 0) {
+    db.exec(`
+      INSERT INTO teachers (matricule, first_name, last_name, phone, subject_id, remuneration_type, remuneration_rate, active)
+      VALUES ('ENS-001', 'الأستاذ الرئيسي', 'إدارة المؤسسة', '0550 00 00 00', 1, 'percent', 0.0, 1);
+    `);
+    console.log('✅ [DB Init] Enseignant principal par défaut initialisé.');
+  }
+
   // Salles de classe par défaut initialisées avec succès.
 
 
