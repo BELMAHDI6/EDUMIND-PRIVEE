@@ -938,6 +938,154 @@ app.post('/api/students/batch-delete', (req, res) => {
   }
 });
 
+function parseAlgerianClassAndLevel({ rawGroup = '', rawLevel = '', defaultLevelId = null, allLevels = [] }) {
+  const norm = (s) => String(s || '')
+    .trim()
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+    .replace(/ئ/g, 'ي')
+    .replace(/ؤ/g, 'و')
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+    .toLowerCase()
+    .replace(/[\s\-_]+/g, ' ');
+
+  const textToScan = norm(`${rawLevel} ${rawGroup}`);
+  const groupNorm = norm(rawGroup);
+
+  // 1. Detect Educational Level
+  let levelCode = '';
+
+  // Priority 1: Check structured pattern "Grade + Stage" (e.g. "1 متوسط", "2AS", "5 ابتدائي", "3م")
+  // Ensures the grade digit BEFORE the stage is used, NOT the division digit after!
+  const gradeStageMatch = textToScan.match(/(?:^|\s)([1-5])\s*(am|as|ap|ms|متوسط|ثانوي|ابتدا[ء-ي]*|م|ث|ب)(?:$|\s|[\-\_\d/])/i);
+  if (gradeStageMatch) {
+    const gNum = gradeStageMatch[1];
+    const stage = gradeStageMatch[2];
+    if (stage === 'am' || stage === 'ms' || stage === 'متوسط' || stage === 'م') {
+      levelCode = `${gNum}AM`;
+    } else if (stage === 'as' || stage === 'ثانوي' || stage === 'ث') {
+      levelCode = `${gNum}AS`;
+    } else if (stage === 'ap' || stage.startsWith('ابتدا') || stage === 'ب') {
+      levelCode = `${gNum}AP`;
+    }
+  }
+
+  // Priority 2: Named levels / exam stages (BEM, BAC, شهادة, اولي متوسط, etc.)
+  if (!levelCode) {
+    if (textToScan.includes('بيام') || textToScan.includes('bem')) levelCode = '4AM';
+    else if (textToScan.includes('باك') || textToScan.includes('bac')) levelCode = '3AS';
+    else if (textToScan.includes('اولي متوسط') || textToScan.includes('اولى متوسط')) levelCode = '1AM';
+    else if (textToScan.includes('ثانيه متوسط') || textToScan.includes('ثانية متوسط')) levelCode = '2AM';
+    else if (textToScan.includes('ثالثه متوسط') || textToScan.includes('ثالثة متوسط')) levelCode = '3AM';
+    else if (textToScan.includes('رابعه متوسط') || textToScan.includes('رابعة متوسط')) levelCode = '4AM';
+    else if (textToScan.includes('اولي ثانوي') || textToScan.includes('اولى ثانوي') || textToScan.includes('tcst') || textToScan.includes('tcl')) levelCode = '1AS';
+    else if (textToScan.includes('ثانيه ثانوي') || textToScan.includes('ثانية ثانوي')) levelCode = '2AS';
+    else if (textToScan.includes('ثالثه ثانوي') || textToScan.includes('ثالثة ثانوي')) levelCode = '3AS';
+    else if (textToScan.includes('1am') || textToScan.includes('1م') || textToScan.includes('1ام')) levelCode = '1AM';
+    else if (textToScan.includes('2am') || textToScan.includes('2م') || textToScan.includes('2ام')) levelCode = '2AM';
+    else if (textToScan.includes('3am') || textToScan.includes('3م') || textToScan.includes('3ام')) levelCode = '3AM';
+    else if (textToScan.includes('4am') || textToScan.includes('4م') || textToScan.includes('4ام')) levelCode = '4AM';
+    else if (textToScan.includes('1as') || textToScan.includes('1ث')) levelCode = '1AS';
+    else if (textToScan.includes('2as') || textToScan.includes('2ث')) levelCode = '2AS';
+    else if (textToScan.includes('3as') || textToScan.includes('3ث')) levelCode = '3AS';
+    else if (textToScan.includes('1ap') || textToScan.includes('1ب')) levelCode = '1AP';
+    else if (textToScan.includes('2ap') || textToScan.includes('2ب')) levelCode = '2AP';
+    else if (textToScan.includes('3ap') || textToScan.includes('3ب')) levelCode = '3AP';
+    else if (textToScan.includes('4ap') || textToScan.includes('4ب')) levelCode = '4AP';
+    else if (textToScan.includes('5ap') || textToScan.includes('5ب')) levelCode = '5AP';
+  }
+
+  let matchedLevel = null;
+  if (levelCode) {
+    matchedLevel = allLevels.find(l => {
+      const ln = norm(l.name);
+      return ln.includes(levelCode.toLowerCase()) || (l.code && l.code.toUpperCase() === levelCode);
+    });
+  }
+
+  if (!matchedLevel && defaultLevelId) {
+    matchedLevel = allLevels.find(l => l.id === Number(defaultLevelId)) || null;
+    if (matchedLevel) {
+      const dbCodeMatch = matchedLevel.name.match(/\b(1AM|2AM|3AM|4AM|1AS|2AS|3AS|1AP|2AP|3AP|4AP|5AP)\b/i);
+      if (dbCodeMatch) levelCode = dbCodeMatch[1].toUpperCase();
+    }
+  }
+
+  if (!matchedLevel) {
+    matchedLevel = allLevels.find(l => l.name.includes('1AM')) || allLevels[0];
+    if (matchedLevel) {
+      const dbCodeMatch = matchedLevel.name.match(/\b(1AM|2AM|3AM|4AM|1AS|2AS|3AS|1AP|2AP|3AP|4AP|5AP)\b/i);
+      if (dbCodeMatch) levelCode = dbCodeMatch[1].toUpperCase();
+    }
+  }
+
+  const levelId = matchedLevel ? matchedLevel.id : null;
+
+  // 2. Extract Division Number
+  let division = '';
+  // Match compound e.g. "1 متوسط 4", "1م3", "1AM-3", "2AS 1", "3ث2" -> Division is 4, 3, 1, 2...
+  // NOTE: Order matters! 'متوسط' before 'م', 'ثانوي' before 'ث', 'ابتدائ' before 'ب'
+  const compoundMatch = groupNorm.match(/(?:[1-5]\s*(?:am|as|ap|ms|متوسط|ثانوي|ابتدا[ء-ي]*|م|ث|ب))\s*[\-\_\s/:]*(\d+|[a-z\u0621-\u064A])/i);
+  if (compoundMatch && compoundMatch[1]) {
+    division = compoundMatch[1].trim();
+  }
+
+  // Match prefixes e.g. "فوج 3", "قسم 2", "ف3", "ق2", "Groupe 4", "Classe 1", "Division 2", "Section 5"
+  if (!division) {
+    const prefixMatch = groupNorm.match(/(?:فوج تربوي|قسم تربوي|فوج|قسم|فرع|شعبة|صف|groupe|classe|section|division|div|grp|cls|g|d|ف|ق)\s*[:：\-\s]*(\d+|[a-z\u0621-\u064A])/i);
+    if (prefixMatch && prefixMatch[1]) {
+      division = prefixMatch[1].trim();
+    }
+  }
+
+  // Standalone digits e.g. "1", "2", "3", "04"
+  if (!division) {
+    const standaloneMatch = groupNorm.match(/^(\d+)$/);
+    if (standaloneMatch) {
+      division = String(parseInt(standaloneMatch[1], 10));
+    }
+  }
+
+  // Fallback: take the last sequence of digits in rawGroup
+  if (!division) {
+    const allNums = groupNorm.match(/\d+/g);
+    if (allNums && allNums.length > 0) {
+      division = String(parseInt(allNums[allNums.length - 1], 10));
+    }
+  }
+
+  if (division && /^\d+$/.test(division)) {
+    division = String(parseInt(division, 10));
+  }
+
+  // 3. Build Standard Bilingual Name
+  let standardName = '';
+  if (levelCode && division) {
+    if (levelCode === '1AM') standardName = `1 متوسط ${division} (1AM-${division})`;
+    else if (levelCode === '2AM') standardName = `2 متوسط ${division} (2AM-${division})`;
+    else if (levelCode === '3AM') standardName = `3 متوسط ${division} (3AM-${division})`;
+    else if (levelCode === '4AM') standardName = `4 متوسط ${division} (4AM-${division})`;
+    else if (levelCode === '1AS') standardName = `1 ثانوي ${division} (1AS-${division})`;
+    else if (levelCode === '2AS') standardName = `2 ثانوي ${division} (2AS-${division})`;
+    else if (levelCode === '3AS') standardName = `3 ثانوي ${division} (3AS-${division})`;
+    else if (levelCode.endsWith('AP')) standardName = `${levelCode[0]} ابتدائي ${division} (${levelCode}-${division})`;
+  }
+
+  if (!standardName) {
+    standardName = rawGroup ? rawGroup.trim() : (division ? `القسم ${division}` : 'قسم عام');
+  }
+
+  return {
+    levelId,
+    levelCode,
+    division,
+    standardName
+  };
+}
+
 // Batch import students (Excel, Algerian Rakmana / Tarbiya platform)
 app.post('/api/students/import-batch', (req, res) => {
   try {
@@ -982,356 +1130,387 @@ app.post('/api/students/import-batch', (req, res) => {
 
     try {
       for (let i = 0; i < students.length; i++) {
-        const item = students[i];
-        const firstName = sanitizeLettersOnly(item.first_name);
-        const lastName = sanitizeLettersOnly(item.last_name);
+        try {
+          const item = students[i];
+          let firstName = sanitizeLettersOnly(item.first_name);
+          let lastName = sanitizeLettersOnly(item.last_name);
 
-        if (!firstName && !lastName) {
-          errors.push({ row: i + 1, error: 'الاسم واللقب فارغان' });
-          continue;
-        }
-
-        // Normalize gender ('M' or 'F')
-        let gender = 'M';
-        const rawGender = String(item.gender || '').trim().toLowerCase();
-        if (rawGender.includes('أنث') || rawGender.includes('انث') || rawGender === 'f' || rawGender.includes('fille') || rawGender.includes('femme')) {
-          gender = 'F';
-        }
-
-        // Resolve birth date (accepts YYYY-MM-DD or DD/MM/YYYY)
-        let birthDate = item.birth_date ? String(item.birth_date).trim() : null;
-        if (birthDate && birthDate.includes('/')) {
-          const parts = birthDate.split('/');
-          if (parts.length === 3) {
-            if (parts[2].length === 4) {
-              birthDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+          // Si un nom ou prénom est manquant mais l'autre contient plusieurs mots, découper
+          if (!lastName && firstName) {
+            const parts = firstName.split(/\s+/);
+            if (parts.length > 1) {
+              lastName = parts[0];
+              firstName = parts.slice(1).join(' ');
+            } else {
+              lastName = firstName;
             }
-          }
-        }
-
-        const birthPlace = (item.birth_place || '').trim() || null;
-        const phone = sanitizePhone(item.phone);
-        const address = (item.address || '').trim() || null;
-        const nationalId = (item.national_id || '').trim() || null;
-
-        // Régime & Cantine detection (نصف داخلي / خارجي)
-        const rawStatut = String(item.statut || '').trim().toLowerCase();
-        let regime = 'demi_pensionnaire';
-        let canteenActive = 1;
-        if (rawStatut.includes('خارجي') || rawStatut.includes('externe')) {
-          regime = 'externe';
-          canteenActive = 0;
-        } else if (rawStatut.includes('نصف') || rawStatut.includes('demi') || rawStatut.includes('مطعم')) {
-          regime = 'demi_pensionnaire';
-          canteenActive = 1;
-        }
-
-        // Compile notes (civil status, mother, statut, raw group)
-        let notesParts = [];
-        if (item.mother_name && item.mother_name.trim()) {
-          notesParts.push(`الأم: ${item.mother_name.trim()}`);
-        }
-        if (item.statut && item.statut.trim()) {
-          notesParts.push(`الصفة: ${item.statut.trim()}`);
-        }
-        if (item.raw_group && item.raw_group.trim()) {
-          notesParts.push(`فوج الرقمنة: ${item.raw_group.trim()}`);
-        }
-        if (item.notes && item.notes.trim()) {
-          notesParts.push(item.notes.trim());
-        }
-        const notes = notesParts.length > 0 ? notesParts.join(' | ') : null;
-
-        // ==============================================================
-        // 1. RESOLVE LEVEL
-        // ==============================================================
-        let levelId = toNullableId(item.level_id) || toNullableId(defaultLevelId);
-        const searchLevelText = `${item.level_name || ''} ${item.group_name || ''} ${item.raw_group || ''}`.trim().toLowerCase();
-
-        if (!levelId && searchLevelText) {
-          let matchedL = allLevels.find(l => {
-            const dbL = l.name.toLowerCase();
-            return searchLevelText.includes(dbL) || dbL.includes(searchLevelText);
-          });
-          if (!matchedL) {
-            if (searchLevelText.includes('1am') || searchLevelText.includes('1 am') || searchLevelText.includes('1م') || (searchLevelText.includes('1') && searchLevelText.includes('متوسط'))) {
-              matchedL = allLevels.find(l => l.name.includes('1AM') || l.name.includes('1ère Année Moyenne'));
-            } else if (searchLevelText.includes('2am') || searchLevelText.includes('2 am') || searchLevelText.includes('2م') || (searchLevelText.includes('2') && searchLevelText.includes('متوسط'))) {
-              matchedL = allLevels.find(l => l.name.includes('2AM') || l.name.includes('2ème Année Moyenne'));
-            } else if (searchLevelText.includes('3am') || searchLevelText.includes('3 am') || searchLevelText.includes('3م') || (searchLevelText.includes('3') && searchLevelText.includes('متوسط'))) {
-              matchedL = allLevels.find(l => l.name.includes('3AM') || l.name.includes('3ème Année Moyenne'));
-            } else if (searchLevelText.includes('4am') || searchLevelText.includes('4 am') || searchLevelText.includes('4م') || (searchLevelText.includes('4') && searchLevelText.includes('متوسط')) || searchLevelText.includes('bem') || searchLevelText.includes('بيام')) {
-              matchedL = allLevels.find(l => l.name.includes('4AM') || l.name.includes('4ème Année Moyenne') || l.name.includes('BEM'));
-            } else if (searchLevelText.includes('1as') || searchLevelText.includes('1 as') || searchLevelText.includes('1ث') || (searchLevelText.includes('1') && searchLevelText.includes('ثانوي'))) {
-              matchedL = allLevels.find(l => l.name.includes('1AS') || l.name.includes('1ère Année Secondaire'));
-            } else if (searchLevelText.includes('2as') || searchLevelText.includes('2 as') || searchLevelText.includes('2ث') || (searchLevelText.includes('2') && searchLevelText.includes('ثانوي'))) {
-              matchedL = allLevels.find(l => l.name.includes('2AS') || l.name.includes('2ème Année Secondaire'));
-            } else if (searchLevelText.includes('3as') || searchLevelText.includes('3 as') || searchLevelText.includes('3ث') || (searchLevelText.includes('3') && searchLevelText.includes('ثانوي')) || searchLevelText.includes('bac') || searchLevelText.includes('باك')) {
-              matchedL = allLevels.find(l => l.name.includes('3AS') || l.name.includes('3ème Année Secondaire') || l.name.includes('BAC'));
-            } else if (searchLevelText.includes('1ap') || (searchLevelText.includes('1') && searchLevelText.includes('ابتدائي'))) {
-              matchedL = allLevels.find(l => l.name.includes('1AP'));
-            } else if (searchLevelText.includes('2ap') || (searchLevelText.includes('2') && searchLevelText.includes('ابتدائي'))) {
-              matchedL = allLevels.find(l => l.name.includes('2AP'));
-            } else if (searchLevelText.includes('3ap') || (searchLevelText.includes('3') && searchLevelText.includes('ابتدائي'))) {
-              matchedL = allLevels.find(l => l.name.includes('3AP'));
-            } else if (searchLevelText.includes('4ap') || (searchLevelText.includes('4') && searchLevelText.includes('ابتدائي'))) {
-              matchedL = allLevels.find(l => l.name.includes('4AP'));
-            } else if (searchLevelText.includes('5ap') || (searchLevelText.includes('5') && searchLevelText.includes('ابتدائي'))) {
-              matchedL = allLevels.find(l => l.name.includes('5AP'));
-            }
-          }
-          if (matchedL) levelId = matchedL.id;
-        }
-
-        // ==============================================================
-        // 2. AUTO-RESOLVE & AUTO-CREATE PARENT (parents table)
-        // ==============================================================
-        let rawParentName = sanitizeLettersOnly(item.parent_name || item.father_name || '');
-        let parentPhone = sanitizePhone(item.parent_phone) || phone;
-        let parentFullName = rawParentName;
-
-        if (rawParentName) {
-          // If parent name is just the father's first name (e.g. "أحمد") and does not contain family name:
-          if (!rawParentName.includes(lastName) && rawParentName.split(/\s+/).length <= 2) {
-            parentFullName = `${lastName} ${rawParentName}`.trim();
-          }
-        } else if (parentPhone) {
-          parentFullName = `ولي أمر التلميذ ${lastName} ${firstName}`.trim();
-        }
-
-        let parentId = null;
-
-        if (parentFullName || parentPhone) {
-          let cleanPhone = parentPhone ? parentPhone.replace(/[\s\-\.]/g, '') : '';
-          let existingParent = null;
-
-          if (cleanPhone.length >= 8) {
-            existingParent = DB.queryOne(`
-              SELECT * FROM parents 
-              WHERE REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '.', '') = ? 
-              LIMIT 1
-            `, [cleanPhone]);
-          }
-
-          if (!existingParent && parentFullName) {
-            existingParent = DB.queryOne(`
-              SELECT * FROM parents 
-              WHERE LOWER(TRIM(full_name)) = LOWER(TRIM(?))
-              LIMIT 1
-            `, [parentFullName]);
-          }
-
-          if (existingParent) {
-            parentId = existingParent.id;
-            parentFullName = existingParent.full_name;
-            parentPhone = existingParent.phone || parentPhone;
-            if (!existingParent.address && address) {
-              DB.run("UPDATE parents SET address = ? WHERE id = ?", [address, parentId]);
-            }
-          } else if (parentFullName) {
-            const resPar = DB.run(`
-              INSERT INTO parents (full_name, phone, address, discount_percent, notes, active)
-              VALUES (?, ?, ?, 0, 'تم التسجيل تلقائياً عبر استيراد ملف الرقمنة', 1)
-            `, [parentFullName, parentPhone || '', address || '']);
-            parentId = resPar.lastInsertRowid;
-            parentsCreatedCount++;
-          }
-        }
-
-        // ==============================================================
-        // 3. AUTO-RESOLVE & AUTO-CREATE GROUP / CLASSE (groups table)
-        // ==============================================================
-        let groupId = toNullableId(item.group_id) || toNullableId(defaultGroupId);
-        let rawGroupName = (item.group_name || item.raw_group || '').trim();
-
-        if (!groupId && rawGroupName) {
-          const cleanG = rawGroupName.toLowerCase();
-          let matchedG = allGroups.find(g => {
-            const dbG = g.name.toLowerCase();
-            return dbG === cleanG || dbG.includes(cleanG) || cleanG.includes(dbG);
-          });
-
-          // Match by level + group number (e.g. group "1" with level 1AM -> "1 متوسط 1")
-          if (!matchedG && levelId) {
-            const numMatch = rawGroupName.match(/\d+/);
-            if (numMatch) {
-              const num = numMatch[0];
-              matchedG = allGroups.find(g => g.level_id === levelId && (g.name.includes(num) || g.name.endsWith(num)));
+          } else if (!firstName && lastName) {
+            const parts = lastName.split(/\s+/);
+            if (parts.length > 1) {
+              firstName = parts[parts.length - 1];
+              lastName = parts.slice(0, parts.length - 1).join(' ');
+            } else {
+              firstName = lastName;
             }
           }
 
-          if (matchedG) {
-            groupId = matchedG.id;
-          } else {
-            // Auto-create new group in database
-            let newGroupName = rawGroupName;
-            const levelObj = allLevels.find(l => l.id === levelId);
-            if (levelObj) {
-              const numMatch = rawGroupName.match(/\d+/);
-              const gNum = numMatch ? numMatch[0] : rawGroupName;
-              if (levelObj.name.includes('1AM')) newGroupName = `1 متوسط ${gNum}`;
-              else if (levelObj.name.includes('2AM')) newGroupName = `2 متوسط ${gNum}`;
-              else if (levelObj.name.includes('3AM')) newGroupName = `3 متوسط ${gNum}`;
-              else if (levelObj.name.includes('4AM')) newGroupName = `4 متوسط ${gNum}`;
-              else if (levelObj.name.includes('1AS')) newGroupName = `1 ثانوي ${gNum}`;
-              else if (levelObj.name.includes('2AS')) newGroupName = `2 ثانوي ${gNum}`;
-              else if (levelObj.name.includes('3AS')) newGroupName = `3 ثانوي ${gNum}`;
-            }
-
-            let safeLevelId = toNullableId(levelId);
-            if (!safeLevelId || !allLevels.some(l => l.id === safeLevelId)) {
-              safeLevelId = allLevels[0]?.id || getOrCreateDefaultLevelId();
-            }
-
-            const resNewG = DB.run(`
-              INSERT INTO groups (name, level_id, subject_id, teacher_id, room_id, school_year, day_of_week, start_time, end_time, price_monthly, max_students, active)
-              VALUES (?, ?, ?, ?, ?, ?, 'Dimanche', '08:00', '16:30', 0, 40, 1)
-            `, [newGroupName, safeLevelId, defaultSubjectId, defaultTeacherId, defaultRoomId, activeYearSetting]);
-
-            groupId = resNewG.lastInsertRowid;
-            groupsCreatedCount++;
-            allGroups.push({ id: groupId, name: newGroupName, level_id: safeLevelId });
-          }
-        }
-
-        // ==============================================================
-        // 4. DUPLICATE CHECK & STUDENT RECORD SAVE
-        // ==============================================================
-        let customMatricule = (item.matricule ? String(item.matricule).trim() : '');
-
-        let existingStudent = null;
-        if (customMatricule) {
-          existingStudent = DB.queryOne("SELECT * FROM students WHERE matricule = ? COLLATE NOCASE", [customMatricule]);
-        }
-        if (!existingStudent && firstName && lastName && birthDate) {
-          existingStudent = DB.queryOne(
-            "SELECT * FROM students WHERE LOWER(TRIM(first_name)) = LOWER(?) AND LOWER(TRIM(last_name)) = LOWER(?) AND birth_date = ?",
-            [firstName, lastName, birthDate]
-          );
-        }
-
-        let studentId = null;
-
-        if (existingStudent) {
-          if (existingStudent.active === 0) {
-            studentId = existingStudent.id;
-            const updatedMatricule = customMatricule || existingStudent.matricule;
-            DB.run(`
-              UPDATE students
-              SET active = 1,
-                  first_name = ?, last_name = ?, gender = ?,
-                  birth_date = COALESCE(?, birth_date),
-                  birth_place = COALESCE(?, birth_place),
-                  phone = COALESCE(?, phone),
-                  parent_id = COALESCE(?, parent_id),
-                  parent_name = COALESCE(?, parent_name),
-                  parent_phone = COALESCE(?, parent_phone),
-                  address = COALESCE(?, address),
-                  level_id = COALESCE(?, level_id),
-                  regime = ?,
-                  canteen_active = ?,
-                  national_id = COALESCE(?, national_id),
-                  notes = CASE WHEN ? IS NOT NULL THEN (COALESCE(notes || ' | ', '') || ?) ELSE notes END
-              WHERE id = ?
-            `, [
-              firstName, lastName, gender,
-              birthDate, birthPlace, phone,
-              toNullableId(parentId), parentFullName, parentPhone, address,
-              toNullableId(levelId), regime, canteenActive, nationalId,
-              notes, notes, studentId
-            ]);
-            importedCount++;
-            processed.push({ id: studentId, matricule: updatedMatricule, first_name: firstName, last_name: lastName, action: 'created' });
-          } else if (duplicateAction === 'skip') {
-            skippedCount++;
-            processed.push({ id: existingStudent.id, matricule: existingStudent.matricule, first_name: firstName, last_name: lastName, action: 'skipped' });
+          if (!firstName && !lastName && !item.matricule) {
+            errors.push({ row: i + 1, error: 'الاسم واللقب ورقم التعريف فارغة' });
             continue;
+          }
+
+          if (!firstName) firstName = 'تلميذ';
+          if (!lastName) lastName = 'جديد';
+
+          // Normalize gender ('M' or 'F')
+          let gender = 'M';
+          const rawGender = String(item.gender || '').trim().toLowerCase();
+          if (rawGender.includes('أنث') || rawGender.includes('انث') || rawGender === 'f' || rawGender.includes('fille') || rawGender.includes('femme') || rawGender === '2') {
+            gender = 'F';
+          }
+
+          // Resolve birth date (accepts Date, numeric serial, YYYY-MM-DD or DD/MM/YYYY or DD-MM-YYYY)
+          let birthDate = item.birth_date ? String(item.birth_date).trim() : null;
+          if (birthDate) {
+            birthDate = birthDate.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+            const numDate = Number(birthDate);
+            if (!isNaN(numDate) && numDate > 1000 && numDate < 60000) {
+              const d = new Date(Math.round((numDate - 25569) * 86400 * 1000));
+              if (!isNaN(d.getTime())) {
+                const y = d.getUTCFullYear();
+                const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+                const day = String(d.getUTCDate()).padStart(2, '0');
+                birthDate = `${y}-${m}-${day}`;
+              }
+            } else {
+              const parts = birthDate.split(/[\/\-\.]/);
+              if (parts.length === 3) {
+                if (parts[2].length === 4) {
+                  birthDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                } else if (parts[0].length === 4) {
+                  birthDate = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+                }
+              }
+            }
+          }
+
+          const birthPlace = (item.birth_place || '').trim() || null;
+          const phone = sanitizePhone(item.phone);
+          const address = (item.address || '').trim() || null;
+          const nationalId = (item.national_id || '').trim() || null;
+
+          // Régime & Cantine detection (نصف داخلي / خارجي)
+          let rawStatut = String(item.statut || '').trim().toLowerCase();
+          let rawMother = String(item.mother_name || '').trim();
+
+          // Guard against regime being placed in mother_name due to column offset or "إطعام"
+          if (rawMother) {
+            const mLower = rawMother.toLowerCase();
+            if (mLower.includes('خارجي') || mLower.includes('نصف') || mLower.includes('داخلي') || mLower.includes('demi') || mLower.includes('externe')) {
+              if (!rawStatut) rawStatut = mLower;
+              rawMother = '';
+            }
+          }
+
+          let regime = 'demi_pensionnaire';
+          let canteenActive = 1;
+          if (rawStatut.includes('خارجي') || rawStatut.includes('externe')) {
+            regime = 'externe';
+            canteenActive = 0;
+          } else if (rawStatut.includes('نصف') || rawStatut.includes('demi') || rawStatut.includes('مطعم') || rawStatut.includes('داخلي')) {
+            regime = 'demi_pensionnaire';
+            canteenActive = 1;
+          }
+
+          // Compile notes
+          let notesParts = [];
+          if (rawMother) {
+            notesParts.push(`الأم: ${rawMother}`);
+          }
+          if (item.statut && item.statut.trim()) {
+            notesParts.push(`الصفة: ${item.statut.trim()}`);
+          }
+          if (item.raw_group && item.raw_group.trim()) {
+            notesParts.push(`فوج الرقمنة: ${item.raw_group.trim()}`);
+          }
+          if (item.notes && item.notes.trim()) {
+            notesParts.push(item.notes.trim());
+          }
+          const notes = notesParts.length > 0 ? notesParts.join(' | ') : null;
+
+          // ==============================================================
+          // 1. RESOLVE LEVEL & GROUP INTELLIGENTLY (BILINGUAL AR/FR)
+          // ==============================================================
+          let rawGroupName = (item.group_name || item.raw_group || '').trim();
+          let rawLevelName = (item.level_name || '').trim();
+
+          const classInfo = parseAlgerianClassAndLevel({
+            rawGroup: rawGroupName,
+            rawLevel: rawLevelName,
+            defaultLevelId: toNullableId(item.level_id) || toNullableId(defaultLevelId),
+            allLevels
+          });
+
+          let levelId = classInfo.levelId;
+
+          // ==============================================================
+          // 2. AUTO-RESOLVE & AUTO-CREATE PARENT (parents table)
+          // ==============================================================
+          let rawParentName = sanitizeLettersOnly(item.parent_name || item.father_name || '');
+          let parentPhone = sanitizePhone(item.parent_phone) || phone;
+          let parentFullName = rawParentName;
+
+          if (rawParentName) {
+            if (!rawParentName.includes(lastName) && rawParentName.split(/\s+/).length <= 2) {
+              parentFullName = `${lastName} ${rawParentName}`.trim();
+            }
+          } else if (parentPhone) {
+            parentFullName = `ولي أمر التلميذ ${lastName} ${firstName}`.trim();
+          }
+
+          let parentId = null;
+
+          if (parentFullName || parentPhone) {
+            let cleanPhone = parentPhone ? parentPhone.replace(/[\s\-\.]/g, '') : '';
+            let existingParent = null;
+
+            if (cleanPhone.length >= 8) {
+              existingParent = DB.queryOne(`
+                SELECT * FROM parents 
+                WHERE REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '.', '') = ? 
+                LIMIT 1
+              `, [cleanPhone]);
+            }
+
+            if (!existingParent && parentFullName) {
+              existingParent = DB.queryOne(`
+                SELECT * FROM parents 
+                WHERE LOWER(TRIM(full_name)) = LOWER(TRIM(?))
+                LIMIT 1
+              `, [parentFullName]);
+            }
+
+            if (existingParent) {
+              parentId = existingParent.id;
+              parentFullName = existingParent.full_name;
+              parentPhone = existingParent.phone || parentPhone;
+              if (!existingParent.address && address) {
+                DB.run("UPDATE parents SET address = ? WHERE id = ?", [address, parentId]);
+              }
+            } else if (parentFullName) {
+              const resPar = DB.run(`
+                INSERT INTO parents (full_name, phone, address, discount_percent, notes, active)
+                VALUES (?, ?, ?, 0, 'تم التسجيل تلقائياً عبر استيراد ملف الرقمنة', 1)
+              `, [parentFullName, parentPhone || '', address || '']);
+              parentId = resPar.lastInsertRowid;
+              parentsCreatedCount++;
+            }
+          }
+
+          // ==============================================================
+          // 3. AUTO-RESOLVE & AUTO-CREATE GROUP / CLASSE (groups table)
+          // STRICT LEVEL ISOLATION: Never match a group from another level!
+          // ==============================================================
+          let groupId = toNullableId(item.group_id) || toNullableId(defaultGroupId);
+
+          if (!groupId && (rawGroupName || classInfo.division)) {
+            const cleanG = rawGroupName.toLowerCase().trim();
+            // Filter strictly to groups belonging to this student's level
+            const levelGroups = allGroups.filter(g => g.level_id === levelId);
+
+            let matchedG = null;
+
+            // Step 1: Match exact name or standard bilingual name
+            matchedG = levelGroups.find(g => {
+              const dbG = g.name.toLowerCase().trim();
+              return dbG === cleanG || dbG === classInfo.standardName.toLowerCase().trim();
+            });
+
+            // Step 2: Match by identical division within the same level
+            if (!matchedG && classInfo.division) {
+              matchedG = levelGroups.find(g => {
+                const gInfo = parseAlgerianClassAndLevel({
+                  rawGroup: g.name,
+                  defaultLevelId: g.level_id,
+                  allLevels
+                });
+                return gInfo.division === classInfo.division;
+              });
+            }
+
+            // Step 3: Match normalized alphanumeric characters within the same level
+            if (!matchedG && cleanG) {
+              const cleanGAlnum = cleanG.replace(/[^0-9a-zA-Z\u0621-\u064A]/g, '');
+              matchedG = levelGroups.find(g => {
+                const dbAlnum = g.name.toLowerCase().replace(/[^0-9a-zA-Z\u0621-\u064A]/g, '');
+                return dbAlnum === cleanGAlnum;
+              });
+            }
+
+            if (matchedG) {
+              groupId = matchedG.id;
+            } else {
+              // Create new group with standard bilingual name
+              const newGroupName = classInfo.standardName;
+              let safeLevelId = toNullableId(levelId) || allLevels[0]?.id || getOrCreateDefaultLevelId();
+
+              const resNewG = DB.run(`
+                INSERT INTO groups (name, level_id, subject_id, teacher_id, room_id, school_year, day_of_week, start_time, end_time, price_monthly, max_students, active)
+                VALUES (?, ?, ?, ?, ?, ?, 'Dimanche', '08:00', '16:30', 0, 40, 1)
+              `, [newGroupName, safeLevelId, defaultSubjectId, defaultTeacherId, defaultRoomId, activeYearSetting]);
+
+              groupId = resNewG.lastInsertRowid;
+              groupsCreatedCount++;
+              allGroups.push({ id: groupId, name: newGroupName, level_id: safeLevelId });
+            }
+          }
+
+          // ==============================================================
+          // 4. DUPLICATE CHECK & STUDENT RECORD SAVE
+          // ==============================================================
+          let customMatricule = (item.matricule ? String(item.matricule).trim() : '');
+          if (customMatricule.endsWith('.0')) customMatricule = customMatricule.slice(0, -2);
+
+          let existingStudent = null;
+          if (customMatricule) {
+            existingStudent = DB.queryOne("SELECT * FROM students WHERE matricule = ? COLLATE NOCASE", [customMatricule]);
+          }
+          if (!existingStudent && firstName && lastName && birthDate) {
+            existingStudent = DB.queryOne(
+              "SELECT * FROM students WHERE LOWER(TRIM(first_name)) = LOWER(?) AND LOWER(TRIM(last_name)) = LOWER(?) AND birth_date = ?",
+              [firstName, lastName, birthDate]
+            );
+          }
+
+          let studentId = null;
+
+          if (existingStudent) {
+            if (existingStudent.active === 0) {
+              studentId = existingStudent.id;
+              const updatedMatricule = customMatricule || existingStudent.matricule;
+              DB.run(`
+                UPDATE students
+                SET active = 1,
+                    first_name = ?, last_name = ?, gender = ?,
+                    birth_date = COALESCE(?, birth_date),
+                    birth_place = COALESCE(?, birth_place),
+                    phone = COALESCE(?, phone),
+                    parent_id = COALESCE(?, parent_id),
+                    parent_name = COALESCE(?, parent_name),
+                    parent_phone = COALESCE(?, parent_phone),
+                    address = COALESCE(?, address),
+                    level_id = COALESCE(?, level_id),
+                    regime = ?,
+                    canteen_active = ?,
+                    national_id = COALESCE(?, national_id),
+                    notes = CASE WHEN ? IS NOT NULL THEN (COALESCE(notes || ' | ', '') || ?) ELSE notes END
+                WHERE id = ?
+              `, [
+                firstName, lastName, gender,
+                birthDate, birthPlace, phone,
+                toNullableId(parentId), parentFullName, parentPhone, address,
+                toNullableId(levelId), regime, canteenActive, nationalId,
+                notes, notes, studentId
+              ]);
+              importedCount++;
+              processed.push({ id: studentId, matricule: updatedMatricule, first_name: firstName, last_name: lastName, action: 'created' });
+            } else if (duplicateAction === 'skip') {
+              skippedCount++;
+              processed.push({ id: existingStudent.id, matricule: existingStudent.matricule, first_name: firstName, last_name: lastName, action: 'skipped' });
+              continue;
+            } else {
+              // Update active student
+              studentId = existingStudent.id;
+              const updatedMatricule = customMatricule || existingStudent.matricule;
+              DB.run(`
+                UPDATE students
+                SET active = 1,
+                    first_name = ?, last_name = ?, gender = ?,
+                    birth_date = COALESCE(?, birth_date),
+                    birth_place = COALESCE(?, birth_place),
+                    phone = COALESCE(?, phone),
+                    parent_id = COALESCE(?, parent_id),
+                    parent_name = COALESCE(?, parent_name),
+                    parent_phone = COALESCE(?, parent_phone),
+                    address = COALESCE(?, address),
+                    level_id = COALESCE(?, level_id),
+                    regime = ?,
+                    canteen_active = ?,
+                    national_id = COALESCE(?, national_id),
+                    notes = CASE WHEN ? IS NOT NULL THEN (COALESCE(notes || ' | ', '') || ?) ELSE notes END
+                WHERE id = ?
+              `, [
+                firstName, lastName, gender,
+                birthDate, birthPlace, phone,
+                toNullableId(parentId), parentFullName, parentPhone, address,
+                toNullableId(levelId), regime, canteenActive, nationalId,
+                notes, notes, studentId
+              ]);
+              updatedCount++;
+              processed.push({ id: studentId, matricule: updatedMatricule, first_name: firstName, last_name: lastName, action: 'updated' });
+            }
           } else {
-            // Update active student
-            studentId = existingStudent.id;
-            const updatedMatricule = customMatricule || existingStudent.matricule;
-            DB.run(`
-              UPDATE students
-              SET active = 1,
-                  first_name = ?, last_name = ?, gender = ?,
-                  birth_date = COALESCE(?, birth_date),
-                  birth_place = COALESCE(?, birth_place),
-                  phone = COALESCE(?, phone),
-                  parent_id = COALESCE(?, parent_id),
-                  parent_name = COALESCE(?, parent_name),
-                  parent_phone = COALESCE(?, parent_phone),
-                  address = COALESCE(?, address),
-                  level_id = COALESCE(?, level_id),
-                  regime = ?,
-                  canteen_active = ?,
-                  national_id = COALESCE(?, national_id),
-                  notes = CASE WHEN ? IS NOT NULL THEN (COALESCE(notes || ' | ', '') || ?) ELSE notes END
-              WHERE id = ?
+            // S'assurer que le matricule est unique pour ne pas déclencher d'exception SQLite UNIQUE
+            let finalMatricule = customMatricule;
+            if (!finalMatricule || DB.queryOne("SELECT id FROM students WHERE matricule = ? COLLATE NOCASE", [finalMatricule])) {
+              finalMatricule = generateUniqueMatricule();
+            }
+            const qrCode = finalMatricule;
+
+            let safeStudentLevelId = toNullableId(levelId);
+            if (safeStudentLevelId && !allLevels.some(l => l.id === safeStudentLevelId)) {
+              safeStudentLevelId = allLevels[0]?.id || null;
+            }
+
+            const resInsert = DB.run(`
+              INSERT INTO students (matricule, first_name, last_name, gender, birth_date, birth_place, phone, parent_id, parent_name, parent_phone, address, level_id, qr_code, notes, regime, canteen_active, national_id, active)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
             `, [
-              firstName, lastName, gender,
+              finalMatricule, firstName, lastName, gender,
               birthDate, birthPlace, phone,
               toNullableId(parentId), parentFullName, parentPhone, address,
-              toNullableId(levelId), regime, canteenActive, nationalId,
-              notes, notes, studentId
+              safeStudentLevelId, qrCode, notes, regime, canteenActive, nationalId
             ]);
-            updatedCount++;
-            processed.push({ id: studentId, matricule: updatedMatricule, first_name: firstName, last_name: lastName, action: 'updated' });
-          }
-        } else {
-          // Insert new student
-          const finalMatricule = customMatricule || generateUniqueMatricule();
-          const qrCode = finalMatricule;
 
-          let safeStudentLevelId = toNullableId(levelId);
-          if (safeStudentLevelId && !allLevels.some(l => l.id === safeStudentLevelId)) {
-            safeStudentLevelId = allLevels[0]?.id || null;
+            studentId = resInsert.lastInsertRowid;
+            importedCount++;
+            processed.push({ id: studentId, matricule: finalMatricule, first_name: firstName, last_name: lastName, action: 'created' });
           }
 
-          const resInsert = DB.run(`
-            INSERT INTO students (matricule, first_name, last_name, gender, birth_date, birth_place, phone, parent_id, parent_name, parent_phone, address, level_id, qr_code, notes, regime, canteen_active, national_id, active)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
-          `, [
-            finalMatricule, firstName, lastName, gender,
-            birthDate, birthPlace, phone,
-            toNullableId(parentId), parentFullName, parentPhone, address,
-            safeStudentLevelId, qrCode, notes, regime, canteenActive, nationalId
-          ]);
-
-          studentId = resInsert.lastInsertRowid;
-          importedCount++;
-          processed.push({ id: studentId, matricule: finalMatricule, first_name: firstName, last_name: lastName, action: 'created' });
-        }
-
-        // ==============================================================
-        // 5. AUTOMATIC ENROLLMENT IN CLASS (enrollments table)
-        // ==============================================================
-        if (groupId && studentId) {
-          const isEnrolled = DB.queryOne("SELECT id FROM enrollments WHERE student_id = ? AND group_id = ? AND school_year = ?", [studentId, groupId, activeYearSetting]);
-          if (!isEnrolled) {
-            DB.run(`
-              INSERT INTO enrollments (student_id, group_id, school_year, registration_date, status, discount_amount)
-              VALUES (?, ?, ?, DATE('now'), 'active', 0)
-            `, [studentId, groupId, activeYearSetting]);
-            enrollmentsCount++;
+          // ==============================================================
+          // 5. AUTOMATIC ENROLLMENT IN CLASS (enrollments table)
+          // ==============================================================
+          if (groupId && studentId) {
+            const isEnrolled = DB.queryOne("SELECT id FROM enrollments WHERE student_id = ? AND group_id = ? AND school_year = ?", [studentId, groupId, activeYearSetting]);
+            if (!isEnrolled) {
+              DB.run(`
+                INSERT INTO enrollments (student_id, group_id, school_year, registration_date, status, discount_amount)
+                VALUES (?, ?, ?, DATE('now'), 'active', 0)
+              `, [studentId, groupId, activeYearSetting]);
+              enrollmentsCount++;
+            }
           }
-        }
 
-        // ==============================================================
-        // 6. AUTO-SUBSCRIBE TO CANTINE IF DEMI-PENSION
-        // ==============================================================
-        if (canteenActive === 1 && studentId) {
-          try {
-            DB.run(`
-              INSERT OR IGNORE INTO canteen_subscriptions (student_id, school_year, trimester, amount, is_paid, receipt_no, paid_date)
-              VALUES (?, ?, 1, 600, 1, 'TARBIYA-IMPORT', DATE('now'))
-            `, [studentId, activeYearSetting]);
-          } catch (eCanteen) {}
+          // ==============================================================
+          // 6. AUTO-SUBSCRIBE TO CANTINE IF DEMI-PENSION
+          // ==============================================================
+          if (canteenActive === 1 && studentId) {
+            try {
+              DB.run(`
+                INSERT OR IGNORE INTO canteen_subscriptions (student_id, school_year, trimester, amount, is_paid, receipt_no, paid_date)
+                VALUES (?, ?, 1, 600, 1, 'TARBIYA-IMPORT', DATE('now'))
+              `, [studentId, activeYearSetting]);
+            } catch (eCanteen) {}
+          }
+        } catch (rowErr) {
+          console.error(`Row ${i + 1} import error:`, rowErr.message);
+          errors.push({ row: i + 1, error: rowErr.message });
         }
       }
 
       DB.exec('COMMIT');
     } catch (loopErr) {
-      DB.exec('ROLLBACK');
+      try { DB.exec('ROLLBACK'); } catch (e) {}
       throw loopErr;
     }
 

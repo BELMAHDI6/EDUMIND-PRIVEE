@@ -1553,7 +1553,12 @@ class EdumindApp {
 
     // Authentication State
     this.isAuthenticated = sessionStorage.getItem('edumind_auth') === 'true' || localStorage.getItem('edumind_auth') === 'true';
-    this.currentUser = JSON.parse(sessionStorage.getItem('edumind_user') || localStorage.getItem('edumind_user') || 'null');
+    try {
+      const stored = sessionStorage.getItem('edumind_user') || localStorage.getItem('edumind_user');
+      this.currentUser = stored && stored !== 'undefined' ? JSON.parse(stored) : null;
+    } catch (e) {
+      this.currentUser = null;
+    }
 
     this.initAudioContext();
   }
@@ -2555,7 +2560,22 @@ class EdumindApp {
         try {
           await fetch('/api/updates/restart', { method: 'POST' });
         } catch(e) {}
-        setTimeout(() => location.reload(), 1200);
+
+        let attempts = 0;
+        const pollInterval = setInterval(async () => {
+          attempts++;
+          try {
+            const check = await fetch('/api/license/status?_t=' + Date.now(), { cache: 'no-store' });
+            if (check.ok) {
+              clearInterval(pollInterval);
+              location.reload();
+            }
+          } catch(e) {}
+          if (attempts > 30) {
+            clearInterval(pollInterval);
+            location.reload();
+          }
+        }, 1000);
       }, 1500);
 
     } catch (err) {
@@ -5179,6 +5199,58 @@ class EdumindApp {
         let statut = colMap.statut !== -1 ? String(row[colMap.statut] || '').trim() : '';
         let levelName = colMap.level !== -1 ? String(row[colMap.level] || '').trim() : detectedSheetLevel;
 
+        // Si la colonne mère contient en réalité la صفة/الإطعام (خارجي أو نصف داخلي)
+        if (motherName && (motherName.includes('خارجي') || motherName.includes('نصف') || motherName.includes('داخلي') || motherName.toLowerCase().includes('demi') || motherName.toLowerCase().includes('externe'))) {
+          if (!statut) statut = motherName;
+          motherName = '';
+        }
+
+        // Découpage intelligent si prénom ou nom avec espaces
+        if (!lastName && firstName && firstName.includes(' ')) {
+          const parts = firstName.split(' ');
+          lastName = parts[0];
+          firstName = parts.slice(1).join(' ');
+        }
+        if (firstName && !lastName) lastName = firstName;
+        if (lastName && !firstName) firstName = lastName;
+
+        // Déduction automatique et complète du niveau (Bilingue Arabe / Français)
+        const combinedLvlText = (levelName + ' ' + groupName).toLowerCase();
+        if (!levelName && groupName) {
+          if (combinedLvlText.includes('1am') || combinedLvlText.includes('1م') || combinedLvlText.includes('1ام') || (combinedLvlText.includes('1') && combinedLvlText.includes('متوسط')) || combinedLvlText.includes('اولي متوسط') || combinedLvlText.includes('س1م')) levelName = '1AM';
+          else if (combinedLvlText.includes('2am') || combinedLvlText.includes('2م') || combinedLvlText.includes('2ام') || (combinedLvlText.includes('2') && combinedLvlText.includes('متوسط')) || combinedLvlText.includes('ثانيه متوسط') || combinedLvlText.includes('س2م')) levelName = '2AM';
+          else if (combinedLvlText.includes('3am') || combinedLvlText.includes('3م') || combinedLvlText.includes('3ام') || (combinedLvlText.includes('3') && combinedLvlText.includes('متوسط')) || combinedLvlText.includes('ثالثه متوسط') || combinedLvlText.includes('س3م')) levelName = '3AM';
+          else if (combinedLvlText.includes('4am') || combinedLvlText.includes('4م') || combinedLvlText.includes('4ام') || (combinedLvlText.includes('4') && combinedLvlText.includes('متوسط')) || combinedLvlText.includes('رابعه متوسط') || combinedLvlText.includes('بيام') || combinedLvlText.includes('bem') || combinedLvlText.includes('س4م')) levelName = '4AM';
+          else if (combinedLvlText.includes('1as') || combinedLvlText.includes('1ث') || (combinedLvlText.includes('1') && combinedLvlText.includes('ثانوي')) || combinedLvlText.includes('اولي ثانوي') || combinedLvlText.includes('س1ث') || combinedLvlText.includes('tcst') || combinedLvlText.includes('tcl')) levelName = '1AS';
+          else if (combinedLvlText.includes('2as') || combinedLvlText.includes('2ث') || (combinedLvlText.includes('2') && combinedLvlText.includes('ثانوي')) || combinedLvlText.includes('ثانيه ثانوي') || combinedLvlText.includes('س2ث')) levelName = '2AS';
+          else if (combinedLvlText.includes('3as') || combinedLvlText.includes('3ث') || (combinedLvlText.includes('3') && combinedLvlText.includes('ثانوي')) || combinedLvlText.includes('ثالثه ثانوي') || combinedLvlText.includes('باك') || combinedLvlText.includes('bac') || combinedLvlText.includes('س3ث')) levelName = '3AS';
+          else if (combinedLvlText.includes('1ap') || (combinedLvlText.includes('1') && combinedLvlText.includes('ابتدائي'))) levelName = '1AP';
+          else if (combinedLvlText.includes('2ap') || (combinedLvlText.includes('2') && combinedLvlText.includes('ابتدائي'))) levelName = '2AP';
+          else if (combinedLvlText.includes('3ap') || (combinedLvlText.includes('3') && combinedLvlText.includes('ابتدائي'))) levelName = '3AP';
+          else if (combinedLvlText.includes('4ap') || (combinedLvlText.includes('4') && combinedLvlText.includes('ابتدائي'))) levelName = '4AP';
+          else if (combinedLvlText.includes('5ap') || (combinedLvlText.includes('5') && combinedLvlText.includes('ابتدائي'))) levelName = '5AP';
+        }
+
+        // Formatage bilingue élégant de l'affichage du groupe pour la prévisualisation
+        let displayGroupName = groupName;
+        if (groupName) {
+          const gnClean = groupName.toLowerCase();
+          const divMatch = gnClean.match(/(?:[1-5]\s*(?:am|as|ap|ms|م|ث|ب|متوسط|ثانوي|ابتدائي))\s*[\-\s/:]*(\d+)/i) ||
+                           gnClean.match(/(?:فوج|قسم|فرع|groupe|classe|section|division|div|grp|cls)\s*[:：\-\s]*(\d+)/i) ||
+                           gnClean.match(/^(\d+)$/);
+          const divNum = divMatch ? divMatch[1] : null;
+          if (divNum && levelName) {
+            if (levelName === '1AM') displayGroupName = `1 متوسط ${divNum} (1AM-${divNum})`;
+            else if (levelName === '2AM') displayGroupName = `2 متوسط ${divNum} (2AM-${divNum})`;
+            else if (levelName === '3AM') displayGroupName = `3 متوسط ${divNum} (3AM-${divNum})`;
+            else if (levelName === '4AM') displayGroupName = `4 متوسط ${divNum} (4AM-${divNum})`;
+            else if (levelName === '1AS') displayGroupName = `1 ثانوي ${divNum} (1AS-${divNum})`;
+            else if (levelName === '2AS') displayGroupName = `2 ثانوي ${divNum} (2AS-${divNum})`;
+            else if (levelName === '3AS') displayGroupName = `3 ثانوي ${divNum} (3AS-${divNum})`;
+            else if (levelName.endsWith('AP')) displayGroupName = `${levelName[0]} ابتدائي ${divNum} (${levelName}-${divNum})`;
+          }
+        }
+
         if (!lastName && firstName.includes(' ')) {
           const parts = firstName.split(' ');
           lastName = parts[0];
@@ -5239,7 +5311,7 @@ class EdumindApp {
           phone: phone || null,
           address: address || null,
           raw_group: groupName || null,
-          group_name: groupName || null,
+          group_name: displayGroupName || groupName || null,
           statut: statut || null,
           level_name: levelName || null,
           isValid: Boolean(firstName && lastName)
@@ -17994,7 +18066,13 @@ class EdumindApp {
 }
 
 // Instantiate and start app
-const app = new EdumindApp();
-document.addEventListener('DOMContentLoaded', () => {
-  app.init();
-});
+window.app = new EdumindApp();
+const app = window.app;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.app.init();
+  });
+} else {
+  window.app.init();
+}

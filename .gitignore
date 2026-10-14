@@ -1,5 +1,6 @@
 node_modules/
-EDUMIND_Scolaire_Setup*.exe
+EDUMIND_Privee_Setup*.exe
+PRIVEE_Setup*.exe
 *.exe
 bin/
 
@@ -8,6 +9,7 @@ temp_*
 *.zip
 !updates/*.zip
 *.bak
+test_*.js
 
 # Chromium unpacked binaries
 *.dll

@@ -62,6 +62,15 @@ async function ensureServerRunning() {
     windowsHide: true
   });
 
+  serverProcess.on('exit', (code) => {
+    serverProcess = null;
+    if (!isNormalQuit) {
+      console.log(`[Main] Serveur Node arrêté (code: ${code}). Redémarrage automatique d'EDUMIND...`);
+      app.relaunch();
+      app.exit(0);
+    }
+  });
+
   for (let i = 0; i < 40; i++) {
     const ready = await isServerReady(activePort);
     if (ready) return activePort;
@@ -70,7 +79,10 @@ async function ensureServerRunning() {
   return activePort;
 }
 
+let isNormalQuit = false;
+
 function cleanupServer() {
+  isNormalQuit = true;
   if (serverProcess) {
     const pid = serverProcess.pid;
     try {
@@ -120,6 +132,15 @@ async function createMainWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+    console.log(`[Main] En attente du serveur (${errorCode}: ${errorDescription})... Nouvelle tentative dans 1s`);
+    setTimeout(() => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.loadURL(`http://127.0.0.1:${activePort}`);
+      }
+    }, 1000);
   });
 
   try {
