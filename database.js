@@ -685,10 +685,18 @@ function initDatabase() {
       ('school_phone', '0550 00 00 00'),
       ('school_address', 'Alger, Algérie'),
       ('active_year', '2026-2027'),
+      ('school_year', '2026-2027'),
       ('currency', 'DA'),
       ('language', 'fr'),
       ('theme', 'dark');
     `);
+  } else {
+    try {
+      db.exec(`
+        INSERT OR IGNORE INTO settings (key, value) VALUES ('school_year', '2026-2027');
+        UPDATE settings SET value = '2026-2027' WHERE key IN ('active_year', 'school_year') AND (value LIKE '%2025%' OR value IS NULL OR value = '');
+      `);
+    } catch (e) {}
   }
 
   // Populate Default Levels if empty

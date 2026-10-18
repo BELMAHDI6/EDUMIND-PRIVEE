@@ -1,7 +1,7 @@
 {
-  "version": "1.0.3",
-  "releaseDate": "2026-10-14",
-  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.3.zip",
-  "notes": "Correction de la reconnaissance des divisions et niveaux et stabilisation du redemarrage",
-  "notes_ar": "Correction de la reconnaissance des divisions et niveaux et stabilisation du redemarrage"
+  "version": "1.0.4",
+  "releaseDate": "2026-10-18",
+  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.4.zip",
+  "notes": "تصحيح بطاقة التلميذ باللغة العربية وتحديث السنة الدراسية إلى 2026-2027",
+  "notes_ar": "تصحيح بطاقة التلميذ باللغة العربية وتحديث السنة الدراسية إلى 2026-2027"
 }

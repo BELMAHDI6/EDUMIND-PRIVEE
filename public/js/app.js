@@ -332,10 +332,14 @@ const i18n = {
     modal_card_title: "Carte Scolaire de l'Élève",
     card_school_sub: "ÉTABLISSEMENT D'ENSEIGNEMENT",
     card_tag_student: "ÉLÈVE • OFFICIEL",
-    card_verified: "OFFICIEL",
-    lbl_card_level: "Niveau :",
-    lbl_card_phone: "Tél :",
-    card_barcode_sublabel: "Pointage Automatique & Présence",
+    card_verified: "رسمي",
+    lbl_card_level: "المستوى :",
+    lbl_card_class: "القسم :",
+    lbl_card_class_bilingual: "القسم :",
+    lbl_card_gender: "الجنس :",
+    lbl_card_gender_bilingual: "الجنس :",
+    lbl_card_phone: "الهاتف :",
+    card_barcode_sublabel: "بطاقة الدخول وتسجيل الحضور الذكي",
     btn_copy_code: "Copier le code",
     btn_print_card: "Imprimer (CR-80)",
     theme_emerald: "Vert Émeraude",
@@ -1083,6 +1087,10 @@ const i18n = {
     card_tag_student: "بطاقة مدرسية • رسمي",
     card_verified: "رسمي",
     lbl_card_level: "المستوى :",
+    lbl_card_class: "القسم :",
+    lbl_card_class_bilingual: "القسم :",
+    lbl_card_gender: "الجنس :",
+    lbl_card_gender_bilingual: "الجنس :",
     lbl_card_phone: "الهاتف :",
     card_barcode_sublabel: "بطاقة الدخول وتسجيل الحضور الذكي",
     btn_copy_code: "نسخ الكود",
@@ -1747,6 +1755,67 @@ class EdumindApp {
     }
 
     return str;
+  }
+
+  formatGenderAr(gender) {
+    const g = String(gender || '').trim().toLowerCase();
+    const isFemale = g === 'f' || g.includes('أنثى') || g.includes('fille') || g.includes('fem');
+    return isFemale ? 'أنثى' : 'ذكر';
+  }
+
+  formatGenderArFr(gender) {
+    return this.formatGenderAr(gender);
+  }
+
+  formatClassAbbr(groupName, levelName) {
+    const raw = groupName || levelName || '';
+    if (!raw) return '—';
+    const str = String(raw).split(',')[0].trim();
+
+    // 1. Middle school (متوسط / AM)
+    const mAm = str.match(/([1-4])\s*(?:AM|متوسط|م)[-_\s]*(\d+)?/i);
+    if (mAm) {
+      const yr = mAm[1];
+      const grp = mAm[2] ? mAm[2] : '';
+      return grp ? `${yr}م${grp}` : `${yr} متوسط`;
+    }
+
+    // 2. Secondary (ثانوي / AS)
+    const mAs = str.match(/([1-3])\s*(?:AS|ثانوي|ث)[-_\s]*(\d+)?/i);
+    if (mAs) {
+      const yr = mAs[1];
+      const grp = mAs[2] ? mAs[2] : '';
+      return grp ? `${yr}ث${grp}` : `${yr} ثانوي`;
+    }
+
+    // 3. Primary (ابتدائي / AP)
+    const mAp = str.match(/([1-5])\s*(?:AP|ابتدائي|ب)[-_\s]*(\d+)?/i);
+    if (mAp) {
+      const yr = mAp[1];
+      const grp = mAp[2] ? mAp[2] : '';
+      return grp ? `${yr}ب${grp}` : `${yr} ابتدائي`;
+    }
+
+    // 4. Pre-school / Préparatoire
+    if (/تحضيري|prep/i.test(str)) {
+      return 'قسم تحضيري';
+    }
+
+    // 5. Parentheses: e.g. "1 متوسط 1 (1AM-1)" -> take Arabic part
+    const mParen = str.match(/^(.*?)\s*\((.*?)\)$/);
+    if (mParen) {
+      const p1 = mParen[1].trim();
+      const p2 = mParen[2].trim();
+      if (/[\u0600-\u06FF]/.test(p1)) return p1;
+      if (/[\u0600-\u06FF]/.test(p2)) return p2;
+    }
+
+    return str;
+  }
+
+  getSchoolYear() {
+    const raw = this.settings?.active_year || this.settings?.school_year || '2026-2027';
+    return String(raw).replace('-', '/');
   }
 
   async init() {
@@ -4516,7 +4585,7 @@ class EdumindApp {
   executeBatchBadgePrint(students, theme = 'emerald') {
     const isAr = this.lang === 'ar';
     const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-    const schoolYear = this.settings?.school_year || '2025/2026';
+    const schoolYear = this.getSchoolYear();
 
     // Helper to generate vector SVG barcode using JsBarcode
     const generateBarcodeSvg = (matricule) => {
@@ -4555,10 +4624,10 @@ class EdumindApp {
     const renderCard = (s) => {
       const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim();
       const matricule = s.matricule || `ETU-${String(s.id).padStart(4, '0')}`;
-      const levelName = s.level_name || 'Niveau non défini';
-      const phone = s.phone || s.parent_phone || '-';
+      const classAbbr = this.formatClassAbbr(s.group_name, s.level_name);
+      const genderAr = this.formatGenderAr(s.gender);
       const barcodeSvg = generateBarcodeSvg(matricule);
-      const isFemale = (s.gender || '').toUpperCase() === 'F';
+      const isFemale = (s.gender || '').toUpperCase() === 'F' || String(s.gender || '').includes('أنثى') || String(s.gender || '').toLowerCase().includes('fille');
 
       return `
         <div class="badge-wrapper">
@@ -4568,17 +4637,17 @@ class EdumindApp {
           <div class="crop-mark bottom-left"></div>
           <div class="crop-mark bottom-right"></div>
 
-          <div class="print-cr80-card ${theme}">
+          <div class="print-cr80-card ${theme}" dir="rtl">
             <div class="card-header">
               <div class="brand">
                 <div class="logo">🎓</div>
                 <div>
                   <div class="school-name">${this.escapeHtml(schoolName)}</div>
-                  <div class="school-tag">${isAr ? 'مؤسسة تعليمية وتدريبية' : "ÉTABLISSEMENT D'ENSEIGNEMENT"}</div>
+                  <div class="school-tag">مؤسسة تعليمية وتدريبية</div>
                 </div>
               </div>
               <div class="badge-col">
-                <span class="badge-tag">${isAr ? 'بطاقة مدرسية • رسمي' : 'CARTE ÉLÈVE • OFFICIEL'}</span>
+                <span class="badge-tag">بطاقة مدرسية • رسمي</span>
                 <span class="year-tag">${this.escapeHtml(schoolYear)}</span>
               </div>
             </div>
@@ -4591,14 +4660,15 @@ class EdumindApp {
               </div>
               <div class="details-box">
                 <div class="student-name">${this.escapeHtml(fullName)}</div>
-                <div class="matricule-pill">N° ${this.escapeHtml(matricule)}</div>
-                <div class="info-line"><strong>${isAr ? 'المستوى :' : 'Niveau :'}</strong> ${this.escapeHtml(levelName)}</div>
-                <div class="info-line"><strong>${isAr ? 'الهاتف :' : 'Tél :'}</strong> ${this.escapeHtml(phone)}</div>
+                <div class="matricule-pill">رقم القيد: ${this.escapeHtml(matricule)}</div>
+                <div class="info-line"><strong>القسم :</strong> ${this.escapeHtml(classAbbr)}</div>
+                <div class="info-line"><strong>الجنس :</strong> ${this.escapeHtml(genderAr)}</div>
               </div>
             </div>
 
             <div class="barcode-box">
               ${barcodeSvg}
+              <div style="font-size: 6px; color: #64748b; font-weight: 700; margin-top: 1px;">بطاقة الدخول وتسجيل الحضور الذكي</div>
             </div>
           </div>
         </div>
@@ -4763,6 +4833,7 @@ class EdumindApp {
           .school-tag { font-size: 6px; opacity: 0.8; letter-spacing: 0.3px; }
 
           .badge-col { text-align: right; }
+          .print-cr80-card[dir="rtl"] .badge-col { text-align: left; }
           .badge-tag { font-size: 6px; font-weight: 800; background: #f59e0b; color: #fff; padding: 1px 3.5px; border-radius: 2px; }
           .year-tag { font-size: 7px; display: block; opacity: 0.8; margin-top: 1px; }
 
@@ -4785,12 +4856,14 @@ class EdumindApp {
           .white .avatar-box { background: #f1f5f9; border-color: #cbd5e1; }
           .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
 
-          .details-box { flex: 1; min-width: 0; line-height: 1.2; }
-          .student-name { font-size: 11.5px; font-weight: 800; margin-bottom: 0.8mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .matricule-pill { display: inline-block; font-family: monospace; font-size: 8px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 4px; border-radius: 2px; margin-bottom: 0.8mm; }
+          .details-box { flex: 1; min-width: 0; line-height: 1.25; }
+          .print-cr80-card[dir="rtl"] .details-box { text-align: right; }
+          .student-name { font-size: 11.5px; font-weight: 800; margin-bottom: 0.8mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+          .matricule-pill { display: block; width: fit-content; margin: 0 auto 0.8mm auto; font-family: monospace; font-size: 8px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 4px; border-radius: 2px; text-align: center; }
           .white .matricule-pill { background: #dbeafe; color: #1e40af; }
-          .info-line { font-size: 7.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .info-line strong { opacity: 0.75; }
+          .info-line { font-size: 7.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.6mm; }
+          .print-cr80-card[dir="rtl"] .info-line { text-align: right; }
+          .info-line strong { opacity: 0.85; }
 
           .barcode-box {
             background: #ffffff;
@@ -6568,7 +6641,7 @@ class EdumindApp {
 
     // School Info from settings
     const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-    const schoolYear = this.settings?.school_year || '2025/2026';
+    const schoolYear = this.getSchoolYear();
     const schoolLogo = this.settings?.school_logo || '/img/logo-icon.png';
 
     const schoolNameEl = document.getElementById('cardSchoolName');
@@ -6583,11 +6656,9 @@ class EdumindApp {
     // Student Info
     const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim();
     const matricule = s.matricule || `ETU-${String(s.id).padStart(4, '0')}`;
-    const levelName = this.formatLevelName(s.level_name) || (this.lang === 'ar' ? 'المستوى غير محدد' : 'Niveau non défini');
-    const groupName = enrollments.length > 0
-      ? enrollments.map(e => this.formatGroupName(e.group_name)).slice(0, 2).join(' • ')
-      : (this.lang === 'ar' ? 'غير مسجل في قسم' : 'Non inscrit');
-    const phone = s.phone || s.parent_phone || '-';
+    const primaryGroupName = enrollments.length > 0 ? enrollments[0].group_name : (s.group_name || '');
+    const classAbbr = this.formatClassAbbr(primaryGroupName, s.level_name);
+    const genderAr = this.formatGenderAr(s.gender);
 
     const nameEl = document.getElementById('cardStudentName');
     if (nameEl) nameEl.textContent = fullName;
@@ -6595,11 +6666,20 @@ class EdumindApp {
     const matriculeEl = document.getElementById('cardStudentMatricule');
     if (matriculeEl) matriculeEl.textContent = matricule;
 
-    const levelEl = document.getElementById('cardStudentLevel');
-    if (levelEl) levelEl.textContent = levelName;
+    const classEl = document.getElementById('cardStudentClass');
+    if (classEl) classEl.textContent = classAbbr;
 
-    const phoneEl = document.getElementById('cardStudentPhone');
-    if (phoneEl) phoneEl.textContent = phone;
+    const genderEl = document.getElementById('cardStudentGender');
+    if (genderEl) genderEl.textContent = genderAr;
+
+    const subEl = document.getElementById('cardSchoolSub');
+    if (subEl) subEl.textContent = 'مؤسسة تعليمية وتدريبية';
+
+    const tagEl = document.getElementById('cardOfficialTag');
+    if (tagEl) tagEl.textContent = 'بطاقة مدرسية • رسمي';
+
+    const barcodeSubEl = document.getElementById('cardBarcodeSublabel');
+    if (barcodeSubEl) barcodeSubEl.textContent = 'بطاقة الدخول وتسجيل الحضور الذكي';
 
     // Avatar / Photo
     const avatarContainer = document.getElementById('cardAvatarContainer');
@@ -6641,54 +6721,57 @@ class EdumindApp {
     if (!s) return;
 
     const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-    const schoolYear = this.settings?.school_year || '2025/2026';
+    const schoolYear = this.getSchoolYear();
     const theme = this.currentCardTheme || 'emerald';
     const matricule = s.matricule || `ETU-${String(s.id).padStart(4, '0')}`;
     const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim();
-    const levelName = s.level_name || 'Niveau non défini';
-    const phone = s.phone || s.parent_phone || '-';
+    const primaryGroupName = (this.currentCardEnrollments && this.currentCardEnrollments.length > 0)
+      ? this.currentCardEnrollments[0].group_name
+      : (s.group_name || '');
+    const classAbbr = this.formatClassAbbr(primaryGroupName, s.level_name);
+    const genderAr = this.formatGenderAr(s.gender);
 
     // Get current Barcode SVG HTML
     const barcodeSvgEl = document.getElementById('cardBarcodeSvg');
     const barcodeSvgHtml = barcodeSvgEl ? barcodeSvgEl.outerHTML : '';
 
-    const isAr = this.lang === 'ar';
     const printWin = window.open('', '_blank');
     if (!printWin) {
-      alert(isAr ? 'يرجى السماح بالنوافذ المنبثقة لطباعة البطاقة.' : 'Veuillez autoriser les fenêtres contextuelles pour imprimer la carte.');
+      alert('يرجى السماح بالنوافذ المنبثقة لطباعة البطاقة.');
       return;
     }
 
     const cardHtml = `
-      <div class="print-cr80-card ${theme}">
+      <div class="print-cr80-card ${theme}" dir="rtl">
         <div class="card-header">
           <div class="brand">
             <div class="logo">🎓</div>
             <div>
               <div class="school-name">${this.escapeHtml(schoolName)}</div>
-              <div class="school-tag">${isAr ? 'مؤسسة تعليمية وتدريبية' : "ÉTABLISSEMENT D'ENSEIGNEMENT"}</div>
+              <div class="school-tag">مؤسسة تعليمية وتدريبية</div>
             </div>
           </div>
           <div class="badge-col">
-            <span class="badge-tag">${isAr ? 'بطاقة مدرسية • رسمي' : 'CARTE ÉLÈVE • OFFICIEL'}</span>
+            <span class="badge-tag">بطاقة مدرسية • رسمي</span>
             <span class="year-tag">${this.escapeHtml(schoolYear)}</span>
           </div>
         </div>
 
         <div class="card-body">
           <div class="avatar-box">
-            ${s.photo_url ? `<img src="${s.photo_url}" alt="Photo">` : `<div style="font-size: 38px; text-align: center; line-height: 80px;">${(s.gender || '').toUpperCase() === 'F' ? '👧' : '👦'}</div>`}
+            ${s.photo_url ? `<img src="${s.photo_url}" alt="Photo">` : `<div style="font-size: 38px; text-align: center; line-height: 80px;">${(s.gender || '').toUpperCase() === 'F' || String(s.gender || '').includes('أنثى') || String(s.gender || '').toLowerCase().includes('fille') ? '👧' : '👦'}</div>`}
           </div>
           <div class="details-box">
             <div class="student-name">${this.escapeHtml(fullName)}</div>
-            <div class="matricule-pill">N° ${this.escapeHtml(matricule)}</div>
-            <div class="info-line"><strong>${isAr ? 'المستوى :' : 'Niveau :'}</strong> ${this.escapeHtml(levelName)}</div>
-            <div class="info-line"><strong>${isAr ? 'الهاتف :' : 'Tél :'}</strong> ${this.escapeHtml(phone)}</div>
+            <div class="matricule-pill">رقم القيد: ${this.escapeHtml(matricule)}</div>
+            <div class="info-line"><strong>القسم :</strong> ${this.escapeHtml(classAbbr)}</div>
+            <div class="info-line"><strong>الجنس :</strong> ${this.escapeHtml(genderAr)}</div>
           </div>
         </div>
 
         <div class="barcode-box">
           ${barcodeSvgHtml}
+          <div style="font-size: 7px; color: #64748b; font-weight: 700; margin-top: 1px;">بطاقة الدخول وتسجيل الحضور الذكي</div>
         </div>
       </div>
     `;
@@ -6701,15 +6784,15 @@ class EdumindApp {
         <div class="crop-mark bottom-right"></div>
         ${cardHtml}
       </div>
-      <div class="print-hint-sub">${isAr ? 'علامات قص للتقطيع بالمقص • الحجم القياسي CR-80 (85.6 مم × 54 مم)' : 'Traits de coupe pour découpe aux ciseaux • Format Standard CR-80 (85.6mm × 54mm)'}</div>
+      <div class="print-hint-sub">علامات قص للتقطيع بالمقص • الحجم القياسي CR-80 (85.6 مم × 54 مم)</div>
     `;
 
     const html = `
       <!DOCTYPE html>
-      <html lang="${this.lang}" dir="ltr">
+      <html lang="ar" dir="rtl">
       <head>
         <meta charset="UTF-8">
-        <title>Carte Scolaire — ${this.escapeHtml(fullName)}</title>
+        <title>بطاقة مدرسية — ${this.escapeHtml(fullName)}</title>
         <style>
           @page {
             size: A4 portrait;
@@ -6809,6 +6892,7 @@ class EdumindApp {
           .school-name { font-size: 11px; font-weight: 800; line-height: 1.1; }
           .school-tag { font-size: 6.5px; opacity: 0.8; letter-spacing: 0.3px; }
           .badge-col { text-align: right; }
+          .print-cr80-card[dir="rtl"] .badge-col { text-align: left; }
           .badge-tag { font-size: 6.5px; font-weight: 800; background: #f59e0b; color: #fff; padding: 1px 4px; border-radius: 2px; }
           .year-tag { font-size: 7.5px; display: block; opacity: 0.8; margin-top: 1px; }
 
@@ -6831,11 +6915,13 @@ class EdumindApp {
           .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
 
           .details-box { flex: 1; min-width: 0; line-height: 1.25; }
-          .student-name { font-size: 12px; font-weight: 800; margin-bottom: 1mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .matricule-pill { display: inline-block; font-family: monospace; font-size: 8.5px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 4px; border-radius: 2px; margin-bottom: 1mm; }
+          .print-cr80-card[dir="rtl"] .details-box { text-align: right; }
+          .student-name { font-size: 12px; font-weight: 800; margin-bottom: 1mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+          .matricule-pill { display: block; width: fit-content; margin: 0 auto 1mm auto; font-family: monospace; font-size: 8.5px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 4px; border-radius: 2px; text-align: center; }
           .white .matricule-pill { background: #dbeafe; color: #1e40af; }
-          .info-line { font-size: 7.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .info-line strong { opacity: 0.75; }
+          .info-line { font-size: 7.8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.8mm; }
+          .print-cr80-card[dir="rtl"] .info-line { text-align: right; }
+          .info-line strong { opacity: 0.85; }
 
           .barcode-box {
             background: #ffffff;
@@ -6878,12 +6964,15 @@ class EdumindApp {
     if (!s) return;
 
     const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-    const schoolYear = this.settings?.school_year || '2025/2026';
+    const schoolYear = this.getSchoolYear();
     const theme = this.currentCardTheme || 'emerald';
     const matricule = s.matricule || `ETU-${String(s.id).padStart(4, '0')}`;
     const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim() || 'Eleve';
-    const levelName = s.level_name || 'Niveau non défini';
-    const phone = s.phone || s.parent_phone || '-';
+    const primaryGroupName = (this.currentCardEnrollments && this.currentCardEnrollments.length > 0)
+      ? this.currentCardEnrollments[0].group_name
+      : (s.group_name || '');
+    const classAbbr = this.formatClassAbbr(primaryGroupName, s.level_name);
+    const genderAr = this.formatGenderAr(s.gender);
     const latinOnly = `${s.first_name || ''}_${s.last_name || ''}`.replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     const safeMatricule = matricule.replace(/[^a-zA-Z0-9_\-]/g, '_');
     const filename = latinOnly ? `Carte_Scolaire_${safeMatricule}_${latinOnly}.pdf` : `Carte_Scolaire_${safeMatricule}.pdf`;
@@ -6969,6 +7058,7 @@ class EdumindApp {
           .pdf-cr80-card .school-name { font-size: 10px; font-weight: 800; line-height: 1.1; }
           .pdf-cr80-card .school-tag { font-size: 5.5px; opacity: 0.8; letter-spacing: 0.3px; }
           .pdf-cr80-card .badge-col { text-align: right; }
+          .pdf-cr80-card[dir="rtl"] .badge-col { text-align: left; }
           .pdf-cr80-card .badge-tag { font-size: 5.5px; font-weight: 800; background: #f59e0b; color: #fff; padding: 1px 3.5px; border-radius: 2px; }
           .pdf-cr80-card .year-tag { font-size: 6.5px; display: block; opacity: 0.8; margin-top: 1px; }
 
@@ -6991,11 +7081,13 @@ class EdumindApp {
           .pdf-cr80-card .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
 
           .pdf-cr80-card .details-box { flex: 1; min-width: 0; line-height: 1.2; }
-          .pdf-cr80-card .student-name { font-size: 10.5px; font-weight: 800; margin-bottom: 0.6mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .pdf-cr80-card .matricule-pill { display: inline-block; font-family: monospace; font-size: 7.5px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 3.5px; border-radius: 2px; margin-bottom: 0.6mm; }
+          .pdf-cr80-card[dir="rtl"] .details-box { text-align: right; }
+          .pdf-cr80-card .student-name { font-size: 10.5px; font-weight: 800; margin-bottom: 0.6mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+          .pdf-cr80-card .matricule-pill { display: block; width: fit-content; margin: 0 auto 0.6mm auto; font-family: monospace; font-size: 7.5px; font-weight: 800; background: rgba(59,130,246,0.25); padding: 1px 3.5px; border-radius: 2px; text-align: center; }
           .pdf-cr80-card.white .matricule-pill { background: #dbeafe; color: #1e40af; }
           .pdf-cr80-card .info-line { font-size: 6.8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.3mm; }
-          .pdf-cr80-card .info-line strong { opacity: 0.75; }
+          .pdf-cr80-card[dir="rtl"] .info-line { text-align: right; }
+          .pdf-cr80-card .info-line strong { opacity: 0.85; }
 
           .pdf-cr80-card .barcode-box {
             background: #ffffff;
@@ -7012,35 +7104,36 @@ class EdumindApp {
             margin: 0 auto;
           }
         </style>
-        <div class="pdf-cr80-card ${theme}">
+        <div class="pdf-cr80-card ${theme}" dir="rtl">
           <div class="card-header">
             <div class="brand">
               <div class="logo">🎓</div>
               <div>
                 <div class="school-name">${this.escapeHtml(schoolName)}</div>
-                <div class="school-tag">${this.lang === 'ar' ? 'مؤسسة تعليمية وتدريبية' : "ÉTABLISSEMENT D'ENSEIGNEMENT"}</div>
+                <div class="school-tag">مؤسسة تعليمية وتدريبية</div>
               </div>
             </div>
             <div class="badge-col">
-              <span class="badge-tag">${this.lang === 'ar' ? 'بطاقة مدرسية • رسمي' : 'CARTE ÉLÈVE • OFFICIEL'}</span>
+              <span class="badge-tag">بطاقة مدرسية • رسمي</span>
               <span class="year-tag">${this.escapeHtml(schoolYear)}</span>
             </div>
           </div>
 
           <div class="card-body">
             <div class="avatar-box">
-              ${s.photo_url ? `<img src="${s.photo_url}" alt="Photo">` : `<div style="font-size: 32px; text-align: center; line-height: 19mm;">${(s.gender || '').toUpperCase() === 'F' ? '👧' : '👦'}</div>`}
+              ${s.photo_url ? `<img src="${s.photo_url}" alt="Photo">` : `<div style="font-size: 32px; text-align: center; line-height: 19mm;">${(s.gender || '').toUpperCase() === 'F' || String(s.gender || '').includes('أنثى') || String(s.gender || '').toLowerCase().includes('fille') ? '👧' : '👦'}</div>`}
             </div>
             <div class="details-box">
               <div class="student-name">${this.escapeHtml(fullName)}</div>
-              <div class="matricule-pill">N° ${this.escapeHtml(matricule)}</div>
-              <div class="info-line"><strong>${this.lang === 'ar' ? 'المستوى :' : 'Niveau :'}</strong> ${this.escapeHtml(levelName)}</div>
-              <div class="info-line"><strong>${this.lang === 'ar' ? 'الهاتف :' : 'Tél :'}</strong> ${this.escapeHtml(phone)}</div>
+              <div class="matricule-pill">رقم القيد: ${this.escapeHtml(matricule)}</div>
+              <div class="info-line"><strong>القسم :</strong> ${this.escapeHtml(classAbbr)}</div>
+              <div class="info-line"><strong>الجنس :</strong> ${this.escapeHtml(genderAr)}</div>
             </div>
           </div>
 
           <div class="barcode-box">
             ${barcodeSvgHtml}
+            <div style="font-size: 6px; color: #64748b; font-weight: 700; margin-top: 0.5mm;">بطاقة الدخول وتسجيل الحضور الذكي</div>
           </div>
         </div>
       `;
@@ -8941,7 +9034,7 @@ class EdumindApp {
       this.currentCardTeacher = t;
 
       const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-      const schoolYear = this.settings?.school_year || '2025/2026';
+      const schoolYear = this.getSchoolYear();
       const schoolLogo = this.settings?.school_logo || '/img/logo-icon.png';
 
       const sNameEl = document.getElementById('cardTeacherSchoolName');
@@ -9009,7 +9102,7 @@ class EdumindApp {
     if (!t) return;
 
     const schoolName = this.settings?.school_name || 'EDUMIND ACADEMY';
-    const schoolYear = this.settings?.school_year || '2025/2026';
+    const schoolYear = this.getSchoolYear();
     const matricule = t.matricule || `ENS-${String(t.id).padStart(3, '0')}`;
     const fullName = `${t.first_name || ''} ${t.last_name || ''}`.trim();
     const subject = t.subject_name || 'Enseignant';
