@@ -1,8 +1,7 @@
 const DB = require('./database.js');
 
 try {
-  // 1. Settings
-  DB.run(`UPDATE settings SET value = 'متوسطة العربي بن مهيدي' WHERE key = 'school_name';`);
+  // 1. Settings (Never overwrite existing school configuration)
   DB.run(`INSERT OR IGNORE INTO settings (key, value) VALUES ('school_name', 'متوسطة العربي بن مهيدي');`);
   DB.run(`INSERT OR IGNORE INTO settings (key, value) VALUES ('active_year', '2026-2027');`);
   DB.run(`INSERT OR IGNORE INTO settings (key, value) VALUES ('school_type', 'public_cem');`);

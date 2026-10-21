@@ -158,7 +158,10 @@ class Updater {
       '.edumind_scolaire_lic_t.sys',
       '.git',
       'node_modules',
-      'uploads'
+      'uploads',
+      'edumind_school_settings.json',
+      'school_settings.json',
+      'data'
     ];
 
     const entries = fs.readdirSync(srcDir, { withFileTypes: true });
@@ -167,7 +170,16 @@ class Updater {
       const srcItem = path.join(srcDir, entry.name);
       const destItem = path.join(destDir, entry.name);
 
-      if (PROTECTED.includes(entry.name.toLowerCase())) {
+      const lower = entry.name.toLowerCase();
+      if (
+        PROTECTED.includes(lower) ||
+        lower.endsWith('.sqlite') ||
+        lower.endsWith('.sqlite-wal') ||
+        lower.endsWith('.sqlite-shm') ||
+        lower.endsWith('.db') ||
+        lower.endsWith('.sys') ||
+        lower.includes('school_settings')
+      ) {
         continue;
       }
 
@@ -198,11 +210,15 @@ class Updater {
     try {
       fs.mkdirSync(tempDir, { recursive: true });
 
-      // 1. Automatic pre-update safety backup of SQLite database
+      // 1. Automatic pre-update safety backup of SQLite database & School Settings
       let dbPath = null;
       let backupsDir = null;
       try {
         const DB = require('./database.js');
+        if (typeof DB.saveSchoolSettingsToDisk === 'function') {
+          DB.saveSchoolSettingsToDisk();
+          console.log('[Auto-Updater] Paramètres école sécurisés vers stockage persistant avant mise à jour.');
+        }
         if (typeof DB.getDatabasePath === 'function') dbPath = DB.getDatabasePath();
         if (typeof DB.getBackupDirectory === 'function') backupsDir = DB.getBackupDirectory();
         // Clear statement cache to avoid stale references after update
@@ -239,6 +255,17 @@ class Updater {
 
       console.log(`[Auto-Updater] Application des fichiers mis à jour...`);
       this.copySafely(effectiveSrcDir, this.projectDir);
+
+      // Verify and re-confirm school settings preservation immediately after update
+      try {
+        delete require.cache[require.resolve('./database.js')];
+        const freshDB = require('./database.js');
+        if (typeof freshDB.ensureSchoolSettingsPreserved === 'function') {
+          freshDB.ensureSchoolSettingsPreserved();
+        }
+      } catch (postDbErr) {
+        console.warn('[Auto-Updater] Post-update settings verification warning:', postDbErr.message);
+      }
 
       const newVersion = this.getCurrentVersion();
       console.log(`[Auto-Updater] Mise à jour appliquée avec succès vers v${newVersion}!`);

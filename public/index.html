@@ -515,6 +515,10 @@
         <span class="nav-icon" style="color: #10b981;"><i class="fa-solid fa-credit-card"></i></span>
         <span data-i18n="nav_paiements">الرسوم والمدفوعات</span>
       </li>
+      <li class="nav-item" data-view="tarifs">
+        <span class="nav-icon" style="color: #06b6d4;"><i class="fa-solid fa-receipt"></i></span>
+        <span data-i18n="nav_tarifs">المصاريف والتسعيرات</span>
+      </li>
       <li class="nav-item" data-view="echeances">
         <span class="nav-icon" style="color: #ef4444;"><i class="fa-solid fa-file-invoice-dollar"></i></span>
         <span data-i18n="nav_echeances">الديون والمستحقات</span>
@@ -2138,9 +2142,13 @@
             <i class="fa-solid fa-file-arrow-down"></i>
             <span data-i18n="btn_export_payments">Exporter les Paiements</span>
           </button>
-          <button class="btn-primary" onclick="app.openModalPayment()">
+          <button class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; box-shadow: 0 4px 14px rgba(37,99,235,0.35); padding: 8px 16px; font-weight: 700;" onclick="app.openModalSchoolInvoice()">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>فاتورة التمدرس والنقل (فصلي / سنوي)</span>
+          </button>
+          <button class="btn-secondary" onclick="app.openModalPayment()" title="دفع الدروس الخصوصية والأفواج">
             <i class="fa-solid fa-plus"></i>
-            <span data-i18n="btn_new_payment">Encaisser un Paiement</span>
+            <span data-i18n="btn_new_payment">دفع شهري (أفواج)</span>
           </button>
         </div>
       </div>
@@ -2175,10 +2183,9 @@
             <div>
               <h3 id="fastPayCardTitle"
                 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-heading);"
-                data-i18n="fast_pay_title">Caisse Rapide & Multi-Paiement (Multi-cours & Mois)</h3>
+                data-i18n="fast_pay_title">تسديد رسوم التمدرس والنقل (مربوط بالتسعيرات الرسمية)</h3>
               <span id="fastPayCardSubtitle" style="font-size: 12px; color: var(--text-muted);"
-                data-i18n="fast_pay_subtitle">Recherchez un élève ou un parent pour encaisser plusieurs cours et générer
-                un reçu unifié</span>
+                data-i18n="fast_pay_subtitle">تسديد فصلي أو سنوي مربوط بتسعيرات المدرسة الرسمية مع حساب النقل والخصم وطباعة الوصل</span>
             </div>
           </div>
 
@@ -2262,10 +2269,10 @@
           </div>
           <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px; color: var(--text-heading);"
             data-i18n="fast_pay_no_student_hint">
-            Tapez le nom ou matricule de l'élève ci-dessus pour afficher ses cours et régler en un clic
+            ابحث باسم التلميذ أو رقم التسجيل أعلاه لعرض تسعيرة مستواه وتسديد الأقساط الفصلية أو السنوية
           </div>
           <div style="font-size: 12px; color: var(--text-muted);" data-i18n="fast_pay_no_student_sub">
-            Les résultats et groupes s'afficheront instantanément avec la possibilité d'imprimer un reçu unifié.
+            سيتم جلب التسعيرة الرسمية تلقائياً لكل فصل (T1, T2, T3) أو لكامل السنة مع خيارات النقل والتخفيض وطباعة الوصل.
           </div>
         </div>
 
@@ -2501,6 +2508,298 @@
       </div>
     </section>
 
+    <!-- ==================== TARIFS & FRAIS SCOLAIRES ==================== -->
+    <section class="view-container" id="view-tarifs">
+      <!-- Tarifs Header -->
+      <div class="card-header" style="margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <div class="card-title" style="font-size: 22px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-receipt" style="color: #06b6d4;"></i>
+            <span data-i18n="tarifs_page_title">إدارة المصاريف وتكاليف التمدرس</span>
+          </div>
+          <p data-i18n="tarifs_page_desc" style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">
+            ضبط تسعيرات الأطوار والمستويات، اشتراكات النقل، الخدمات الملحقة واستيراد الأسعار من ملفات إكسل
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <!-- School Year Filter Pill -->
+          <div style="display: flex; align-items: center; gap: 6px; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: 10px; padding: 4px 10px;">
+            <i class="fa-solid fa-calendar-days" style="color: #06b6d4; font-size: 13px;"></i>
+            <label data-i18n="tarifs_lbl_school_year" style="font-size: 12px; font-weight: 700; color: #06b6d4;">السنة الدراسية:</label>
+            <select id="tarifsSchoolYearFilter" class="form-control" style="width: auto; padding: 4px 10px; font-size: 13px; font-weight: 700; border: none; background: transparent;" onchange="app.onTarifsYearChange(this.value)">
+              <option value="2026-2027">2026-2027</option>
+              <option value="2025-2026">2025-2026</option>
+              <option value="2027-2028">2027-2028</option>
+              <option value="all" data-i18n="tarifs_opt_all_years">جميع السنوات</option>
+            </select>
+          </div>
+
+          <!-- Action Buttons -->
+          <button class="btn-excel" onclick="app.openModalImportTariffsExcel()" title="استيراد وتحديث الأسعار عبر ملف إكسل">
+            <i class="fa-solid fa-file-excel"></i>
+            <span data-i18n="tarifs_btn_import_excel">استيراد من إكسل</span>
+          </button>
+
+          <button class="btn-secondary" onclick="app.exportTarifsToExcel()" title="تصدير جدول الأسعار إلى ملف إكسل">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            <span data-i18n="tarifs_btn_export_excel">تصدير إلى إكسل</span>
+          </button>
+
+          <button class="btn-secondary" onclick="app.openModalDuplicateYear()" title="نسخ وتكرار أسعار سنة سابقة لسنة جديدة">
+            <i class="fa-solid fa-clone" style="color: #a855f7;"></i>
+            <span data-i18n="tarifs_btn_duplicate_year">نسخ لسنة جديدة</span>
+          </button>
+
+          <button class="btn-primary" style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); border: none; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);" onclick="app.openModalAddTariff()">
+            <i class="fa-solid fa-plus"></i>
+            <span data-i18n="tarifs_btn_add_tariff">إضافة تسعيرة جديدة</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 22px;">
+        <div class="stat-card" style="border-left: 4px solid #06b6d4;">
+          <span class="stat-title" data-i18n="tarifs_kpi_levels">المستويات المسجلة</span>
+          <div class="stat-value" id="tarifsKpiLevelsCount" style="color: #06b6d4;">0</div>
+          <div data-i18n="tarifs_kpi_levels_sub" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            طور متوسط / ابتدائي / ثانوي
+          </div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #10b981;">
+          <span class="stat-title" data-i18n="tarifs_kpi_avg_annual">متوسط التمدرس السنوي</span>
+          <div class="stat-value" id="tarifsKpiAvgAnnual" style="color: #10b981;">0 دج</div>
+          <div data-i18n="tarifs_kpi_avg_annual_sub" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            دون احتساب تكاليف النقل
+          </div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+          <span class="stat-title" data-i18n="tarifs_kpi_routes">خطوط النقل المدرسي</span>
+          <div class="stat-value" id="tarifsKpiRoutesCount" style="color: #f59e0b;">0</div>
+          <div data-i18n="tarifs_kpi_routes_sub" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            مسارات الحافلات المعتمدة
+          </div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #a855f7;">
+          <span class="stat-title" data-i18n="tarifs_kpi_extras">الرسوم والخدمات الملحقة</span>
+          <div class="stat-value" id="tarifsKpiExtrasCount" style="color: #a855f7;">0</div>
+          <div data-i18n="tarifs_kpi_extras_sub" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            تأمين، إطعام ومستلزمات
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Tabs Navigation -->
+      <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; padding-bottom: 2px;">
+        <button type="button" class="login-tab-btn active" id="tabTarifsBtnScolarite" onclick="app.switchTarifsTab('scolarite')" style="padding: 10px 18px; border-radius: 10px 10px 0 0; font-size: 14px; font-weight: 700;">
+          <i class="fa-solid fa-graduation-cap" style="color: #06b6d4;"></i>
+          <span data-i18n="tarifs_tab_scolarite">تكاليف التمدرس والأشطر</span>
+        </button>
+        <button type="button" class="login-tab-btn" id="tabTarifsBtnTransport" onclick="app.switchTarifsTab('transport')" style="padding: 10px 18px; border-radius: 10px 10px 0 0; font-size: 14px; font-weight: 700;">
+          <i class="fa-solid fa-bus" style="color: #f59e0b;"></i>
+          <span data-i18n="tarifs_tab_transport">اشتراكات النقل المدرسي</span>
+        </button>
+        <button type="button" class="login-tab-btn" id="tabTarifsBtnExtras" onclick="app.switchTarifsTab('extras')" style="padding: 10px 18px; border-radius: 10px 10px 0 0; font-size: 14px; font-weight: 700;">
+          <i class="fa-solid fa-cubes" style="color: #a855f7;"></i>
+          <span data-i18n="tarifs_tab_extras">الخدمات والرسوم الملحقة</span>
+        </button>
+        <button type="button" class="login-tab-btn" id="tabTarifsBtnExcel" onclick="app.switchTarifsTab('excel')" style="padding: 10px 18px; border-radius: 10px 10px 0 0; font-size: 14px; font-weight: 700;">
+          <i class="fa-solid fa-file-excel" style="color: #10b981;"></i>
+          <span data-i18n="tarifs_tab_excel">استيراد وتحديث الأسعار عبر إكسل</span>
+        </button>
+      </div>
+
+      <!-- ================= TAB 1: SCOLARITÉ ================= -->
+      <div id="tabTarifsContentScolarite" class="tarifs-tab-pane">
+        <div class="card" style="padding: 16px 20px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <label data-i18n="tarifs_filter_cycle_lbl" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">فلترة حسب الطور التعليمي:</label>
+              <select id="tarifsCycleFilter" class="form-control" style="width: 170px; padding: 6px 12px; font-size: 13px;" onchange="app.filterTarifsTable()">
+                <option value="all" data-i18n="tarifs_all_cycles">جميع الأطوار</option>
+                <option value="Maternelle">تحضيري (Maternelle)</option>
+                <option value="Primaire">ابتدائي (Primaire)</option>
+                <option value="CEM">متوسط (CEM)</option>
+                <option value="Lycee">ثانوي (Lycée)</option>
+              </select>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted);">
+              <i class="fa-solid fa-circle-info" style="color: #06b6d4;"></i>
+              <span data-i18n="tarifs_scolarite_info">يتم اعتماد هذه المبالغ تلقائياً عند إنشاء فواتير الطلاب وفق الشطر أو الدفع السنوي.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="data-table" id="tarifsTable" style="margin: 0;">
+              <thead>
+                <tr>
+                  <th style="min-width: 170px;" data-i18n="tarifs_th_level">المستوى الدراسي</th>
+                  <th style="width: 120px;" data-i18n="tarifs_th_cycle">الطور</th>
+                  <th style="text-align: right; min-width: 130px;" data-i18n="tarifs_th_reg_fee">حقوق التسجيل</th>
+                  <th style="text-align: right; min-width: 130px;" data-i18n="tarifs_th_t1">الشطر الأول (T1)</th>
+                  <th style="text-align: right; min-width: 130px;" data-i18n="tarifs_th_t2">الشطر الثاني (T2)</th>
+                  <th style="text-align: right; min-width: 130px;" data-i18n="tarifs_th_t3">الشطر الثالث (T3)</th>
+                  <th style="text-align: right; min-width: 140px; font-weight: 800; color: #10b981;" data-i18n="tarifs_th_annual">المجموع السنوي</th>
+                  <th style="width: 120px;" data-i18n="tarifs_th_year">السنة الدراسية</th>
+                  <th style="text-align: center; width: 120px;" data-i18n="tarifs_th_actions">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="tarifsTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 2: TRANSPORT ================= -->
+      <div id="tabTarifsContentTransport" class="tarifs-tab-pane" style="display: none;">
+        <div class="card" style="padding: 16px 20px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="font-size: 13px; color: var(--text-muted);">
+              <i class="fa-solid fa-bus-simple" style="color: #f59e0b;"></i>
+              <span data-i18n="tarifs_transport_info">تسعيرات خطوط النقل المدرسي الرسمية للذهاب والإياب، قابلة للتعديل والربط مع الحافلات والسائقين.</span>
+            </div>
+            <button class="btn-primary" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); border: none;" onclick="app.openModalAddTransportRoute()">
+              <i class="fa-solid fa-plus"></i>
+              <span data-i18n="tarifs_btn_add_route">إضافة مسار نقل جديد</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="data-table" id="tarifsTransportTable" style="margin: 0;">
+              <thead>
+                <tr>
+                  <th style="min-width: 160px;" data-i18n="tarifs_th_route_name">اسم الخط / المسار</th>
+                  <th style="min-width: 140px;" data-i18n="tarifs_th_zone">المنطقة / الحي</th>
+                  <th style="text-align: right; min-width: 120px;" data-i18n="tarifs_th_t1">الشطر الأول (T1)</th>
+                  <th style="text-align: right; min-width: 120px;" data-i18n="tarifs_th_t2">الشطر الثاني (T2)</th>
+                  <th style="text-align: right; min-width: 120px;" data-i18n="tarifs_th_t3">الشطر الثالث (T3)</th>
+                  <th style="text-align: right; min-width: 140px; font-weight: 800; color: #f59e0b;" data-i18n="tarifs_th_annual">المجموع السنوي</th>
+                  <th style="min-width: 110px;" data-i18n="tarifs_th_bus">رقم الحافلة</th>
+                  <th style="min-width: 130px;" data-i18n="tarifs_th_driver">السائق</th>
+                  <th style="text-align: center; width: 120px;" data-i18n="tarifs_th_actions">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="tarifsTransportTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 3: SERVICES & EXTRAS ================= -->
+      <div id="tabTarifsContentExtras" class="tarifs-tab-pane" style="display: none;">
+        <div class="card" style="padding: 16px 20px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="font-size: 13px; color: var(--text-muted);">
+              <i class="fa-solid fa-layer-group" style="color: #a855f7;"></i>
+              <span data-i18n="tarifs_extras_info">تعريف مصاريف الإطعام المدرسي، حقوق التأمين، الأنشطة اللاصفية والزي المدرسي والمطبوعات.</span>
+            </div>
+            <button class="btn-primary" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border: none;" onclick="app.openModalAddExtraFee()">
+              <i class="fa-solid fa-plus"></i>
+              <span data-i18n="tarifs_btn_add_extra">إضافة رسم أو خدمة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="data-table" id="tarifsExtrasTable" style="margin: 0;">
+              <thead>
+                <tr>
+                  <th style="min-width: 180px;" data-i18n="tarifs_th_extra_name">اسم الرسم / الخدمة</th>
+                  <th style="width: 130px;" data-i18n="tarifs_th_category">التصنيف</th>
+                  <th style="width: 130px;" data-i18n="tarifs_th_cycle_target">الطور المعني</th>
+                  <th style="text-align: right; min-width: 130px; font-weight: 800; color: #a855f7;" data-i18n="tarifs_th_amount">المبلغ</th>
+                  <th style="width: 130px;" data-i18n="tarifs_th_period">دورية الدفع</th>
+                  <th style="min-width: 180px;" data-i18n="tarifs_th_notes">ملاحظات</th>
+                  <th style="text-align: center; width: 120px;" data-i18n="tarifs_th_actions">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="tarifsExtrasTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 4: EXCEL SMART IMPORTER ================= -->
+      <div id="tabTarifsContentExcel" class="tarifs-tab-pane" style="display: none;">
+        <!-- Preloaded Excel Instant Loader Hero -->
+        <div class="pointage-hero" style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.85) 0%, rgba(15, 118, 110, 0.85) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 24px; margin-bottom: 22px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div style="max-width: 650px;">
+              <span class="badge" style="background: rgba(16, 185, 129, 0.25); color: #34d399; margin-bottom: 8px; font-weight: 700;">
+                <i class="fa-solid fa-file-excel"></i> <span data-i18n="tarifs_excel_badge">ملف الإكسل الرسمي متوفر في النظام</span>
+              </span>
+              <h3 style="font-size: 19px; font-weight: 800; color: #fff; margin: 6px 0;" data-i18n="tarifs_excel_title">
+                ملف "تكاليف التمدرس للطور المتوسط" (.xlsx)
+              </h3>
+              <p style="margin: 0; font-size: 13px; color: #d1fae5; line-height: 1.6;" data-i18n="tarifs_excel_desc">
+                تم الكشف عن ملف الأسعار الرسمي المرفق الذي يحتوي على جداول تكاليف التمدرس لسنوات (أولى، ثانية، ثالثة، رابعة متوسط) وخطوط النقل السبعة (برج منايل، يسر، الناصرية، جنات، تحلية المياه، بغلية، دلس). يمكنك اعتماده بنقرة زر واحدة أو استيراد ملف جديد.
+              </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 12px 22px; font-size: 14px; font-weight: 800; border: none; box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);" onclick="app.importPreloadedMiddleSchoolExcel()">
+                <i class="fa-solid fa-bolt"></i>
+                <span data-i18n="tarifs_btn_load_preload">استيراد وتثبيت الأسعار من الملف المرفق</span>
+              </button>
+              <button class="btn-secondary" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" onclick="app.downloadTariffsExcelTemplate()">
+                <i class="fa-solid fa-download"></i>
+                <span data-i18n="tarifs_btn_download_template">تحميل نموذج إكسل فارغ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Excel Upload Dropzone -->
+        <div class="card" style="padding: 30px; text-align: center; border: 2px dashed rgba(6, 182, 212, 0.4); border-radius: 16px; background: rgba(6, 182, 212, 0.02); margin-bottom: 20px;">
+          <input type="file" id="tarifsExcelFileInput" accept=".xlsx, .xls" style="display: none;" onchange="app.onTarifsExcelFileSelected(event)">
+          <div style="font-size: 48px; color: #06b6d4; margin-bottom: 12px;">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <h4 style="font-size: 17px; font-weight: 700; margin-bottom: 6px;" data-i18n="tarifs_upload_title">
+            رفع وتحديث الأسعار عبر ملف إكسل مخصص
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); max-width: 520px; margin: 0 auto 16px auto; line-height: 1.6;" data-i18n="tarifs_upload_desc">
+            اسحب وأفلت ملف الإكسل هنا، أو انقر لاختيار ملف من جهازك لتحديث تسعيرات التمدرس ومسارات النقل تلقائياً.
+          </p>
+          <button class="btn-primary" style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); border: none; padding: 10px 24px; font-weight: 700;" onclick="document.getElementById('tarifsExcelFileInput').click()">
+            <i class="fa-solid fa-folder-open"></i>
+            <span data-i18n="tarifs_btn_browse_excel">اختيار ملف إكسل من الجهاز</span>
+          </button>
+        </div>
+
+        <!-- Live Preview Container for Uploaded Excel -->
+        <div id="tarifsExcelPreviewContainer" style="display: none;">
+          <div class="card-header" style="margin-bottom: 14px;">
+            <div class="card-title" style="font-size: 16px;">
+              <i class="fa-solid fa-table-list" style="color: #06b6d4;"></i>
+              <span data-i18n="tarifs_preview_title">معاينة البيانات المستخرجة قبل الحفظ النهائي</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-primary" style="background: #10b981; border: none; padding: 9px 18px; font-weight: 700;" onclick="app.confirmTarifsExcelImport()">
+                <i class="fa-solid fa-check-double"></i>
+                <span data-i18n="tarifs_btn_confirm_import">تأكيد وحفظ في قاعدة البيانات</span>
+              </button>
+              <button class="btn-secondary" onclick="document.getElementById('tarifsExcelPreviewContainer').style.display='none'">
+                <span data-i18n="tarifs_btn_cancel_preview">إلغاء المعاينة</span>
+              </button>
+            </div>
+          </div>
+          <div id="tarifsExcelPreviewTables"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== 7. ENSEIGNANTS ==================== -->
     <section class="view-container" id="view-enseignants">
       <div class="card-header" style="margin-bottom: 20px;">
@@ -2514,9 +2813,9 @@
             <input type="text" id="searchTeacherInput" class="schoolaris-search-input"
               placeholder="Rechercher par nom, matière, grade..." onkeyup="app.filterTeachers(this.value)">
           </div>
-          <button class="btn-primary" onclick="app.openModalTeacher()">
+          <button class="btn-primary" onclick="app.openStaffTypeChoiceModal()">
             <i class="fa-solid fa-user-plus"></i>
-            <span data-i18n="btn_add_teacher">Ajouter un Enseignant</span>
+            <span data-i18n="btn_add_teacher">Ajouter un Enseignant / Personnel</span>
           </button>
         </div>
       </div>
@@ -3970,16 +4269,59 @@
             </div>
           </div>
 
-          <!-- Parent Selector from Database -->
-          <div class="form-group" style="margin-bottom: 14px;">
-            <label class="form-label" style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-user-check" style="color: var(--text-muted); font-size: 12px;"></i>
-              <span data-i18n="modal_student_parent_select">ولي أمر التلميذ المسجل مسبقاً</span>
-            </label>
-            <select id="studentParentId" class="form-control" onchange="app.onStudentParentSelectChange()"
-              style="font-weight: 500;">
+          <!-- Parent Selector from Database (Searchable Combobox) -->
+          <div class="form-group parent-combobox-container" style="margin-bottom: 14px; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" style="display: flex; align-items: center; gap: 6px; margin-bottom: 0;">
+                <i class="fa-solid fa-user-check" style="color: #3b82f6; font-size: 13px;"></i>
+                <span data-i18n="modal_student_parent_select">ولي أمر التلميذ المسجل مسبقاً</span>
+              </label>
+              <span style="font-size: 11px; color: var(--text-muted);">
+                <i class="fa-solid fa-bolt" style="color: #f59e0b; margin-inline-end: 3px;"></i>
+                <span data-i18n="parent_search_hint">ابحث بكتابة اسم الولي أو الهاتف</span>
+              </span>
+            </div>
+
+            <!-- Hidden native select for full backward compatibility -->
+            <select id="studentParentId" style="display: none;" onchange="app.onStudentParentSelectChange()">
               <option value="">-- اختار ولي أمر مسجل مسبقاً (أو أدخل بياناته أدناه) --</option>
             </select>
+
+            <!-- Searchable Input with Icons -->
+            <div style="position: relative; display: flex; align-items: center; width: 100%;">
+              <i class="fa-solid fa-magnifying-glass"
+                style="position: absolute; inset-inline-start: 14px; color: var(--text-muted); font-size: 13px; pointer-events: none; z-index: 2;"></i>
+              
+              <input type="text" id="parentSearchInput" class="form-control"
+                placeholder="🔍 اكتب اسم الولي أو رقم الهاتف للبحث السريع..."
+                autocomplete="off"
+                style="padding-inline-start: 38px; padding-inline-end: 65px; font-weight: 600; font-size: 13.5px;"
+                oninput="app.onParentSearchInput(this.value)"
+                onfocus="app.openParentSearchDropdown()"
+                onkeydown="app.handleParentSearchKeydown(event)">
+
+              <!-- Action buttons on the opposite side inside input -->
+              <div style="position: absolute; inset-inline-end: 10px; display: flex; align-items: center; gap: 4px; z-index: 2;">
+                <button type="button" id="btnClearParentSearch"
+                  onclick="app.clearSelectedParent()"
+                  style="display: none; background: rgba(239, 68, 68, 0.15); border: none; color: #ef4444; border-radius: 6px; width: 24px; height: 24px; cursor: pointer; align-items: center; justify-content: center; font-size: 11px;"
+                  title="إلغاء التحديد / مسح">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button type="button" id="btnToggleParentDropdown"
+                  onclick="app.toggleParentSearchDropdown()"
+                  style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center;"
+                  title="عرض القائمة الكاملة">
+                  <i class="fa-solid fa-chevron-down" id="parentSearchChevron" style="font-size: 12px; transition: transform 0.2s;"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Floating Search Results Dropdown -->
+            <div id="parentSearchResults" class="parent-search-dropdown-menu"
+              style="display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 1050; background: var(--bg-card, #111d38); border: 1px solid var(--border-color, rgba(255,255,255,0.12)); border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5); max-height: 280px; overflow-y: auto; padding: 6px;">
+              <!-- Dynamic items rendered by JS -->
+            </div>
           </div>
 
           <!-- Parent Name & Parent Phone Side-by-Side -->
@@ -4688,93 +5030,613 @@
     </div>
   </div>
 
-  <!-- Modal: Reçu de Paiement Imprimable -->
-  <div class="modal-overlay" id="modalReceipt">
-    <div class="modal-content" style="max-width: 520px; background-color: var(--bg-card);">
+  <!-- ==================== MODAL: FACTURATION SCOLARITÉ & TRANSPORT (ÉCOLES PRIVÉES) ==================== -->
+  <div class="modal-overlay" id="modalSchoolInvoice">
+    <div class="modal-content" style="max-width: 580px;">
       <div class="modal-header">
-        <h3 class="modal-title" data-i18n="receipt_title">Reçu de Paiement Officiel</h3>
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-file-invoice-dollar" style="color: #3b82f6;"></i>
+          <span>فاتورة التمدرس والنقل (المدارس الخاصة)</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="schoolInvoiceForm" onsubmit="event.preventDefault(); app.saveSchoolInvoice();">
+        <!-- Student selection -->
+        <div class="form-group">
+          <label class="form-label">التلميذ (Élève) *</label>
+          <div class="schoolaris-search-box" style="margin-bottom: 8px; width: 100%;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="invStudentSearch" class="schoolaris-search-input"
+              placeholder="ابحث باسم أو لقب التلميذ أو رقم القيد..." oninput="app.filterInvoiceStudents(this.value)" autocomplete="off">
+          </div>
+          <select id="invStudentSelect" class="form-control" required onchange="app.onInvoiceStudentChange()">
+            <option value="">-- اختر التلميذ --</option>
+          </select>
+        </div>
+
+        <!-- Student level badge & info -->
+        <div id="invStudentInfoBox" style="display: none; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span><strong>المستوى الدراسي:</strong> <span id="invStudentLevelName" style="color: #3b82f6; font-weight: 700;">1 متوسط</span></span>
+            <span><strong>رقم القيد:</strong> <span id="invStudentMatricule" style="font-family: monospace;">-</span></span>
+          </div>
+        </div>
+
+        <!-- Section: فصول التمدرس المدرسي (Multi-trimesters selection) -->
+        <div style="background: rgba(59, 130, 246, 0.04); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 13px 15px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <label class="form-label" style="margin-bottom: 0; font-weight: 700; color: #3b82f6; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span>فصول التمدرس المطلوب تسديدها (Frais de Scolarité)</span>
+            </label>
+            <div style="display: flex; gap: 5px;">
+              <button type="button" class="btn-sm btn-secondary" onclick="app.setAllInvoiceTrimesters(true)" style="padding: 2px 8px; font-size: 11px; cursor: pointer;">
+                <i class="fa-solid fa-check-double"></i> كامل السنة
+              </button>
+              <button type="button" class="btn-sm btn-secondary" onclick="app.setAllInvoiceTrimesters(false)" style="padding: 2px 8px; font-size: 11px; cursor: pointer;">
+                إلغاء
+              </button>
+            </div>
+          </div>
+
+          <!-- Trimesters Checkbox Cards -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
+            <!-- T1 -->
+            <div id="cardInvT1" class="invoice-period-card active" onclick="app.toggleInvoiceTrimester(1)"
+                 style="cursor: pointer; border: 2px solid #3b82f6; background: rgba(59, 130, 246, 0.1); border-radius: 10px; padding: 9px 6px; text-align: center; transition: all 0.2s;">
+              <input type="checkbox" id="chkInvT1" checked style="display: none;">
+              <div style="font-weight: 800; font-size: 12.5px; color: var(--text-main);">الفصل 1 (T1)</div>
+              <div id="priceInvT1" style="font-size: 11.5px; color: #3b82f6; font-weight: 700; margin-top: 2px;">0 DA</div>
+              <span id="badgePaidInvT1" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+            </div>
+
+            <!-- T2 -->
+            <div id="cardInvT2" class="invoice-period-card" onclick="app.toggleInvoiceTrimester(2)"
+                 style="cursor: pointer; border: 1.5px solid var(--border-color); background: var(--bg-card); border-radius: 10px; padding: 9px 6px; text-align: center; transition: all 0.2s;">
+              <input type="checkbox" id="chkInvT2" style="display: none;">
+              <div style="font-weight: 800; font-size: 12.5px; color: var(--text-main);">الفصل 2 (T2)</div>
+              <div id="priceInvT2" style="font-size: 11.5px; color: var(--text-muted); font-weight: 700; margin-top: 2px;">0 DA</div>
+              <span id="badgePaidInvT2" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+            </div>
+
+            <!-- T3 -->
+            <div id="cardInvT3" class="invoice-period-card" onclick="app.toggleInvoiceTrimester(3)"
+                 style="cursor: pointer; border: 1.5px solid var(--border-color); background: var(--bg-card); border-radius: 10px; padding: 9px 6px; text-align: center; transition: all 0.2s;">
+              <input type="checkbox" id="chkInvT3" style="display: none;">
+              <div style="font-weight: 800; font-size: 12.5px; color: var(--text-main);">الفصل 3 (T3)</div>
+              <div id="priceInvT3" style="font-size: 11.5px; color: var(--text-muted); font-weight: 700; margin-top: 2px;">0 DA</div>
+              <span id="badgePaidInvT3" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; color: var(--text-muted);">المجموع المحسوب للتمدرس:</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="number" id="invTuitionFee" class="form-control" min="0" step="any" placeholder="0" required
+                     style="width: 140px; font-weight: 800; text-align: right; font-size: 14px; color: #3b82f6;"
+                     oninput="app.calculateInvoiceTotals()">
+              <span style="font-size: 12px; font-weight: 700;">دج</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: خط النقل المدرسي وأقساطه (Multi-installments transport) -->
+        <div style="background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 13px 15px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label class="form-label" style="margin-bottom: 0; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+              <i class="fa-solid fa-bus"></i>
+              <span>خط النقل وأقساط التسديد (Frais de Transport)</span>
+            </label>
+            <div id="btnSyncTransportWrapper" style="display: none;">
+              <button type="button" class="btn-sm btn-secondary" onclick="app.syncTransportWithTuition()" style="padding: 2px 8px; font-size: 11px; cursor: pointer;">
+                <i class="fa-solid fa-arrows-rotate"></i> نفس فصول التمدرس
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 10px;">
+            <select id="invTransportRouteSelect" class="form-control" onchange="app.onInvoiceTransportRouteChanged()">
+              <option value="">-- بدون نقل (0 دج) --</option>
+            </select>
+          </div>
+
+          <!-- Transport Installment Cards (shown when route selected) -->
+          <div id="invTransportInstallmentsContainer" style="display: none; margin-bottom: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
+              <!-- Trans T1 -->
+              <div id="cardInvTrans1" class="invoice-trans-card active" onclick="app.toggleInvoiceTransInstallment(1)"
+                   style="cursor: pointer; border: 2px solid #f59e0b; background: rgba(245, 158, 11, 0.1); border-radius: 10px; padding: 8px 6px; text-align: center; transition: all 0.2s;">
+                <input type="checkbox" id="chkInvTrans1" checked style="display: none;">
+                <div style="font-weight: 700; font-size: 12px; color: var(--text-main);">شطر النقل 1</div>
+                <div id="priceInvTrans1" style="font-size: 11.5px; color: #d97706; font-weight: 700; margin-top: 2px;">0 DA</div>
+                <span id="badgePaidInvTrans1" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+              </div>
+
+              <!-- Trans T2 -->
+              <div id="cardInvTrans2" class="invoice-trans-card" onclick="app.toggleInvoiceTransInstallment(2)"
+                   style="cursor: pointer; border: 1.5px solid var(--border-color); background: var(--bg-card); border-radius: 10px; padding: 8px 6px; text-align: center; transition: all 0.2s;">
+                <input type="checkbox" id="chkInvTrans2" style="display: none;">
+                <div style="font-weight: 700; font-size: 12px; color: var(--text-main);">شطر النقل 2</div>
+                <div id="priceInvTrans2" style="font-size: 11.5px; color: var(--text-muted); font-weight: 700; margin-top: 2px;">0 DA</div>
+                <span id="badgePaidInvTrans2" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+              </div>
+
+              <!-- Trans T3 -->
+              <div id="cardInvTrans3" class="invoice-trans-card" onclick="app.toggleInvoiceTransInstallment(3)"
+                   style="cursor: pointer; border: 1.5px solid var(--border-color); background: var(--bg-card); border-radius: 10px; padding: 8px 6px; text-align: center; transition: all 0.2s;">
+                <input type="checkbox" id="chkInvTrans3" style="display: none;">
+                <div style="font-weight: 700; font-size: 12px; color: var(--text-main);">شطر النقل 3</div>
+                <div id="priceInvTrans3" style="font-size: 11.5px; color: var(--text-muted); font-weight: 700; margin-top: 2px;">0 DA</div>
+                <span id="badgePaidInvTrans3" class="badge" style="display: none; background: #10b981; color: white; font-size: 9px; padding: 1px 5px; border-radius: 6px; margin-top: 3px;">✔ مسدد</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; color: var(--text-muted);">المجموع المحسوب للنقل:</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="number" id="invTransportFee" class="form-control" min="0" step="any" value="0"
+                     style="width: 140px; font-weight: 800; text-align: right; font-size: 14px; color: #d97706;"
+                     oninput="app.calculateInvoiceTotals()">
+              <span style="font-size: 12px; font-weight: 700;">دج</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Remise / Discount -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label class="form-label" style="margin-bottom: 0; font-weight: 600;">قيمة التخفيض الممنوح (Remise DA)</label>
+            <span id="invDiscountAutoHint" style="font-size: 11.5px; color: #10b981; font-weight: 700;"></span>
+          </div>
+          <input type="number" id="invDiscountAmount" class="form-control" min="0" step="any" value="0" placeholder="0" oninput="app.calculateInvoiceTotals()">
+        </div>
+
+        <!-- Summary Totals Display -->
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px;">
+            <span style="color: var(--text-muted);">المجموع الصافي للدفع (Net à payer):</span>
+            <strong id="invNetTotalDisplay" style="color: #10b981; font-size: 16px;">0 دج</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+            <span style="color: var(--text-muted);">المتبقي كدين (Reste à payer):</span>
+            <strong id="invRemainingDisplay" style="color: #ef4444; font-size: 14px;">0 دج</strong>
+          </div>
+        </div>
+
+        <!-- Payment details: Paid amount & method -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">المبلغ المدفوع حالياً (Montant Versé DA) *</label>
+            <input type="number" id="invPaidAmount" class="form-control" min="0" step="any" placeholder="0.00" required oninput="app.calculateInvoiceTotals()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">طريقة الدفع (Mode de Règlement)</label>
+            <select id="invPaymentMethod" class="form-control">
+              <option value="espece">نقداً (Espèces / Caisse)</option>
+              <option value="baridimob">BaridiMob (بريدي موب / CCP)</option>
+              <option value="cheque">شيك بنكي (Chèque)</option>
+              <option value="virement">تحويل بنكي (Virement)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()">
+            <span>إلغاء</span>
+          </button>
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none;">
+            <i class="fa-solid fa-print"></i>
+            <span>تسجيل وتأكيد الفاتورة والطباعة</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Ajouter / Modifier une Grille Tarifaire -->
+  <div class="modal-overlay" id="modalTariff">
+    <div class="modal-content" style="max-width: 580px; background-color: var(--bg-card);">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTariffTitle">
+          <i class="fa-solid fa-graduation-cap" style="color: #06b6d4;"></i>
+          <span data-i18n="modal_tariff_title_add">إضافة تسعيرة تمدرس جديدة</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formTariff" onsubmit="event.preventDefault(); app.saveTariff(event);">
+        <input type="hidden" id="tariffId">
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700;" data-i18n="modal_tariff_lbl_level">اسم المستوى الدراسي *</label>
+            <input type="text" id="tariffLevelName" class="form-control" placeholder="مثال: أولى متوسط (1AM)" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700;" data-i18n="modal_tariff_lbl_cycle">الطور التعليمي</label>
+            <select id="tariffCycle" class="form-control">
+              <option value="CEM">متوسط (CEM)</option>
+              <option value="Primaire">ابتدائي (Primaire)</option>
+              <option value="Maternelle">تحضيري (Maternelle)</option>
+              <option value="Lycee">ثانوي (Lycée)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_tariff_lbl_reg">حقوق التسجيل والتأمين (DA)</label>
+            <input type="number" id="tariffRegistration" class="form-control" value="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_tariff_lbl_year">السنة الدراسية</label>
+            <input type="text" id="tariffSchoolYear" class="form-control" value="2026-2027" placeholder="2026-2027">
+          </div>
+        </div>
+
+        <div style="background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+          <label style="font-size: 13px; font-weight: 800; color: #06b6d4; display: block; margin-bottom: 10px;">
+            <i class="fa-solid fa-calculator"></i> <span data-i18n="modal_tariff_lbl_breakdown">تقسيم الأشطر والمجموع السنوي (DA)</span>
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t1">الشطر الأول (T1)</label>
+              <input type="number" id="tariffT1" class="form-control" value="0" min="0" oninput="app.autoCalculateTariffTotal()">
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t2">الشطر الثاني (T2)</label>
+              <input type="number" id="tariffT2" class="form-control" value="0" min="0" oninput="app.autoCalculateTariffTotal()">
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t3">الشطر الثالث (T3)</label>
+              <input type="number" id="tariffT3" class="form-control" value="0" min="0" oninput="app.autoCalculateTariffTotal()">
+            </div>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" style="font-weight: 800; color: #10b981;" data-i18n="modal_tariff_lbl_annual">المجموع السنوي الإجمالي (DA)</label>
+            <input type="number" id="tariffAnnual" class="form-control" style="font-size: 16px; font-weight: 800; color: #10b981;" value="0" min="0">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label" data-i18n="modal_tariff_lbl_notes">ملاحظات إضافية</label>
+          <input type="text" id="tariffNotes" class="form-control" placeholder="اختياري...">
+        </div>
+
+        <div class="modal-footer" style="padding: 0; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()" data-i18n="btn_cancel">إلغاء</button>
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); border: none;">
+            <i class="fa-solid fa-check"></i>
+            <span data-i18n="modal_tariff_btn_save">حفظ التسعيرة</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Ajouter / Modifier une Ligne de Transport -->
+  <div class="modal-overlay" id="modalTransportRoute">
+    <div class="modal-content" style="max-width: 580px; background-color: var(--bg-card);">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTransportRouteTitle">
+          <i class="fa-solid fa-bus" style="color: #f59e0b;"></i>
+          <span data-i18n="modal_route_title_add">إضافة خط نقل مدرسي جديد</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formTransportRoute" onsubmit="event.preventDefault(); app.saveTransportRoute(event);">
+        <input type="hidden" id="routeId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700;" data-i18n="modal_route_lbl_name">اسم الخط / المسار *</label>
+            <input type="text" id="routeName" class="form-control" placeholder="مثال: خط برج منايل" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_route_lbl_zone">المنطقة / الحي</label>
+            <input type="text" id="routeZone" class="form-control" placeholder="مثال: وسط المدينة">
+          </div>
+        </div>
+
+        <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+          <label style="font-size: 13px; font-weight: 800; color: #f59e0b; display: block; margin-bottom: 10px;">
+            <i class="fa-solid fa-coins"></i> <span data-i18n="modal_route_lbl_fees">تكلفة الاشتراك في النقل (DA)</span>
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t1">الشطر الأول (T1)</label>
+              <input type="number" id="routeT1" class="form-control" value="0" min="0" oninput="app.autoCalculateRouteTotal()">
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t2">الشطر الثاني (T2)</label>
+              <input type="number" id="routeT2" class="form-control" value="0" min="0" oninput="app.autoCalculateRouteTotal()">
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;" data-i18n="modal_tariff_lbl_t3">الشطر الثالث (T3)</label>
+              <input type="number" id="routeT3" class="form-control" value="0" min="0" oninput="app.autoCalculateRouteTotal()">
+            </div>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" style="font-weight: 800; color: #f59e0b;" data-i18n="modal_route_lbl_annual">المجموع السنوي (ذهاب وإياب) (DA)</label>
+            <input type="number" id="routeAnnual" class="form-control" style="font-size: 16px; font-weight: 800; color: #f59e0b;" value="0" min="0">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px;">
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_route_lbl_bus">رقم الحافلة</label>
+            <input type="text" id="routeBusNo" class="form-control" placeholder="Ex: Bus 01">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_route_lbl_driver">اسم السائق</label>
+            <input type="text" id="routeDriverName" class="form-control" placeholder="اسم السائق">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_route_lbl_driver_phone">هاتف السائق</label>
+            <input type="text" id="routeDriverPhone" class="form-control" placeholder="05XXXXXXXX">
+          </div>
+        </div>
+
+        <div class="modal-footer" style="padding: 0; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()" data-i18n="btn_cancel">إلغاء</button>
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); border: none;">
+            <i class="fa-solid fa-check"></i>
+            <span data-i18n="modal_route_btn_save">حفظ المسار</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Ajouter / Modifier un Frais Annexe (Extra Fee) -->
+  <div class="modal-overlay" id="modalExtraFee">
+    <div class="modal-content" style="max-width: 780px; width: 95vw; background-color: var(--bg-card);">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalExtraFeeTitle">
+          <i class="fa-solid fa-cubes" style="color: #a855f7;"></i>
+          <span data-i18n="modal_extra_title_add">إضافة رسم أو خدمة جديدة</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formExtraFee" onsubmit="event.preventDefault(); app.saveExtraFee(event);">
+        <input type="hidden" id="extraFeeId">
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-weight: 700;" data-i18n="modal_extra_lbl_name">اسم الخدمة أو الرسم *</label>
+          <input type="text" id="extraFeeName" class="form-control" placeholder="مثال: اشتراك الإطعام المدرسي" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_extra_lbl_cat">التصنيف</label>
+            <select id="extraFeeCategory" class="form-control">
+              <option value="cantine">إطعام مدرسي (Cantine)</option>
+              <option value="assurance">تأمين وتسجيل (Assurance)</option>
+              <option value="activite">أنشطة ورحلات (Activités)</option>
+              <option value="fourniture">مستلزمات وكتب (Fournitures)</option>
+              <option value="autre">أخرى (Autre)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_extra_lbl_cycle">الطور المعني</label>
+            <select id="extraFeeCycle" class="form-control">
+              <option value="tous">جميع الأطوار</option>
+              <option value="CEM">متوسط (CEM)</option>
+              <option value="Primaire">ابتدائي (Primaire)</option>
+              <option value="Maternelle">تحضيري (Maternelle)</option>
+              <option value="Lycee">ثانوي (Lycée)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700; color: #a855f7;" data-i18n="modal_extra_lbl_amount">المبلغ (DA) *</label>
+            <input type="number" id="extraFeeAmount" class="form-control" value="0" min="0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="modal_extra_lbl_period">دورية الدفع</label>
+            <select id="extraFeePeriod" class="form-control">
+              <option value="annual">سنوي (Annuel)</option>
+              <option value="trimester">فصلي (Trimestriel)</option>
+              <option value="monthly">شهري (Mensuel)</option>
+              <option value="one_time">مرة واحدة (Ponctuel)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label" data-i18n="modal_extra_lbl_notes">ملاحظات توضيحية</label>
+          <input type="text" id="extraFeeNotes" class="form-control" placeholder="اختياري...">
+        </div>
+
+        <div class="modal-footer" style="padding: 0; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()" data-i18n="btn_cancel">إلغاء</button>
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border: none;">
+            <i class="fa-solid fa-check"></i>
+            <span data-i18n="modal_extra_btn_save">حفظ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Dupliquer les Tarifs d'une Année -->
+  <div class="modal-overlay" id="modalDuplicateYear">
+    <div class="modal-content" style="max-width: 480px; background-color: var(--bg-card);">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-clone" style="color: #a855f7;"></i>
+          <span data-i18n="modal_dup_title">نسخ أسعار سنة دراسية لسنة جديدة</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formDuplicateYear" onsubmit="event.preventDefault(); app.submitDuplicateYear(event);">
+        <div data-i18n="modal_dup_desc" style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 14px; margin-bottom: 16px; font-size: 13px; color: var(--text-color); line-height: 1.5;">
+          تتيح لك هذه الميزة نسخ جميع تسعيرات التمدرس، مسارات النقل والرسوم الملحقة المعتمدة في سنة معينة إلى سنة دراسية جديدة بضغطة زر مع إمكانية تطبيق نسبة زيادة عامة.
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700;" data-i18n="modal_dup_from">من السنة الدراسية *</label>
+            <select id="dupFromYear" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700;" data-i18n="modal_dup_to">إلى السنة الدراسية *</label>
+            <input type="text" id="dupToYear" class="form-control" placeholder="2027-2028" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" data-i18n="modal_dup_increase">نسبة الزيادة التقديرية المئوية (%) [اختياري]</label>
+          <input type="number" id="dupIncreasePercent" class="form-control" value="0" min="0" max="100" placeholder="0% (نفس الأسعار)">
+          <span data-i18n="modal_dup_increase_hint" style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">اتركها 0% لنسخ نفس الأسعار تماماً، أو أدخل مثلاً 5 لزيادة 5% على كل قسط.</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+            <input type="checkbox" id="dupCopyTransport" checked>
+            <span data-i18n="modal_dup_copy_transport">نسخ خطوط ومسارات النقل المدرسي أيضاً</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+            <input type="checkbox" id="dupCopyExtras" checked>
+            <span data-i18n="modal_dup_copy_extras">نسخ الخدمات والرسوم الملحقة (إطعام، تأمين...)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer" style="padding: 0; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()" data-i18n="btn_cancel">إلغاء</button>
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border: none;">
+            <i class="fa-solid fa-copy"></i>
+            <span data-i18n="modal_dup_btn_confirm">تأكيد النسخ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Reçu de Paiement & Facture Scolaire Imprimable -->
+  <div class="modal-overlay" id="modalReceipt">
+    <div class="modal-content" style="max-width: 820px; width: 96vw; background-color: var(--bg-card); padding: 20px;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-file-invoice-dollar" style="color: #3b82f6; font-size: 22px;"></i>
+          <h3 class="modal-title" style="margin: 0; font-size: 18px;" data-i18n="receipt_title">وصل استلام وفاتورة مدرسية رسمية (Facture & Reçu)</h3>
+        </div>
         <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <!-- Printable Area for Payment Receipt -->
-      <div id="printableReceipt" class="receipt-card printable-area">
-        <div class="receipt-header">
-          <h3 id="rcptSchoolName">EDUMIND ACADEMY</h3>
-          <p id="rcptSchoolDetails">Établissement Privé d'Enseignement & Soutien Scolaire</p>
-          <p id="rcptSchoolContact">Alger, Algérie | Tél: 0550 00 00 00</p>
-          <div class="receipt-badge-title">REÇU DE PAIEMENT / وصل استلام</div>
-        </div>
-
-        <div class="receipt-grid">
+      <div id="printableReceipt" class="receipt-card printable-area" style="max-width: 760px; width: 100%; margin: 0 auto; background: #ffffff; color: #0f172a; border-radius: 12px; padding: 24px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: 1.5px solid #cbd5e1;">
+        
+        <!-- Header Banner -->
+        <div class="receipt-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <span class="receipt-item-label">N° de Reçu:</span>
-            <span class="receipt-item-val" style="color: #2563eb;" id="rcptNumber">REC-2026-0001</span>
+            <h2 id="rcptSchoolName" style="font-size: 21px; font-weight: 800; color: #1e3a8a; margin: 0 0 3px 0;">جواهر المعرفة الخاصة</h2>
+            <p id="rcptSchoolDetails" style="font-size: 12px; color: #475569; font-weight: 600; margin: 0 0 2px 0;">مؤسسة التربية والتعليم الخاصة (ابتدائي - متوسط - ثانوي)</p>
+            <p id="rcptSchoolContact" style="font-size: 11px; color: #64748b; margin: 0;">ذراع القهوة برج منايل - بومرداس | Tél: 0699879822</p>
           </div>
-          <div>
-            <span class="receipt-item-label">Date & Heure:</span>
-            <span class="receipt-item-val" id="rcptDate">10/09/2026 15:30</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Élève:</span>
-            <span class="receipt-item-val" id="rcptStudent">Yacine Brahimi</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Matricule:</span>
-            <span class="receipt-item-val" id="rcptMatricule">ETU-2026-001</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Groupe / Cours:</span>
-            <span class="receipt-item-val" id="rcptGroup">BAC Maths</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Enseignant:</span>
-            <span class="receipt-item-val" id="rcptTeacher">Karim Bensalem</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Mois Réglé:</span>
-            <span class="receipt-item-val" id="rcptMonth">Septembre 2026</span>
-          </div>
-          <div>
-            <span class="receipt-item-label">Mode de Règlement:</span>
-            <span class="receipt-item-val" style="text-transform: uppercase;" id="rcptMethod">Espèces</span>
+          <div style="text-align: right;">
+            <div class="receipt-badge-title" style="display: inline-block; background: #1e3a8a; color: #ffffff; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 6px; letter-spacing: 0.5px; margin-bottom: 4px;">
+              FACTURE & REÇU DE SCOLARITÉ / وصل استلام
+            </div>
+            <div style="font-size: 14px; font-weight: 800; color: #2563eb;" id="rcptNumber">REC-2026-00001</div>
+            <div style="font-size: 11.5px; color: #64748b;" id="rcptDate">10/09/2026</div>
           </div>
         </div>
 
-        <table class="receipt-table" id="rcptSingleTable">
+        <!-- Student & Bill Meta Grid -->
+        <div class="receipt-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; font-size: 12px; margin-bottom: 16px; padding: 12px 14px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div>
+            <span class="receipt-item-label" id="rcptStudentLabel" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">التلميذ / Élève:</span>
+            <span class="receipt-item-val" style="font-weight: 800; color: #0f172a; font-size: 13px;" id="rcptStudent">عبد الرزاق محمد وسيم</span>
+          </div>
+          <div>
+            <span class="receipt-item-label" id="rcptMatriculeLabel" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">رقم التعريف / Matricule:</span>
+            <span class="receipt-item-val" style="font-weight: 700; color: #1e3a8a; font-family: monospace;" id="rcptMatricule">5101302500384000</span>
+          </div>
+          <div>
+            <span class="receipt-item-label" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">المستوى / Classe:</span>
+            <span class="receipt-item-val" style="font-weight: 700; color: #0f172a;" id="rcptClass">1 متوسط 1</span>
+          </div>
+          <div>
+            <span class="receipt-item-label" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">الفترة / Période:</span>
+            <span class="receipt-item-val" style="font-weight: 800; color: #0284c7;" id="rcptTrimestre">الفصل الأول (T1)</span>
+          </div>
+          <div>
+            <span class="receipt-item-label" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">طريقة التسديد / Règlement:</span>
+            <span class="receipt-item-val" style="font-weight: 700; color: #059669;" id="rcptMethod">نقداً (ESPÈCES)</span>
+          </div>
+          <div id="rcptTransportRouteBox">
+            <span class="receipt-item-label" style="color: #64748b; font-size: 10.5px; display: block; font-weight: 600;">خط النقل / Ligne Transport:</span>
+            <span class="receipt-item-val" style="font-weight: 700; color: #d97706;" id="rcptTransportRoute">خط برج منايل</span>
+          </div>
+          <!-- Hidden fallback elements for backwards compatibility -->
+          <span id="rcptGroup" style="display:none;"></span>
+          <span id="rcptTeacher" style="display:none;"></span>
+          <span id="rcptMonth" style="display:none;"></span>
+        </div>
+
+        <!-- Single Student Itemized Table -->
+        <table class="receipt-table" id="rcptSingleTable" style="width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 16px; font-size: 12px; border: 1px solid #cbd5e1;">
           <thead>
-            <tr>
-              <th>DÉSIGNATION</th>
-              <th style="text-align: right;">MONTANT</th>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+              <th style="text-align: right; padding: 9px 12px; font-weight: 800; color: #0f172a; width: 45%;">البيان / DÉSIGNATION DES FRAIS</th>
+              <th style="text-align: center; padding: 9px 10px; font-weight: 800; color: #0f172a; width: 15%;">الفترة / PÉRIODE</th>
+              <th style="text-align: right; padding: 9px 12px; font-weight: 800; color: #0f172a; width: 20%;">التسعيرة / TARIF</th>
+              <th style="text-align: right; padding: 9px 12px; font-weight: 800; color: #0f172a; width: 20%;">الصافي / NET</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Frais mensuels du cours</td>
-              <td style="text-align: right;" id="rcptBasePrice">2,500.00 DA</td>
+            <tr id="rcptRowTuition" style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 9px 12px; font-weight: 700; color: #1e293b;">
+                <i class="fa-solid fa-graduation-cap" style="color: #3b82f6; margin-left: 6px;"></i>
+                <span>مصاريف التمدرس الدراسي / Frais de Scolarité</span>
+              </td>
+              <td style="text-align: center; padding: 9px 10px; color: #475569;" id="rcptTuitionPeriod">الفصل 1</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 600; color: #334155;" id="rcptBasePrice">0 DA</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 700; color: #0284c7;" id="rcptTuitionNet">0 DA</td>
             </tr>
-            <tr>
-              <td>Remise accordée</td>
-              <td style="text-align: right;" id="rcptDiscount">0.00 DA</td>
+            <tr id="rcptRowTransport" style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 9px 12px; font-weight: 700; color: #1e293b;">
+                <i class="fa-solid fa-bus" style="color: #f59e0b; margin-left: 6px;"></i>
+                <span>مصاريف النقل المدرسي / Frais de Transport</span>
+                <span id="rcptTransportSubline" style="display: block; font-size: 10.5px; color: #d97706; font-weight: normal; margin-top: 2px;"></span>
+              </td>
+              <td style="text-align: center; padding: 9px 10px; color: #475569;" id="rcptTransportPeriod">الفصل 1</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 600; color: #334155;" id="rcptTransportPrice">0 DA</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 700; color: #d97706;" id="rcptTransportNet">0 DA</td>
             </tr>
-            <tr>
-              <td><strong>Reste Dû après ce paiement</strong></td>
-              <td style="text-align: right; color: #ef4444;" id="rcptRemaining">0.00 DA</td>
+            <tr id="rcptRowRegistration" style="display: none; border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 9px 12px; font-weight: 700; color: #1e293b;">
+                <i class="fa-solid fa-id-card" style="color: #10b981; margin-left: 6px;"></i>
+                <span>حقوق التسجيل والتأمين / Frais d'inscription & assurance</span>
+              </td>
+              <td style="text-align: center; padding: 9px 10px; color: #475569;">سنوي</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 600;" id="rcptRegBasePrice">0 DA</td>
+              <td style="text-align: right; padding: 9px 12px; font-weight: 700; color: #10b981;" id="rcptRegNet">0 DA</td>
+            </tr>
+            <tr id="rcptRowDiscount" style="border-bottom: 1px solid #e2e8f0; background: #f0fdf4;">
+              <td colspan="3" style="padding: 8px 12px; font-weight: 700; color: #166534;">
+                <i class="fa-solid fa-tags" style="color: #16a34a; margin-left: 6px;"></i>
+                <span>تخفيض ممنوح / Remise accordée (خصم عائلي أو إخوة)</span>
+              </td>
+              <td style="text-align: right; padding: 8px 12px; color: #16a34a; font-weight: 800;" id="rcptDiscount">- 0 DA</td>
             </tr>
           </tbody>
         </table>
 
         <!-- Itemized Multi-Course Receipt Table -->
-        <table class="receipt-table" id="rcptMultiTable"
-          style="display: none; width: 100%; margin-top: 10px; font-size: 11px;">
+        <table class="receipt-table" id="rcptMultiTable" style="display: none; width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 16px; font-size: 11.5px; border: 1px solid #cbd5e1;">
           <thead>
-            <tr>
-              <th style="text-align: center; width: 25px;">#</th>
-              <th>GROUPE / MATIÈRE</th>
-              <th>PÉRIODE</th>
-              <th style="text-align: right;">TARIF</th>
-              <th style="text-align: right;">REMISE</th>
-              <th style="text-align: right;">PAYÉ</th>
-              <th style="text-align: right;">RESTE</th>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+              <th style="text-align: center; width: 30px; padding: 7px;">#</th>
+              <th style="padding: 7px 10px;">GROUPE / MATIÈRE</th>
+              <th style="padding: 7px 10px;">PÉRIODE</th>
+              <th style="text-align: right; padding: 7px 10px;">TARIF</th>
+              <th style="text-align: right; padding: 7px 10px;">REMISE</th>
+              <th style="text-align: right; padding: 7px 10px;">PAYÉ</th>
+              <th style="text-align: right; padding: 7px 10px;">RESTE</th>
             </tr>
           </thead>
           <tbody id="rcptMultiTableBody">
@@ -4783,18 +5645,17 @@
         </table>
 
         <!-- Itemized Family Receipt Table (Multi-Children) -->
-        <table class="receipt-table" id="rcptFamilyTable"
-          style="display: none; width: 100%; margin-top: 10px; font-size: 11px;">
+        <table class="receipt-table" id="rcptFamilyTable" style="display: none; width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 16px; font-size: 11.5px; border: 1px solid #cbd5e1;">
           <thead>
-            <tr>
-              <th style="text-align: center; width: 25px;">#</th>
-              <th>ÉLÈVE / التلميذ</th>
-              <th>GROUPE / MATIÈRE</th>
-              <th>PÉRIODE</th>
-              <th style="text-align: right;">TARIF</th>
-              <th style="text-align: right;">REMISE</th>
-              <th style="text-align: right;">PAYÉ</th>
-              <th style="text-align: right;">RESTE</th>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+              <th style="text-align: center; width: 30px; padding: 7px;">#</th>
+              <th style="padding: 7px 10px;">ÉLÈVE / التلميذ</th>
+              <th style="padding: 7px 10px;">CLASSE & SERVICE</th>
+              <th style="padding: 7px 10px;">PÉRIODE</th>
+              <th style="text-align: right; padding: 7px 10px;">TARIF</th>
+              <th style="text-align: right; padding: 7px 10px;">REMISE</th>
+              <th style="text-align: right; padding: 7px 10px;">PAYÉ</th>
+              <th style="text-align: right; padding: 7px 10px;">RESTE</th>
             </tr>
           </thead>
           <tbody id="rcptFamilyTableBody">
@@ -4802,36 +5663,85 @@
           </tbody>
         </table>
 
-        <div class="receipt-total-box">
-          <span class="receipt-total-title">MONTANT VERSÉ / المحصّل</span>
-          <span class="receipt-total-amount" id="rcptTotalPaid">2,500.00 DA</span>
-        </div>
-
-        <div id="rcptFamilyRemainingBox"
-          style="display: none; justify-content: space-between; align-items: center; padding: 7px 14px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 6px; margin-top: 6px; font-size: 12px; color: #ef4444; font-weight: 700;">
-          <span>RESTE DÛ / المتبقي كدين :</span>
-          <span id="rcptFamilyTotalRemaining">0.00 DA</span>
-        </div>
-
-        <div class="receipt-footer">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 0 10px;">
-            <span>Signature du déposant</span>
-            <span>Cachet & Signature de l'administration</span>
+        <!-- Financial Summary Banner -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; margin-bottom: 14px;">
+          
+          <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; text-align: right;">
+            <span style="font-size: 11px; color: #64748b; display: block; font-weight: 600;">المجموع الصافي المستحق / Total Dû</span>
+            <strong id="rcptSubtotalNet" style="font-size: 17px; color: #0f172a; font-weight: 800;">0 DA</strong>
           </div>
-          <p style="font-size: 10px; color: #94a3b8;">
-            Document généré électroniquement par le système EDUMIND. Conservez ce reçu comme preuve de paiement.
+
+          <div style="background: #f0fdf4; border: 2px solid #16a34a; border-radius: 10px; padding: 10px 14px; text-align: right;">
+            <span style="font-size: 11px; color: #166534; display: block; font-weight: 700;">المبلغ المدفوع (المحصّل) / MONTANT VERSÉ</span>
+            <strong id="rcptTotalPaid" style="font-size: 21px; color: #15803d; font-weight: 900;">0 DA</strong>
+          </div>
+
+          <div style="background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: right;">
+            <span style="font-size: 11px; color: #b45309; display: block; font-weight: 700;">المتبقي من هذا الوصل / Reste versement</span>
+            <strong id="rcptRemaining" style="font-size: 17px; color: #d97706; font-weight: 800;">0 DA</strong>
+          </div>
+
+        </div>
+
+        <!-- Overall Remaining Student Debt Box -->
+        <div id="rcptRowTotalStudentDebt" style="background: #fff1f2; border: 2px dashed #f43f5e; border-radius: 10px; padding: 12px 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong style="color: #be123c; font-size: 14px; display: block;">
+              <i class="fa-solid fa-triangle-exclamation" style="margin-left: 6px;"></i>
+              <span id="rcptDebtTitle">المتبقي السنوي الإجمالي على التلميذ (الواجب السنوي - مجموع المدفوع) / RESTE ANNUEL TOTAL DÛ</span>
+            </strong>
+            <span id="rcptDebtSubtitle" style="font-size: 11.5px; color: #9f1239; font-weight: 700; display: block; margin-top: 2px;">
+              (الواجب السنوي الإجمالي مطروحاً منه مجموع ما تم سداده)
+            </span>
+          </div>
+          <div style="text-align: right;">
+            <strong id="rcptTotalStudentDebt" style="font-size: 22px; color: #be123c; font-weight: 900;">0 DA</strong>
+          </div>
+        </div>
+
+        <!-- Family Remaining Debt Box (Alternative) -->
+        <div id="rcptFamilyRemainingBox" style="display: none; justify-content: space-between; align-items: center; padding: 9px 16px; background: #fff1f2; border: 1.5px dashed #f43f5e; border-radius: 10px; margin-bottom: 16px; font-size: 12.5px; color: #be123c; font-weight: 800;">
+          <span>المتبقي الإجمالي كدين على العائلة / RESTE DÛ FAMILLE :</span>
+          <span id="rcptFamilyTotalRemaining" style="font-size: 17px; font-weight: 900;">0 DA</span>
+        </div>
+
+        <!-- Signatures & Legal Footer -->
+        <div class="receipt-footer" style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 35px; padding: 0 16px; font-size: 12px; font-weight: 700; color: #334155;">
+            <div style="text-align: center; width: 220px; border-top: 1px dotted #94a3b8; padding-top: 4px;">
+              <span>ختم وتوقيع الإدارة</span>
+              <div style="font-size: 10px; color: #64748b; font-weight: normal;">Cachet & Signature de l'administration</div>
+            </div>
+            <div style="text-align: center; width: 220px; border-top: 1px dotted #94a3b8; padding-top: 4px;">
+              <span>توقيع الولي / المودع</span>
+              <div style="font-size: 10px; color: #64748b; font-weight: normal;">Signature du déposant</div>
+            </div>
+          </div>
+          <p style="font-size: 10px; color: #64748b; margin: 0; text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
+            وثيقة رسمية صادرة إلكترونياً عن نظام EDUMIND المدرسي. يرجى الاحتفاظ بهذا الوصل كإثبات رسمي لعملية التسديد.
           </p>
         </div>
+
       </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
-        <button type="button" class="btn-secondary" onclick="app.closeModals()"><span
-            data-i18n="btn_close">Fermer</span></button>
-        <button type="button" class="btn-primary" onclick="window.print()">
-          <i class="fa-solid fa-print"></i>
-          <span>Imprimer le Reçu</span>
-        </button>
+      <!-- Action Buttons Modal Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 12px;">
+          <i class="fa-solid fa-circle-info" style="color: #3b82f6;"></i>
+          <span>المقاس مهيأ للطباعة القياسية A5 / A4 وبجودة عالية.</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()">
+            <i class="fa-solid fa-xmark"></i>
+            <span data-i18n="btn_close">إغلاق</span>
+          </button>
+          <button type="button" class="btn-primary" onclick="window.print()" style="background: linear-gradient(135deg, #1e40af, #3b82f6); font-weight: 700; padding: 8px 20px;">
+            <i class="fa-solid fa-print"></i>
+            <span>طباعة الوصل والفاتورة (A5 / A4)</span>
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -5168,6 +6078,182 @@
           <button type="button" class="btn-secondary" onclick="app.closeModals()"><span
               data-i18n="btn_cancel">Annuler</span></button>
           <button type="submit" class="btn-primary">Enregistrer la Dépense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Choix Type de Collaborateur (Enseignant vs Employé Normal) -->
+  <div class="modal-overlay" id="modalStaffTypeChoice">
+    <div class="modal-content" style="max-width: 600px; padding: 26px 28px;">
+      <div class="modal-header" style="margin-bottom: 8px; border-bottom: none; padding-bottom: 0;">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 10px; font-size: 19px;">
+          <i class="fa-solid fa-users-gear" style="color: #6366f1;"></i>
+          <span id="choiceModalTitle">Ajouter un Membre du Personnel / إضافة عضو جديد</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 22px;">
+        Veuillez sélectionner la catégorie du collaborateur à enregistrer dans l'établissement :
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-bottom: 12px;">
+        <!-- Option 1: Enseignant / Professeur -->
+        <div onclick="app.chooseStaffType('teacher')"
+             style="cursor: pointer; border: 2px solid rgba(249, 115, 22, 0.25); border-radius: 14px; padding: 22px 18px; background: rgba(249, 115, 22, 0.04); transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;"
+             onmouseover="this.style.borderColor='#f97316'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(249, 115, 22, 0.15)';"
+             onmouseout="this.style.borderColor='rgba(249, 115, 22, 0.25)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div style="width: 58px; height: 58px; border-radius: 16px; background: linear-gradient(135deg, #f97316, #ea580c); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Professeur / Enseignant</h4>
+            <div style="font-size: 12.5px; color: #f97316; font-weight: 600; margin-bottom: 6px;">أستاذ / هيئة التدريس</div>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin: 0;">
+              Matière enseignée, grade, spécialité, attribution des classes pédagogiques et emploi du temps.
+            </p>
+          </div>
+          <span class="badge-pill" style="background: rgba(249, 115, 22, 0.15); color: #ea580c; font-weight: 700; font-size: 11px; padding: 5px 12px; border-radius: 20px;">
+            Sélectionner <i class="fa-solid fa-arrow-right" style="margin-left: 4px;"></i>
+          </span>
+        </div>
+
+        <!-- Option 2: Employé normal / Personnel -->
+        <div onclick="app.chooseStaffType('employee')"
+             style="cursor: pointer; border: 2px solid rgba(99, 102, 241, 0.25); border-radius: 14px; padding: 22px 18px; background: rgba(99, 102, 241, 0.04); transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;"
+             onmouseover="this.style.borderColor='#6366f1'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(99, 102, 241, 0.15)';"
+             onmouseout="this.style.borderColor='rgba(99, 102, 241, 0.25)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div style="width: 58px; height: 58px; border-radius: 16px; background: linear-gradient(135deg, #6366f1, #4f46e5); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Employé Normal</h4>
+            <div style="font-size: 12.5px; color: #6366f1; font-weight: 600; margin-bottom: 6px;">موظف / عامل عادي</div>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin: 0;">
+              Nom, prénom, téléphone et type de métier personnalisable (Secrétaire, Chauffeur, Agent, etc.).
+            </p>
+          </div>
+          <span class="badge-pill" style="background: rgba(99, 102, 241, 0.15); color: #4f46e5; font-weight: 700; font-size: 11px; padding: 5px 12px; border-radius: 20px;">
+            Sélectionner <i class="fa-solid fa-arrow-right" style="margin-left: 4px;"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Ajouter / Modifier un Employé Normal (Personnel) -->
+  <div class="modal-overlay" id="modalEmployee">
+    <div class="modal-content" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalEmployeeTitle" style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-user-tie" style="color: #6366f1;"></i>
+          <span>Ajouter un Employé Normal</span>
+        </h3>
+        <button class="btn-icon" onclick="app.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="employeeForm" onsubmit="event.preventDefault(); app.saveEmployee();">
+        <input type="hidden" id="employeeId">
+        
+        <!-- Matricule -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Matricule Employé</label>
+            <span style="font-size: 11px; color: var(--text-muted);">اتركه فارغاً للتوليد التلقائي (EMP-xxx)</span>
+          </div>
+          <input type="text" id="employeeMatricule" class="form-control"
+            style="font-family: monospace; font-weight: 700; color: #6366f1;" placeholder="Automatique (ex: EMP-001)">
+        </div>
+
+        <!-- Nom et Prénom -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nom (اللقب) *</label>
+            <input type="text" id="employeeLastName" class="form-control" required data-letters-only="true"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\u00C0-\u024F\u0600-\u06FF\s'\-]/g, '')"
+              placeholder="ex: Bensalem">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prénom (الاسم) *</label>
+            <input type="text" id="employeeFirstName" class="form-control" required data-letters-only="true"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\u00C0-\u024F\u0600-\u06FF\s'\-]/g, '')"
+              placeholder="ex: Ahmed">
+          </div>
+        </div>
+
+        <!-- Téléphone -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label">Numéro de Téléphone (رقم الهاتف)</label>
+          <input type="tel" id="employeePhone" class="form-control" maxlength="10" inputmode="numeric" pattern="[0-9]*"
+            oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" placeholder="0550 00 00 00">
+        </div>
+
+        <!-- Type de Métier / Poste avec dropdown personnalisable -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Type de Métier / المهنة أو الوظيفة *</label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-sm btn-secondary" onclick="app.toggleNewJobInput()"
+                      style="padding: 3px 9px; font-size: 11.5px; border-radius: 6px; cursor: pointer;">
+                <i class="fa-solid fa-plus" style="color: #6366f1;"></i> Nouveau métier
+              </button>
+              <button type="button" class="btn-sm btn-secondary" onclick="app.toggleManageJobsContainer()"
+                      style="padding: 3px 9px; font-size: 11.5px; border-radius: 6px; cursor: pointer; color: #ef4444;"
+                      title="Gérer / Supprimer des métiers de la liste">
+                <i class="fa-solid fa-list-check"></i> Supprimer / Gérer
+              </button>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <select id="employeeJobTitle" class="form-control" required style="flex: 1;" onchange="app.onEmployeeJobSelected()">
+              <!-- Injected dynamically via app.loadStaffJobs() -->
+            </select>
+            <button type="button" id="btnDeleteCurrentJob" onclick="app.deleteCurrentJobTitle()"
+                    class="btn-icon" style="color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; width: 40px; height: 40px; display: none; background: rgba(239, 68, 68, 0.05);"
+                    title="Supprimer ce métier sélectionné de la liste">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+
+          <!-- Zone pour gérer / supprimer les métiers enregistrés -->
+          <div id="manageJobsListContainer" style="display: none; margin-top: 10px; background: rgba(239, 68, 68, 0.04); padding: 12px; border-radius: 10px; border: 1px dashed rgba(239, 68, 68, 0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 700; color: #b91c1c;">
+                <i class="fa-solid fa-trash-can" style="margin-right: 4px;"></i> Cliquez sur le ✖ pour supprimer un métier :
+              </span>
+              <button type="button" class="btn-icon" style="width: 22px; height: 22px; font-size: 11px;" onclick="app.toggleManageJobsContainer(false)">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div id="manageJobsBadgesList" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 130px; overflow-y: auto;">
+              <!-- Badges rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Zone pour ajouter un métier personnalisé directement -->
+          <div id="newJobInputContainer" style="display: none; margin-top: 10px; background: rgba(99, 102, 241, 0.06); padding: 10px 12px; border-radius: 8px; border: 1px dashed rgba(99, 102, 241, 0.3);">
+            <label style="font-size: 11.5px; font-weight: 600; color: #4f46e5; display: block; margin-bottom: 5px;">
+              Ajouter une nouvelle profession dans la liste :
+            </label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="newJobTitleInput" class="form-control" style="font-size: 13px;"
+                     placeholder="Ex: Responsable RH, Infirmier, Cuisinier..."
+                     onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.saveNewJobTitle(); }">
+              <button type="button" class="btn-primary" onclick="app.saveNewJobTitle()" style="white-space: nowrap; padding: 6px 14px; font-size: 12px;">
+                <i class="fa-solid fa-check"></i> Ajouter
+              </button>
+              <button type="button" class="btn-secondary" onclick="app.toggleNewJobInput(false)" style="padding: 6px 10px; font-size: 12px;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn-secondary" onclick="app.closeModals()"><span data-i18n="btn_cancel">Annuler</span></button>
+          <button type="submit" class="btn-primary" id="btnSaveEmployee">
+            <i class="fa-solid fa-floppy-disk"></i> Enregistrer l'Employé
+          </button>
         </div>
       </form>
     </div>

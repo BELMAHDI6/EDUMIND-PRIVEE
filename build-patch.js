@@ -78,7 +78,19 @@ async function main() {
     const dst = path.join(tempDir, item);
     if (fs.existsSync(src)) {
       if (fs.statSync(src).isDirectory()) {
-        fs.cpSync(src, dst, { recursive: true });
+        fs.cpSync(src, dst, {
+          recursive: true,
+          filter: (source) => {
+            const lower = source.toLowerCase();
+            return !lower.includes('uploads') &&
+                   !lower.endsWith('.sqlite') &&
+                   !lower.endsWith('.sqlite-wal') &&
+                   !lower.endsWith('.sqlite-shm') &&
+                   !lower.endsWith('.db') &&
+                   !lower.includes('school_settings') &&
+                   !lower.includes('seed.js');
+          }
+        });
       } else {
         fs.copyFileSync(src, dst);
       }

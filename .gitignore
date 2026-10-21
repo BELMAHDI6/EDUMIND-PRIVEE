@@ -31,3 +31,9 @@ backups/
 # Excel test files
 *.xlsx
 *.xls
+
+# Subscribers & client license registry
+subscribers_registry.json
+subscribers.json
+*school_settings.json
+

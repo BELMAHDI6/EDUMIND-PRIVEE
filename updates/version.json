@@ -1,7 +1,7 @@
 {
-  "version": "1.0.4",
-  "releaseDate": "2026-10-18",
-  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.4.zip",
-  "notes": "تصحيح بطاقة التلميذ باللغة العربية وتحديث السنة الدراسية إلى 2026-2027",
-  "notes_ar": "تصحيح بطاقة التلميذ باللغة العربية وتحديث السنة الدراسية إلى 2026-2027"
+  "version": "1.0.5",
+  "releaseDate": "2026-10-21",
+  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.5.zip",
+  "notes": "تحسينات الدفع المالي المتعدد (دراسة ونقل)، وتسهيل البحث عن الأولياء، وضبط الحساب الذكي للديون المتبقية في الوصولات",
+  "notes_ar": "تحسينات الدفع المالي المتعدد (دراسة ونقل)، وتسهيل البحث عن الأولياء، وضبط الحساب الذكي للديون المتبقية في الوصولات"
 }

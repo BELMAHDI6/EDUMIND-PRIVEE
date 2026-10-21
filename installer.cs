@@ -309,6 +309,24 @@ namespace EdumindPriveeSetup
                                 Directory.CreateDirectory(parentDir);
                             }
 
+                            string fileName = Path.GetFileName(destPath).ToLowerInvariant();
+                            string lowerDest = destPath.ToLowerInvariant();
+                            bool isProtected = fileName.EndsWith(".sqlite") ||
+                                              fileName.EndsWith(".sqlite-wal") ||
+                                              fileName.EndsWith(".sqlite-shm") ||
+                                              fileName.EndsWith(".db") ||
+                                              fileName.EndsWith(".sys") ||
+                                              fileName.Contains("school_settings") ||
+                                              lowerDest.Contains(@"\uploads\") ||
+                                              lowerDest.Contains(@"/uploads/") ||
+                                              lowerDest.Contains(@"\backups\") ||
+                                              lowerDest.Contains(@"/backups/");
+
+                            if (isProtected && File.Exists(destPath))
+                            {
+                                continue;
+                            }
+
                             entry.ExtractToFile(destPath, true);
 
                             int pct = 10 + (int)((current / (double)total) * 75);

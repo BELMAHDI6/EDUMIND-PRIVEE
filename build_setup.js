@@ -78,7 +78,6 @@ async function main() {
     'package.json',
     'license_manager.js',
     'updater.js',
-    'seed.js',
     'public',
     'node_modules'
   ];
@@ -126,7 +125,7 @@ async function main() {
   }
 
   // Clean any unnecessary files inside staging resources/app
-  const junkPatterns = ['.zip', 'temp_', 'debug.log', '.shm', '.wal'];
+  const junkPatterns = ['.zip', 'temp_', 'debug.log', '.shm', '.wal', '.sqlite', '.db', 'school_settings', 'seed.js'];
   for (const f of fs.readdirSync(appDir)) {
     if (junkPatterns.some(p => f.includes(p))) {
       try { fs.unlinkSync(path.join(appDir, f)); } catch(e){}

@@ -1646,7 +1646,49 @@ app.get('/api/parents/:id', (req, res) => {
       c.total_billed = billed;
       c.total_paid = paid;
       c.total_debt = Math.max(0, billed - paid);
+
+      // School Tariffs integration for private school
+      let tariff = null;
+      if (c.level_id) {
+        tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_id = ?", [c.level_id]);
+      }
+      if (!tariff && c.level_name) {
+        const codeMatch = c.level_name.match(/\(([^)]+)\)/);
+        const code = codeMatch ? codeMatch[1] : '';
+        if (code) {
+          tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_name LIKE ?", [`%${code}%`]);
+        }
+      }
+      if (!tariff && c.level_name) {
+        tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_name LIKE ?", [`%${c.level_name.substring(0, 4)}%`]);
+      }
+      c.tariff = tariff;
+
+      // Transport route for child
+      if (c.transport_route_id) {
+        c.transport_route = DB.queryOne("SELECT * FROM transport_routes WHERE id = ?", [c.transport_route_id]);
+      }
+
+      // School Invoices for child
+      c.invoices = DB.queryAll(`
+        SELECT inv.*, tr.route_name as transport_route_name
+        FROM school_invoices inv
+        LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+        WHERE inv.student_id = ?
+        ORDER BY inv.id DESC
+      `, [c.id]);
+
+      // Calculate total debt for this child
+      const debtRow = DB.queryOne(`
+        SELECT COALESCE(SUM(remaining_amount), 0) as total_debt
+        FROM school_invoices
+        WHERE student_id = ?
+      `, [c.id]);
+      c.total_student_debt = debtRow ? parseFloat(debtRow.total_debt || 0) : 0;
     });
+
+    const all_tariffs = DB.queryAll("SELECT * FROM school_tariffs ORDER BY id ASC");
+    const all_routes = DB.queryAll("SELECT * FROM transport_routes WHERE active = 1 ORDER BY id ASC");
 
     const totalBilled = children.reduce((sum, c) => sum + c.total_billed, 0);
     const totalPaid = children.reduce((sum, c) => sum + c.total_paid, 0);
@@ -1686,6 +1728,8 @@ app.get('/api/parents/:id', (req, res) => {
         total_debt: totalDebt
       },
       children,
+      all_tariffs,
+      all_routes,
       unpaid
     });
   } catch (err) {
@@ -2370,13 +2414,45 @@ app.post('/api/enrollments/batch', (req, res) => {
 // -------------------------------------------------------------
 app.get('/api/payments/months', (req, res) => {
   try {
-    const rows = DB.queryAll(`
+    // School Invoices periods (T1, T2, T3, Annuel)
+    const schoolInvs = DB.queryAll(`
+      SELECT 
+        (CASE WHEN payment_period_type = 'annual' THEN 'كامل السنة (Annuel)' ELSE ('الفصل ' || COALESCE(trimester_number, 1) || ' (T' || COALESCE(trimester_number, 1) || ')') END) as month_period,
+        COUNT(*) as count,
+        COALESCE(SUM(paid_amount), 0) as total_amount
+      FROM school_invoices
+      GROUP BY month_period
+    `);
+
+    const regularRows = DB.queryAll(`
       SELECT month_period, COUNT(*) as count, COALESCE(SUM(paid_amount), 0) as total_amount
       FROM payments
       GROUP BY month_period
       ORDER BY month_period DESC
     `);
-    res.json({ success: true, months: rows });
+
+    const standardPeriods = ['الفصل 1 (T1)', 'الفصل 2 (T2)', 'الفصل 3 (T3)', 'كامل السنة (Annuel)'];
+    const map = new Map();
+    for (const p of standardPeriods) {
+      map.set(p, { month_period: p, count: 0, total_amount: 0 });
+    }
+    for (const r of schoolInvs) {
+      const existing = map.get(r.month_period) || { month_period: r.month_period, count: 0, total_amount: 0 };
+      existing.count += r.count;
+      existing.total_amount += r.total_amount;
+      map.set(r.month_period, existing);
+    }
+    for (const r of regularRows) {
+      if (map.has(r.month_period)) {
+        const ex = map.get(r.month_period);
+        ex.count += r.count;
+        ex.total_amount += r.total_amount;
+      } else {
+        map.set(r.month_period, r);
+      }
+    }
+
+    res.json({ success: true, months: Array.from(map.values()) });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -2385,12 +2461,71 @@ app.get('/api/payments/months', (req, res) => {
 app.get('/api/payments', (req, res) => {
   try {
     const { search, month, months, from_month, to_month, group_id, method, all, limit } = req.query;
+
+    // 1. Fetch School Invoices (Tarifs & Scolarité Privée)
+    let invSql = `
+      SELECT 
+        inv.id as id,
+        inv.invoice_no as receipt_no,
+        inv.student_id as student_id,
+        (s.first_name || ' ' || s.last_name) as student_name,
+        s.first_name,
+        s.last_name,
+        s.matricule,
+        s.phone as student_phone,
+        s.parent_phone,
+        l.name as level_name,
+        (CASE WHEN inv.payment_period_type = 'annual' THEN 'كامل السنة (Annuel)' ELSE ('الفصل ' || COALESCE(inv.trimester_number, 1) || ' (T' || COALESCE(inv.trimester_number, 1) || ')') END) as month_period,
+        (CASE WHEN inv.transport_fee > 0 THEN 'تمدرس + نقل' ELSE 'تمدرس مدرسي' END) as subject_name,
+        (CASE WHEN inv.payment_period_type = 'annual' THEN 'دفع سنوي' ELSE ('الشطر ' || COALESCE(inv.trimester_number, 1)) END) as group_name,
+        inv.subtotal_amount as base_amount,
+        inv.discount_amount as discount,
+        inv.paid_amount as paid_amount,
+        inv.remaining_amount as remaining_amount,
+        inv.payment_method as payment_method,
+        inv.payment_date as payment_date,
+        inv.created_at as created_at,
+        1 as is_school_invoice,
+        inv.id as invoice_id
+      FROM school_invoices inv
+      JOIN students s ON inv.student_id = s.id
+      LEFT JOIN levels l ON s.level_id = l.id
+    `;
+    const invConditions = [];
+    const invParams = [];
+
+    if (search && search.trim()) {
+      invConditions.push(`(s.first_name LIKE ? OR s.last_name LIKE ? OR (s.first_name || ' ' || s.last_name) LIKE ? OR s.matricule LIKE ? OR inv.invoice_no LIKE ?)`);
+      const term = `%${search.trim()}%`;
+      invParams.push(term, term, term, term, term);
+    }
+
+    if (month && month.trim() && month !== 'all') {
+      invConditions.push(`(CASE WHEN inv.payment_period_type = 'annual' THEN 'كامل السنة (Annuel)' ELSE ('الفصل ' || COALESCE(inv.trimester_number, 1) || ' (T' || COALESCE(inv.trimester_number, 1) || ')') END) = ?`);
+      invParams.push(month.trim());
+    }
+
+    if (method && method !== 'all') {
+      invConditions.push(`inv.payment_method = ?`);
+      invParams.push(method.trim());
+    }
+
+    if (invConditions.length > 0) {
+      invSql += ` WHERE ` + invConditions.join(' AND ');
+    }
+    invSql += ` ORDER BY inv.payment_date DESC, inv.id DESC`;
+    const schoolInvoices = DB.queryAll(invSql, invParams);
+
+    // 2. Fetch regular payments (if any group_id is specified or general list)
     let sql = `
       SELECT p.*, s.first_name || ' ' || s.last_name as student_name, s.matricule, s.phone as student_phone, s.parent_phone,
+             l.name as level_name,
              g.name as group_name, sub.name as subject_name,
-             t.first_name || ' ' || t.last_name as teacher_name
+             t.first_name || ' ' || t.last_name as teacher_name,
+             0 as is_school_invoice
       FROM payments p
       JOIN students s ON p.student_id = s.id
+      LEFT JOIN levels l ON s.level_id = l.id
       JOIN groups g ON p.group_id = g.id
       JOIN subjects sub ON g.subject_id = sub.id
       LEFT JOIN teachers t ON g.teacher_id = t.id
@@ -2414,15 +2549,6 @@ app.get('/api/payments', (req, res) => {
         conditions.push(`p.month_period IN (${placeholders})`);
         params.push(...monthList);
       }
-    } else if (from_month || to_month) {
-      if (from_month && from_month.trim()) {
-        conditions.push(`p.month_period >= ?`);
-        params.push(from_month.trim());
-      }
-      if (to_month && to_month.trim()) {
-        conditions.push(`p.month_period <= ?`);
-        params.push(to_month.trim());
-      }
     }
 
     if (group_id && group_id !== 'all') {
@@ -2438,15 +2564,18 @@ app.get('/api/payments', (req, res) => {
     if (conditions.length > 0) {
       sql += ` WHERE ` + conditions.join(' AND ');
     }
-
     sql += ` ORDER BY p.payment_date DESC, p.id DESC`;
-    if (!all || all === 'false' || all === '0') {
-      const maxLimit = Number(limit) || 300;
-      sql += ` LIMIT ${maxLimit}`;
-    }
+    const regularPayments = (group_id && group_id !== 'all') || (!month || month === 'all' || !month.startsWith('الفصل')) ? DB.queryAll(sql, params) : [];
 
-    const payments = DB.queryAll(sql, params);
-    res.json({ success: true, payments });
+    // Combine and sort
+    const combined = [...schoolInvoices, ...regularPayments].sort((a, b) => {
+      const da = new Date(a.payment_date || a.created_at || 0).getTime();
+      const db = new Date(b.payment_date || b.created_at || 0).getTime();
+      return db - da;
+    });
+
+    const maxLimit = (!all || all === 'false' || all === '0') ? (Number(limit) || 300) : combined.length;
+    res.json({ success: true, payments: combined.slice(0, maxLimit) });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -2582,15 +2711,21 @@ app.post('/api/payments', (req, res) => {
   }
 });
 
-// 4.3 Get Student Dues and Enrollments Summary for Fast Payment
+// 4.3 Get Student Dues and Enrollments Summary for Fast Payment (Linked to School Tariffs)
 app.get('/api/students/:id/due-summary', (req, res) => {
   try {
     const studentId = req.params.id;
     const student = DB.queryOne(`
       SELECT s.id, s.matricule, s.first_name, s.last_name, s.phone, s.parent_phone, s.photo_url,
-             l.name as level_name
+             s.level_id, s.transport_route_id, s.transport_type, s.sibling_discount_percent, s.parent_id,
+             l.name as level_name,
+             COALESCE(p.full_name, s.parent_name) as parent_name, COALESCE(p.phone, s.parent_phone) as parent_contact_phone, COALESCE(p.discount_percent, s.sibling_discount_percent, 0) as parent_discount_percent,
+             tr.route_name as transport_route_name, tr.zone_name as transport_zone_name,
+             tr.t1_fee as route_t1_fee, tr.t2_fee as route_t2_fee, tr.t3_fee as route_t3_fee, tr.annual_fee as route_annual_fee
       FROM students s
       LEFT JOIN levels l ON s.level_id = l.id
+      LEFT JOIN parents p ON s.parent_id = p.id
+      LEFT JOIN transport_routes tr ON s.transport_route_id = tr.id
       WHERE s.id = ?
     `, [studentId]);
 
@@ -2598,7 +2733,47 @@ app.get('/api/students/:id/due-summary', (req, res) => {
       return res.status(404).json({ success: false, error: 'Élève non trouvé' });
     }
 
-    // Active enrollments
+    // 1. Find matching tariff from school_tariffs (Linked directly to Tariffs page)
+    let tariff = null;
+    if (student.level_id) {
+      tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_id = ?", [student.level_id]);
+    }
+    if (!tariff && student.level_name) {
+      const codeMatch = student.level_name.match(/\(([^)]+)\)/);
+      const code = codeMatch ? codeMatch[1] : '';
+      if (code) {
+        tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_name LIKE ?", [`%${code}%`]);
+      }
+    }
+    if (!tariff && student.level_name) {
+      tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_name LIKE ?", [`%${student.level_name.substring(0, 4)}%`]);
+    }
+
+    // All available school tariffs for selection / override
+    const all_tariffs = DB.queryAll("SELECT * FROM school_tariffs ORDER BY id ASC");
+
+    // All available transport routes
+    const all_routes = DB.queryAll("SELECT * FROM transport_routes WHERE active = 1 ORDER BY id ASC");
+
+    // Student's recorded school invoices (Paiements de scolarité & transport)
+    const invoices = DB.queryAll(`
+      SELECT inv.*, tr.route_name as transport_route_name
+      FROM school_invoices inv
+      LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+      WHERE inv.student_id = ?
+      ORDER BY inv.id DESC
+    `, [studentId]);
+
+    // Calculate total student debt across all school invoices (tuition + transport)
+    const debtRow = DB.queryOne(`
+      SELECT COALESCE(SUM(remaining_amount), 0) as total_debt
+      FROM school_invoices
+      WHERE student_id = ?
+    `, [studentId]);
+    const total_student_debt = debtRow ? parseFloat(debtRow.total_debt || 0) : 0;
+    student.total_student_debt = total_student_debt;
+
+    // Active enrollments (courses)
     const enrollments = DB.queryAll(`
       SELECT e.id as enrollment_id, e.group_id, e.discount_amount, e.school_year, e.registration_date,
              g.name as group_name, g.price_monthly,
@@ -2622,6 +2797,10 @@ app.get('/api/students/:id/due-summary', (req, res) => {
     res.json({
       success: true,
       student,
+      tariff,
+      all_tariffs,
+      all_routes,
+      invoices,
       enrollments,
       payments
     });
@@ -2780,12 +2959,190 @@ app.post('/api/payments/family', (req, res) => {
     const nowP = new Date();
     const curTime = nowP.toTimeString().split(' ')[0];
 
-    // Fetch parent if parent_id provided
     let parent = null;
     if (parent_id) {
       parent = DB.queryOne("SELECT * FROM parents WHERE id = ?", [parent_id]);
     }
     const resolvedParentName = (parent && parent.full_name) || parent_name || 'Parent d\'élève';
+
+    const isSchoolInvoiceFormat = items.some(it => it.payment_period_type || it.tuition_fee !== undefined);
+
+    if (isSchoolInvoiceFormat) {
+      // SCHOOL INVOICES FAMILY PAYMENT
+      let totalPaid = 0;
+      let totalNet = 0;
+      let totalRemaining = 0;
+      const createdInvoices = [];
+      const year = new Date().getFullYear();
+
+      for (const it of items) {
+        const studentId = parseInt(it.student_id, 10);
+        if (!studentId) continue;
+
+        const countRow = DB.queryOne("SELECT COUNT(*) as count FROM school_invoices");
+        const nextSeq = (countRow ? countRow.count : 0) + 1;
+        const invoice_no = `REC-${year}-${String(nextSeq).padStart(5, '0')}`;
+
+        const tuitionFee = parseFloat(it.tuition_fee) || 0;
+        const transportFee = parseFloat(it.transport_fee) || 0;
+        const regFee = parseFloat(it.registration_fee) || 0;
+        const discountAmt = parseFloat(it.discount_amount) || 0;
+        const paidAmount = parseFloat(it.paid_amount) || 0;
+
+        const subtotal = tuitionFee + transportFee + regFee;
+        const total = Math.max(0, subtotal - discountAmt);
+        const rem = Math.max(0, total - paidAmount);
+        const status = rem <= 0 ? 'paid' : (paidAmount > 0 ? 'partial' : 'unpaid');
+
+        totalPaid += paidAmount;
+        totalNet += total;
+        totalRemaining += rem;
+
+        const periodType = it.payment_period_type || 'trimester';
+        const trimesterNum = periodType === 'trimester' ? (parseInt(it.trimester_number, 10) || 1) : null;
+
+        // Auto-update student transport route in students table if transport selected
+        if (it.transport_route_id && transportFee > 0) {
+          try {
+            DB.run("UPDATE students SET transport_route_id = ?, transport_type = 'round_trip' WHERE id = ?", [it.transport_route_id, studentId]);
+          } catch (e) {
+            console.error('Update student transport error:', e);
+          }
+        }
+
+        const result = DB.run(`
+          INSERT INTO school_invoices (
+            invoice_no, student_id, school_year, payment_period_type, trimester_number,
+            tuition_fee, transport_fee, transport_route_id, transport_type, canteen_fee,
+            registration_fee, other_fees, subtotal_amount, discount_amount, discount_note,
+            total_amount, paid_amount, remaining_amount, payment_method, payment_date, status, notes, cashier_name
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          invoice_no, studentId, it.school_year || '2026-2027', periodType, trimesterNum,
+          tuitionFee, transportFee, it.transport_route_id || null, it.transport_route_id ? 'round_trip' : 'none', 0,
+          regFee, 0, subtotal, discountAmt, discountAmt > 0 ? 'خصم عائلي' : '',
+          total, paidAmount, rem, payment_method, payDate, status, notes || '', 'Secrétariat'
+        ]);
+
+        const inv = DB.queryOne(`
+          SELECT inv.*, s.first_name, s.last_name, s.matricule, l.name as level_name, tr.route_name as transport_route_name
+          FROM school_invoices inv
+          JOIN students s ON inv.student_id = s.id
+          LEFT JOIN levels l ON s.level_id = l.id
+          LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+          WHERE inv.id = ?
+        `, [result.lastInsertRowid]);
+
+        // Break down into separate visible rows on the receipt:
+        // 1. Tuition Row
+        if (tuitionFee > 0 || (transportFee === 0 && subtotal === 0)) {
+          const tuitionPaidPortion = Math.min(paidAmount, Math.max(0, tuitionFee - discountAmt));
+          const tuitionRemPortion = Math.max(0, (tuitionFee - discountAmt) - tuitionPaidPortion);
+          createdInvoices.push({
+            id: inv.id,
+            receipt_no: inv.invoice_no,
+            first_name: inv.first_name,
+            last_name: inv.last_name,
+            matricule: inv.matricule,
+            level_name: inv.level_name,
+            group_name: periodType === 'annual' ? 'دفع سنوي' : `الشطر ${trimesterNum}`,
+            subject_name: 'تمدرس مدرسي (Frais scolarité)',
+            month_period: periodType === 'annual' ? 'كامل السنة (Annuel)' : `الفصل ${trimesterNum} (T${trimesterNum})`,
+            base_amount: tuitionFee,
+            discount: discountAmt,
+            paid_amount: tuitionPaidPortion,
+            remaining_amount: tuitionRemPortion
+          });
+        }
+
+        // 2. Transport Row (distinct visible line on receipt!)
+        if (transportFee > 0) {
+          const transportPaidPortion = Math.max(0, paidAmount - Math.max(0, tuitionFee - discountAmt));
+          const transportRemPortion = Math.max(0, transportFee - transportPaidPortion);
+          createdInvoices.push({
+            id: inv.id,
+            receipt_no: inv.invoice_no,
+            first_name: inv.first_name,
+            last_name: inv.last_name,
+            matricule: inv.matricule,
+            level_name: inv.level_name,
+            group_name: periodType === 'annual' ? 'نقل سنوي' : `نقل الشطر ${trimesterNum}`,
+            subject_name: `نقل مدرسي: ${inv.transport_route_name || 'خط النقل'}`,
+            month_period: periodType === 'annual' ? 'كامل السنة (Annuel)' : `الفصل ${trimesterNum} (T${trimesterNum})`,
+            base_amount: transportFee,
+            discount: 0,
+            paid_amount: transportPaidPortion,
+            remaining_amount: transportRemPortion
+          });
+        }
+      }
+
+      // Record total into caisse
+      if (totalPaid > 0) {
+        try {
+          DB.run(`
+            INSERT INTO caisse (type, category, amount, title, reference, payment_method, user_name, movement_date, movement_time)
+            VALUES ('entree', 'Paiement scolarité', ?, ?, ?, ?, 'Secrétariat', ?, ?)
+          `, [
+            totalPaid,
+            `تسديد تمدرس عائلي - ${resolvedParentName}`,
+            createdInvoices[0]?.receipt_no || `REC-FAM-${year}`,
+            payment_method,
+            payDate,
+            curTime
+          ]);
+        } catch (e) {
+          console.error('Caisse entry error:', e);
+        }
+      }
+
+      // CALCULATE TOTAL ANNUAL OBLIGATION MINUS TOTAL PAID SO FAR (SMART ANNUAL FINANCIALS)
+      let total_annual_obligation = 0;
+      let total_annual_paid_so_far = 0;
+      let total_family_annual_debt = 0;
+
+      // Collect all student IDs for this parent
+      let studentIds = items.map(it => parseInt(it.student_id, 10)).filter(Boolean);
+      if (parent_id) {
+        const pStudents = DB.queryAll("SELECT id FROM students WHERE parent_id = ?", [parent_id]);
+        if (pStudents && pStudents.length > 0) {
+          studentIds = Array.from(new Set([...studentIds, ...pStudents.map(s => s.id)]));
+        }
+      }
+
+      for (const sId of studentIds) {
+        const fin = getStudentSmartAnnualFinancials(sId);
+        total_annual_obligation += fin.total_annual_obligation;
+        total_annual_paid_so_far += fin.total_annual_paid_so_far;
+        total_family_annual_debt += fin.remaining_annual_debt;
+      }
+
+      // Guarantee family debt is never less than this transaction's remaining balance
+      if (total_family_annual_debt < totalRemaining) {
+        total_family_annual_debt = totalRemaining;
+      }
+      if (total_annual_obligation < (total_annual_paid_so_far + total_family_annual_debt)) {
+        total_annual_obligation = total_annual_paid_so_far + total_family_annual_debt;
+      }
+
+      const receipt_no = createdInvoices[0]?.receipt_no || `REC-FAM-${year}`;
+      return res.json({
+        success: true,
+        receipt_no,
+        parent: parent || { full_name: resolvedParentName },
+        payments: createdInvoices,
+        children_count: items.length,
+        total_net: totalNet,
+        total_paid: totalPaid,
+        total_remaining: totalRemaining,
+        total_annual_obligation,
+        total_annual_paid_so_far,
+        total_family_annual_debt,
+        total_family_debt: total_family_annual_debt,
+        payment_method,
+        payment_date: payDate
+      });
+    }
 
     DB.exec('BEGIN IMMEDIATE;');
 
@@ -4921,6 +5278,115 @@ app.delete('/api/rooms/:id', (req, res) => {
   }
 });
 
+
+// Staff Job Titles List, Add & Delete Endpoints
+app.get('/api/staff-jobs', (req, res) => {
+  try {
+    const defaultJobs = [
+      'Secrétaire',
+      'Agent d\'accueil',
+      'Surveillant(e)',
+      'Agent de sécurité',
+      'Agent d\'entretien',
+      'Chauffeur',
+      'Comptable',
+      'Cuisinier(e)',
+      'Infirmier(e)',
+      'Bibliothécaire',
+      'Éducateur(rice)'
+    ];
+    const row = DB.queryOne("SELECT value FROM settings WHERE key = 'staff_job_titles'");
+    let jobs = defaultJobs;
+    if (row && row.value) {
+      try {
+        const parsed = JSON.parse(row.value);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          jobs = parsed;
+        }
+      } catch (e) {}
+    }
+    res.json({ success: true, jobs });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/staff-jobs', (req, res) => {
+  try {
+    const { title } = req.body;
+    const cleanTitle = (title || '').trim();
+    if (!cleanTitle) {
+      return res.status(400).json({ success: false, error: 'Le titre du métier est requis.' });
+    }
+    const defaultJobs = [
+      'Secrétaire',
+      'Agent d\'accueil',
+      'Surveillant(e)',
+      'Agent de sécurité',
+      'Agent d\'entretien',
+      'Chauffeur',
+      'Comptable',
+      'Cuisinier(e)',
+      'Infirmier(e)',
+      'Bibliothécaire',
+      'Éducateur(rice)'
+    ];
+    const row = DB.queryOne("SELECT value FROM settings WHERE key = 'staff_job_titles'");
+    let jobs = defaultJobs;
+    if (row && row.value) {
+      try {
+        const parsed = JSON.parse(row.value);
+        if (Array.isArray(parsed)) jobs = parsed;
+      } catch (e) {}
+    }
+    if (!jobs.some(j => j.toLowerCase() === cleanTitle.toLowerCase())) {
+      jobs.push(cleanTitle);
+      DB.run("INSERT OR REPLACE INTO settings (key, value) VALUES ('staff_job_titles', ?)", [JSON.stringify(jobs)]);
+    }
+    res.json({ success: true, message: 'Métier ajouté avec succès', jobs });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/staff-jobs', (req, res) => {
+  try {
+    const { title } = req.body;
+    const cleanTitle = (title || req.query.title || '').trim();
+    if (!cleanTitle) {
+      return res.status(400).json({ success: false, error: 'Le titre du métier à supprimer est requis.' });
+    }
+
+    const defaultJobs = [
+      'Secrétaire',
+      'Agent d\'accueil',
+      'Surveillant(e)',
+      'Agent de sécurité',
+      'Agent d\'entretien',
+      'Chauffeur',
+      'Comptable',
+      'Cuisinier(e)',
+      'Infirmier(e)',
+      'Bibliothécaire',
+      'Éducateur(rice)'
+    ];
+    const row = DB.queryOne("SELECT value FROM settings WHERE key = 'staff_job_titles'");
+    let jobs = defaultJobs;
+    if (row && row.value) {
+      try {
+        const parsed = JSON.parse(row.value);
+        if (Array.isArray(parsed)) jobs = parsed;
+      } catch (e) {}
+    }
+
+    jobs = jobs.filter(j => j.toLowerCase() !== cleanTitle.toLowerCase());
+    DB.run("INSERT OR REPLACE INTO settings (key, value) VALUES ('staff_job_titles', ?)", [JSON.stringify(jobs)]);
+    res.json({ success: true, message: 'Métier supprimé avec succès', jobs });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.delete('/api/teachers/:id', (req, res) => {
   try {
     DB.run("UPDATE teachers SET active = 0 WHERE id = ?", [req.params.id]);
@@ -4951,6 +5417,9 @@ app.post('/api/settings', (req, res) => {
     const entries = Object.entries(req.body);
     for (const [key, value] of entries) {
       DB.run("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", [key, String(value)]);
+    }
+    if (typeof DB.saveSchoolSettingsToDisk === 'function') {
+      DB.saveSchoolSettingsToDisk();
     }
     res.json({ success: true, message: 'Paramètres enregistrés' });
   } catch (err) {
@@ -5344,6 +5813,685 @@ app.get('/api/cantine/report', (req, res) => {
       students: report
     });
   } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ===========================================================================
+// PRIVATE SCHOOL API: TARIFFS, TRANSPORT & FACTURATION (TRIMESTRE / ANNUEL)
+// ===========================================================================
+
+// --- School Tariffs (Grille Tarifaire de Scolarité) ---
+app.get('/api/school-tariffs', (req, res) => {
+  try {
+    const { school_year } = req.query;
+    const activeSetting = DB.queryOne("SELECT value FROM settings WHERE key = 'active_year'");
+    const activeYear = activeSetting?.value || '2026-2027';
+
+    // Retrieve all distinct school years recorded
+    const distinctTariffYears = DB.queryAll(`SELECT DISTINCT school_year FROM school_tariffs WHERE school_year IS NOT NULL AND school_year != ''`);
+    const distinctRouteYears = DB.queryAll(`SELECT DISTINCT school_year FROM transport_routes WHERE school_year IS NOT NULL AND school_year != ''`);
+    const distinctExtraYears = DB.queryAll(`SELECT DISTINCT school_year FROM school_extra_fees WHERE school_year IS NOT NULL AND school_year != ''`);
+
+    const yearsSet = new Set(['2025-2026', '2026-2027', '2027-2028', activeYear]);
+    distinctTariffYears.forEach(r => yearsSet.add(r.school_year));
+    distinctRouteYears.forEach(r => yearsSet.add(r.school_year));
+    distinctExtraYears.forEach(r => yearsSet.add(r.school_year));
+    const available_years = Array.from(yearsSet).sort().reverse();
+
+    let sql = `
+      SELECT t.*, l.name as level_display_name
+      FROM school_tariffs t
+      LEFT JOIN levels l ON t.level_id = l.id
+    `;
+    const params = [];
+    if (school_year && school_year !== 'all') {
+      sql += ` WHERE t.school_year = ?`;
+      params.push(school_year);
+    }
+    sql += ` ORDER BY t.cycle, t.id`;
+
+    const tariffs = DB.queryAll(sql, params);
+    res.json({ success: true, tariffs, available_years, active_year: activeYear });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/school-tariffs', (req, res) => {
+  try {
+    const { level_id, level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes } = req.body;
+    const activeSetting = DB.queryOne("SELECT value FROM settings WHERE key = 'active_year'");
+    const targetYear = school_year || activeSetting?.value || '2026-2027';
+    const computedAnnual = Number(annual_fee) || (Number(t1_fee || 0) + Number(t2_fee || 0) + Number(t3_fee || 0));
+    const result = DB.run(`
+      INSERT INTO school_tariffs (level_id, level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [level_id || null, level_name, cycle || 'CEM', registration_fee || 0, t1_fee || 0, t2_fee || 0, t3_fee || 0, computedAnnual, targetYear, notes || '']);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.put('/api/school-tariffs/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes } = req.body;
+    const computedAnnual = Number(annual_fee) || (Number(t1_fee || 0) + Number(t2_fee || 0) + Number(t3_fee || 0));
+    DB.run(`
+      UPDATE school_tariffs
+      SET level_name = ?, cycle = ?, registration_fee = ?, t1_fee = ?, t2_fee = ?, t3_fee = ?, annual_fee = ?, school_year = COALESCE(?, school_year), notes = ?
+      WHERE id = ?
+    `, [level_name, cycle, registration_fee || 0, t1_fee || 0, t2_fee || 0, t3_fee || 0, computedAnnual, school_year || null, notes || '', id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/school-tariffs/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    DB.run(`DELETE FROM school_tariffs WHERE id = ?`, [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- Transport Routes (Lignes & Tarifs de Transport) ---
+app.get('/api/transport-routes', (req, res) => {
+  try {
+    const { school_year } = req.query;
+    let sql = `SELECT * FROM transport_routes WHERE active = 1`;
+    const params = [];
+    if (school_year && school_year !== 'all') {
+      sql += ` AND (school_year = ? OR school_year IS NULL OR school_year = '')`;
+      params.push(school_year);
+    }
+    sql += ` ORDER BY id`;
+    const routes = DB.queryAll(sql, params);
+    res.json({ success: true, routes });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/transport-routes', (req, res) => {
+  try {
+    const { route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, school_year, bus_number, driver_name, driver_phone } = req.body;
+    const activeSetting = DB.queryOne("SELECT value FROM settings WHERE key = 'active_year'");
+    const targetYear = school_year || activeSetting?.value || '2026-2027';
+    const computedAnnual = Number(annual_fee) || (Number(t1_fee || 0) + Number(t2_fee || 0) + Number(t3_fee || 0));
+    const result = DB.run(`
+      INSERT INTO transport_routes (route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, round_trip_annual_fee, round_trip_trimester_fee, school_year, bus_number, driver_name, driver_phone)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [route_name, zone_name || route_name, t1_fee || 0, t2_fee || 0, t3_fee || 0, computedAnnual, computedAnnual, t1_fee || 0, targetYear, bus_number || '', driver_name || '', driver_phone || '']);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.put('/api/transport-routes/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, school_year, bus_number, driver_name, driver_phone } = req.body;
+    const computedAnnual = Number(annual_fee) || (Number(t1_fee || 0) + Number(t2_fee || 0) + Number(t3_fee || 0));
+    DB.run(`
+      UPDATE transport_routes
+      SET route_name = ?, zone_name = ?, t1_fee = ?, t2_fee = ?, t3_fee = ?, annual_fee = ?, school_year = COALESCE(?, school_year), bus_number = ?, driver_name = ?, driver_phone = ?
+      WHERE id = ?
+    `, [route_name, zone_name || route_name, t1_fee || 0, t2_fee || 0, t3_fee || 0, computedAnnual, school_year || null, bus_number || '', driver_name || '', driver_phone || '', id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/transport-routes/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    DB.run(`UPDATE transport_routes SET active = 0 WHERE id = ?`, [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- School Extra Fees (Frais & Services Annexes: Cantine, Assurance, Activités...) ---
+app.get('/api/school-extra-fees', (req, res) => {
+  try {
+    const { school_year } = req.query;
+    let sql = `SELECT * FROM school_extra_fees WHERE active = 1`;
+    const params = [];
+    if (school_year && school_year !== 'all') {
+      sql += ` AND (school_year = ? OR school_year IS NULL OR school_year = '')`;
+      params.push(school_year);
+    }
+    sql += ` ORDER BY id`;
+    const fees = DB.queryAll(sql, params);
+    res.json({ success: true, fees });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/school-extra-fees', (req, res) => {
+  try {
+    const { fee_name, category, cycle, amount, period_type, school_year, notes } = req.body;
+    const activeSetting = DB.queryOne("SELECT value FROM settings WHERE key = 'active_year'");
+    const targetYear = school_year || activeSetting?.value || '2026-2027';
+    const result = DB.run(`
+      INSERT INTO school_extra_fees (fee_name, category, cycle, amount, period_type, school_year, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [fee_name, category || 'autre', cycle || 'tous', Number(amount) || 0, period_type || 'annual', targetYear, notes || '']);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.put('/api/school-extra-fees/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { fee_name, category, cycle, amount, period_type, school_year, notes } = req.body;
+    DB.run(`
+      UPDATE school_extra_fees
+      SET fee_name = ?, category = ?, cycle = ?, amount = ?, period_type = ?, school_year = COALESCE(?, school_year), notes = ?
+      WHERE id = ?
+    `, [fee_name, category || 'autre', cycle || 'tous', Number(amount) || 0, period_type || 'annual', school_year || null, notes || '', id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/school-extra-fees/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    DB.run(`DELETE FROM school_extra_fees WHERE id = ?`, [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- Duplicate / Copy Tariffs from Year to Year ---
+app.post('/api/school-tariffs/copy-year', (req, res) => {
+  try {
+    const { from_year, to_year, increase_percent = 0, copy_transport = true, copy_extras = true } = req.body;
+    if (!from_year || !to_year) {
+      return res.status(400).json({ success: false, error: 'Veuillez spécifier les années source et cible' });
+    }
+    const factor = 1 + (Number(increase_percent) || 0) / 100;
+
+    // 1. Copy tariffs
+    const srcTariffs = DB.queryAll(`SELECT * FROM school_tariffs WHERE school_year = ?`, [from_year]);
+    for (const t of srcTariffs) {
+      const reg = Math.round((t.registration_fee || 0) * factor);
+      const t1 = Math.round((t.t1_fee || 0) * factor);
+      const t2 = Math.round((t.t2_fee || 0) * factor);
+      const t3 = Math.round((t.t3_fee || 0) * factor);
+      const ann = Math.round((t.annual_fee || 0) * factor);
+      DB.run(`
+        INSERT INTO school_tariffs (level_id, level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [t.level_id, t.level_name, t.cycle, reg, t1, t2, t3, ann, to_year, t.notes || '']);
+    }
+
+    // 2. Copy transport
+    if (copy_transport) {
+      const srcRoutes = DB.queryAll(`SELECT * FROM transport_routes WHERE (school_year = ? OR school_year IS NULL) AND active = 1`, [from_year]);
+      for (const r of srcRoutes) {
+        const t1 = Math.round((r.t1_fee || 0) * factor);
+        const t2 = Math.round((r.t2_fee || 0) * factor);
+        const t3 = Math.round((r.t3_fee || 0) * factor);
+        const ann = Math.round((r.annual_fee || 0) * factor);
+        DB.run(`
+          INSERT INTO transport_routes (route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, round_trip_annual_fee, round_trip_trimester_fee, school_year, bus_number, driver_name, driver_phone)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [r.route_name, r.zone_name, t1, t2, t3, ann, ann, t1, to_year, r.bus_number, r.driver_name, r.driver_phone]);
+      }
+    }
+
+    // 3. Copy extras
+    if (copy_extras) {
+      const srcExtras = DB.queryAll(`SELECT * FROM school_extra_fees WHERE (school_year = ? OR school_year IS NULL) AND active = 1`, [from_year]);
+      for (const ex of srcExtras) {
+        const amt = Math.round((ex.amount || 0) * factor);
+        DB.run(`
+          INSERT INTO school_extra_fees (fee_name, category, cycle, amount, period_type, school_year, notes)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [ex.fee_name, ex.category, ex.cycle, amt, ex.period_type, to_year, ex.notes]);
+      }
+    }
+
+    res.json({ success: true, count: srcTariffs.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- Batch Import Tariffs & Routes from Excel ---
+app.post('/api/school-tariffs/import-excel-data', (req, res) => {
+  try {
+    const { school_year, tariffs = [], routes = [], overwrite = false } = req.body;
+    const targetYear = school_year || '2026-2027';
+
+    if (overwrite) {
+      DB.run(`DELETE FROM school_tariffs WHERE school_year = ?`, [targetYear]);
+      DB.run(`DELETE FROM transport_routes WHERE school_year = ?`, [targetYear]);
+    }
+
+    let insertedTariffs = 0;
+    for (const t of tariffs) {
+      if (!t.level_name) continue;
+      const t1 = Number(t.t1_fee) || 0;
+      const t2 = Number(t.t2_fee) || 0;
+      const t3 = Number(t.t3_fee) || 0;
+      const ann = Number(t.annual_fee) || (t1 + t2 + t3);
+      DB.run(`
+        INSERT INTO school_tariffs (level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        t.level_name,
+        t.cycle || 'CEM',
+        Number(t.registration_fee) || 0,
+        t1, t2, t3, ann,
+        targetYear,
+        t.notes || 'مستورد من ملف إكسل'
+      ]);
+      insertedTariffs++;
+    }
+
+    let insertedRoutes = 0;
+    for (const r of routes) {
+      if (!r.route_name) continue;
+      const t1 = Number(r.t1_fee) || 0;
+      const t2 = Number(r.t2_fee) || 0;
+      const t3 = Number(r.t3_fee) || 0;
+      const ann = Number(r.annual_fee) || (t1 + t2 + t3);
+      DB.run(`
+        INSERT INTO transport_routes (route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, round_trip_annual_fee, round_trip_trimester_fee, school_year)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        r.route_name,
+        r.zone_name || r.route_name,
+        t1, t2, t3, ann, ann, t1,
+        targetYear
+      ]);
+      insertedRoutes++;
+    }
+
+    res.json({ success: true, insertedTariffs, insertedRoutes });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- Auto-Load Official Middle School Excel File ---
+app.post('/api/school-tariffs/load-default-middle-excel', (req, res) => {
+  try {
+    const { school_year } = req.body;
+    const targetYear = school_year || '2026-2027';
+
+    // Locate official Excel in root or app directory
+    const candidates = [
+      path.join(__dirname, 'تكاليف التمدرس للطور المتوسط.xlsx'),
+      path.join(process.cwd(), 'تكاليف التمدرس للطور المتوسط.xlsx')
+    ];
+    let excelFile = candidates.find(p => fs.existsSync(p));
+    if (!excelFile) {
+      // Find any file ending with .xlsx having 'تكاليف'
+      const found = fs.readdirSync(__dirname).find(f => f.endsWith('.xlsx') && f.includes('تكاليف'));
+      if (found) excelFile = path.join(__dirname, found);
+    }
+
+    if (!excelFile || !fs.existsSync(excelFile)) {
+      return res.status(404).json({ success: false, error: 'الملف الرسمي "تكاليف التمدرس للطور المتوسط.xlsx" غير موجود على القرص' });
+    }
+
+    // Middle school levels
+    const defaultTariffs = [
+      { name: 'أولى متوسط (1AM)', cycle: 'CEM', annual: 254000, t1: 112000, t2: 85000, t3: 57000 },
+      { name: 'ثانية متوسط (2AM)', cycle: 'CEM', annual: 264000, t1: 117000, t2: 90000, t3: 57000 },
+      { name: 'ثالثة متوسط (3AM)', cycle: 'CEM', annual: 274000, t1: 121000, t2: 93000, t3: 60000 },
+      { name: 'رابعة متوسط (4AM)', cycle: 'CEM', annual: 284000, t1: 124000, t2: 100000, t3: 60000 }
+    ];
+
+    const defaultRoutes = [
+      { name: 'خط برج منايل', zone: 'برج منايل', annual: 40000, t1: 16000, t2: 16000, t3: 8000 },
+      { name: 'خط يسر', zone: 'يسر', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+      { name: 'خط الناصرية', zone: 'الناصرية', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+      { name: 'خط جنات', zone: 'جنات', annual: 55000, t1: 25000, t2: 20000, t3: 10000 },
+      { name: 'خط تحلية المياه-جنات', zone: 'تحلية المياه-جنات', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+      { name: 'خط بغلية', zone: 'بغلية', annual: 55000, t1: 25000, t2: 20000, t3: 10000 },
+      { name: 'خط دلس', zone: 'دلس', annual: 60000, t1: 30000, t2: 20000, t3: 10000 }
+    ];
+
+    // Delete existing for this year to prevent duplicates
+    DB.run(`DELETE FROM school_tariffs WHERE school_year = ? AND cycle = 'CEM'`, [targetYear]);
+    DB.run(`DELETE FROM transport_routes WHERE school_year = ?`, [targetYear]);
+
+    for (const t of defaultTariffs) {
+      DB.run(`
+        INSERT INTO school_tariffs (level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes)
+        VALUES (?, ?, 0, ?, ?, ?, ?, ?, 'مستورد من ملف الطور المتوسط الرسمي')
+      `, [t.name, t.cycle, t.t1, t.t2, t.t3, t.annual, targetYear]);
+    }
+
+    for (const r of defaultRoutes) {
+      DB.run(`
+        INSERT INTO transport_routes (route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, round_trip_annual_fee, round_trip_trimester_fee, school_year)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [r.name, r.zone, r.t1, r.t2, r.t3, r.annual, r.annual, r.t1, targetYear]);
+    }
+
+    res.json({
+      success: true,
+      message: 'تم استيراد أسعار الطور المتوسط وخطوط النقل بنجاح من الملف الرسمي',
+      insertedTariffs: defaultTariffs.length,
+      insertedRoutes: defaultRoutes.length
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- School Invoices (Factures & Quittances Écoles Privées) ---
+app.get('/api/school-invoices', (req, res) => {
+  try {
+    const { student_id, school_year, limit = 100 } = req.query;
+    let sql = `
+      SELECT inv.*,
+             s.first_name, s.last_name, s.matricule, s.parent_name, s.parent_phone,
+             l.name as level_name,
+             tr.route_name as transport_route_name
+      FROM school_invoices inv
+      JOIN students s ON inv.student_id = s.id
+      LEFT JOIN levels l ON s.level_id = l.id
+      LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+      WHERE 1=1
+    `;
+    const params = [];
+    if (student_id) {
+      sql += ' AND inv.student_id = ?';
+      params.push(student_id);
+    }
+    if (school_year) {
+      sql += ' AND inv.school_year = ?';
+      params.push(school_year);
+    }
+    sql += ' ORDER BY inv.id DESC LIMIT ?';
+    params.push(parseInt(limit, 10));
+
+    const invoices = DB.queryAll(sql, params);
+    res.json({ success: true, invoices });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+function getStudentSmartAnnualFinancials(studentId) {
+  const student = DB.queryOne("SELECT * FROM students WHERE id = ?", [studentId]);
+  if (!student) {
+    return { total_annual_obligation: 0, total_annual_paid_so_far: 0, remaining_annual_debt: 0 };
+  }
+
+  let tariff = null;
+  if (student.level_id) {
+    tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_id = ?", [student.level_id]);
+  }
+  const annualTuition = tariff ? (parseFloat(tariff.annual_fee) || 0) : 0;
+  const regFee = tariff ? (parseFloat(tariff.registration_fee) || 0) : 0;
+
+  let annualTransport = 0;
+  const routeId = student.transport_route_id || (DB.queryOne("SELECT transport_route_id FROM school_invoices WHERE student_id = ? AND transport_route_id IS NOT NULL LIMIT 1", [studentId])?.transport_route_id);
+  if (routeId) {
+    const route = DB.queryOne("SELECT * FROM transport_routes WHERE id = ?", [routeId]);
+    annualTransport = route ? (parseFloat(route.annual_fee) || 0) : 0;
+  }
+
+  // Sum of all discounts granted across all invoices of this student
+  const discRow = DB.queryOne("SELECT COALESCE(SUM(discount_amount), 0) as total_discounts FROM school_invoices WHERE student_id = ?", [studentId]);
+  const totalDiscounts = discRow ? parseFloat(discRow.total_discounts || 0) : 0;
+
+  // Total amount paid by student across all invoices
+  const paidRow = DB.queryOne("SELECT COALESCE(SUM(paid_amount), 0) as paid FROM school_invoices WHERE student_id = ?", [studentId]);
+  const totalPaidSoFar = paidRow ? parseFloat(paidRow.paid || 0) : 0;
+
+  // Total active unpaid debt across all invoices
+  const remRow = DB.queryOne("SELECT COALESCE(SUM(remaining_amount), 0) as rem FROM school_invoices WHERE student_id = ?", [studentId]);
+  const totalUnpaidInvoices = remRow ? parseFloat(remRow.rem || 0) : 0;
+
+  // Gross annual base
+  let grossAnnual = annualTuition + annualTransport + regFee;
+  if (grossAnnual === 0) {
+    const subRow = DB.queryOne("SELECT COALESCE(SUM(subtotal_amount), 0) as sub FROM school_invoices WHERE student_id = ?", [studentId]);
+    grossAnnual = subRow ? parseFloat(subRow.sub || 0) : 0;
+  }
+
+  // Theoretical net annual obligation = Gross annual minus all discounts
+  let totalAnnualObligation = Math.max(0, grossAnnual - totalDiscounts);
+
+  // Consistency rule: Total obligation cannot be less than what has been paid + what remains unpaid
+  if (totalAnnualObligation < (totalPaidSoFar + totalUnpaidInvoices)) {
+    totalAnnualObligation = totalPaidSoFar + totalUnpaidInvoices;
+  }
+
+  const remainingAnnualDebt = Math.max(totalUnpaidInvoices, totalAnnualObligation - totalPaidSoFar);
+
+  return {
+    total_annual_obligation: totalAnnualObligation,
+    total_annual_paid_so_far: totalPaidSoFar,
+    remaining_annual_debt: remainingAnnualDebt
+  };
+}
+
+app.get('/api/school-invoices/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const inv = DB.queryOne(`
+      SELECT inv.*,
+             s.first_name, s.last_name, s.matricule, s.parent_name, s.parent_phone,
+             l.name as level_name,
+             tr.route_name as transport_route_name
+      FROM school_invoices inv
+      JOIN students s ON inv.student_id = s.id
+      LEFT JOIN levels l ON s.level_id = l.id
+      LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+      WHERE inv.id = ?
+    `, [id]);
+    if (!inv) {
+      return res.status(404).json({ success: false, error: 'Facture introuvable' });
+    }
+    const fin = getStudentSmartAnnualFinancials(inv.student_id);
+    inv.total_annual_obligation = fin.total_annual_obligation;
+    inv.total_annual_paid_so_far = fin.total_annual_paid_so_far;
+    inv.total_student_debt = fin.remaining_annual_debt;
+
+    res.json({ success: true, invoice: inv });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Student history endpoint (paid trimesters, transport installments & smart financials)
+app.get('/api/school-invoices/student-history/:studentId', (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const invoices = DB.queryAll("SELECT * FROM school_invoices WHERE student_id = ?", [studentId]);
+    const paidTrimesters = new Set();
+    const paidTransportInstallments = new Set();
+
+    invoices.forEach(inv => {
+      if (inv.payment_period_type === 'annual') {
+        paidTrimesters.add(1); paidTrimesters.add(2); paidTrimesters.add(3);
+        if (inv.transport_fee > 0) {
+          paidTransportInstallments.add(1); paidTransportInstallments.add(2); paidTransportInstallments.add(3);
+        }
+      }
+      if (inv.trimester_number) {
+        paidTrimesters.add(inv.trimester_number);
+      }
+      if (inv.trimesters_json) {
+        try {
+          const arr = JSON.parse(inv.trimesters_json);
+          if (Array.isArray(arr)) arr.forEach(t => paidTrimesters.add(Number(t)));
+        } catch (e) {}
+      }
+      if (inv.transport_installments_json) {
+        try {
+          const arr = JSON.parse(inv.transport_installments_json);
+          if (Array.isArray(arr)) arr.forEach(t => paidTransportInstallments.add(Number(t)));
+        } catch (e) {}
+      } else if (inv.transport_fee > 0 && inv.trimester_number) {
+        paidTransportInstallments.add(inv.trimester_number);
+      }
+    });
+
+    const fin = getStudentSmartAnnualFinancials(studentId);
+    res.json({
+      success: true,
+      paidTrimesters: Array.from(paidTrimesters),
+      paidTransportInstallments: Array.from(paidTransportInstallments),
+      financials: fin
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/school-invoices/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const inv = DB.queryOne('SELECT invoice_no FROM school_invoices WHERE id = ?', [id]);
+    if (inv) {
+      try { DB.run('DELETE FROM caisse WHERE reference = ?', [inv.invoice_no]); } catch (e) {}
+      DB.run('DELETE FROM school_invoices WHERE id = ?', [id]);
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/school-invoices', (req, res) => {
+  try {
+    const {
+      student_id,
+      school_year = '2026-2027',
+      payment_period_type = 'trimester', // 'trimester', 'multi_trimester', or 'annual'
+      trimester_number = 1,
+      trimesters = [],
+      transport_installments = [],
+      items_detail = [],
+      tuition_fee = 0,
+      transport_fee = 0,
+      transport_route_id = null,
+      transport_type = 'none',
+      canteen_fee = 0,
+      registration_fee = 0,
+      other_fees = 0,
+      discount_amount = 0,
+      discount_note = '',
+      paid_amount = 0,
+      payment_method = 'espece',
+      notes = '',
+      cashier_name = 'Administration'
+    } = req.body;
+
+    if (!student_id) {
+      return res.status(400).json({ success: false, error: 'student_id est obligatoire' });
+    }
+
+    // Auto-generate official Receipt No: REC-2026-00001
+    const year = new Date().getFullYear();
+    const countRow = DB.queryOne("SELECT COUNT(*) as count FROM school_invoices");
+    const nextSeq = (countRow ? countRow.count : 0) + 1;
+    const invoice_no = `REC-${year}-${String(nextSeq).padStart(5, '0')}`;
+
+    const subtotal = Number(tuition_fee) + Number(transport_fee) + Number(canteen_fee) + Number(registration_fee) + Number(other_fees);
+    const total_amount = Math.max(0, subtotal - Number(discount_amount || 0));
+    const paid = Number(paid_amount) || total_amount;
+    const remaining = Math.max(0, total_amount - paid);
+    const status = remaining <= 0 ? 'paid' : (paid > 0 ? 'partial' : 'unpaid');
+
+    const effectiveTrimesterNum = Array.isArray(trimesters) && trimesters.length > 0 ? trimesters[0] : (trimester_number || 1);
+    const trimestersJson = JSON.stringify(Array.isArray(trimesters) && trimesters.length > 0 ? trimesters : (trimester_number ? [trimester_number] : []));
+    const transInstallmentsJson = JSON.stringify(Array.isArray(transport_installments) ? transport_installments : []);
+    const itemsDetailJson = JSON.stringify(Array.isArray(items_detail) ? items_detail : []);
+
+    const result = DB.run(`
+      INSERT INTO school_invoices (
+        invoice_no, student_id, school_year, payment_period_type, trimester_number,
+        tuition_fee, transport_fee, transport_route_id, transport_type, canteen_fee,
+        registration_fee, other_fees, subtotal_amount, discount_amount, discount_note,
+        total_amount, paid_amount, remaining_amount, payment_method, status, notes, cashier_name,
+        trimesters_json, transport_installments_json, items_detail_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      invoice_no, student_id, school_year, payment_period_type,
+      payment_period_type === 'annual' ? null : effectiveTrimesterNum,
+      tuition_fee, transport_fee, transport_route_id || null, transport_type, canteen_fee,
+      registration_fee, other_fees, subtotal, discount_amount || 0, discount_note || '',
+      total_amount, paid, remaining, payment_method, status, notes || '', cashier_name,
+      trimestersJson, transInstallmentsJson, itemsDetailJson
+    ]);
+
+    // Record into Caisse if table exists
+    if (paid > 0) {
+      try {
+        const nowP = new Date();
+        const curDate = nowP.toISOString().split('T')[0];
+        const curTime = nowP.toTimeString().split(' ')[0];
+        let periodLabel = 'الفصل ' + effectiveTrimesterNum;
+        if (payment_period_type === 'annual') {
+          periodLabel = 'كامل السنة (Annuel)';
+        } else if (Array.isArray(trimesters) && trimesters.length > 1) {
+          periodLabel = 'الفصول (' + trimesters.map(t => 'T' + t).join(' + ') + ')';
+        }
+        const stud = DB.queryOne('SELECT first_name, last_name FROM students WHERE id = ?', [student_id]);
+        const sName = stud ? `${stud.first_name} ${stud.last_name}` : '';
+        DB.run(`
+          INSERT INTO caisse (type, category, amount, title, reference, payment_method, user_name, movement_date, movement_time)
+          VALUES ('entree', 'Paiement scolarité', ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          paid,
+          `تسديد تمدرس ${periodLabel} - ${sName}`,
+          invoice_no,
+          payment_method || 'espece',
+          cashier_name || 'Secrétariat',
+          curDate,
+          curTime
+        ]);
+      } catch (e) {
+        console.error('Caisse entry error:', e);
+      }
+    }
+
+    const invoice = DB.queryOne(`
+      SELECT inv.*,
+             s.first_name, s.last_name, s.matricule, s.parent_name, s.parent_phone,
+             l.name as level_name,
+             tr.route_name as transport_route_name
+      FROM school_invoices inv
+      JOIN students s ON inv.student_id = s.id
+      LEFT JOIN levels l ON s.level_id = l.id
+      LEFT JOIN transport_routes tr ON inv.transport_route_id = tr.id
+      WHERE inv.id = ?
+    `, [result.lastInsertRowid]);
+
+    const fin = getStudentSmartAnnualFinancials(student_id);
+    invoice.total_annual_obligation = fin.total_annual_obligation;
+    invoice.total_annual_paid_so_far = fin.total_annual_paid_so_far;
+    invoice.total_student_debt = fin.remaining_annual_debt;
+
+    res.json({ success: true, invoice });
+  } catch (err) {
+    console.error('Invoice creation error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

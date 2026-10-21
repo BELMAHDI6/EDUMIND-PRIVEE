@@ -271,6 +271,162 @@ function restoreDatabase(incomingFilePath) {
 }
 
 // =====================================================================
+// PERSISTENT SCHOOL SETTINGS PROTECTION ACROSS ALL UPDATES
+// Guarantees school settings (name, phone, address, logo, active year, etc.)
+// are NEVER wiped or reset to defaults during any software update.
+// =====================================================================
+function getSchoolSettingsFilePaths() {
+  const paths = [
+    path.join(getDataDirectory(), 'edumind_school_settings.json'),
+    path.join(__dirname, 'edumind_school_settings.json')
+  ];
+  try {
+    const cwdPath = path.join(process.cwd(), 'edumind_school_settings.json');
+    if (!paths.includes(cwdPath)) paths.push(cwdPath);
+  } catch (e) {}
+  return paths;
+}
+
+function saveSchoolSettingsToDisk() {
+  try {
+    const keys = [
+      'school_name', 'school_phone', 'school_address', 'school_email',
+      'currency', 'active_year', 'school_year', 'school_logo',
+      'school_cycles', 'school_type', 'badge_width', 'badge_height',
+      'admin_password', 'caisse_categories_entree', 'caisse_categories_sortie'
+    ];
+    const settings = {};
+    const rows = db.prepare("SELECT key, value FROM settings WHERE key IN (" + keys.map(() => '?').join(',') + ")").all(...keys);
+    for (const r of rows) {
+      if (r && r.key) settings[r.key] = r.value;
+    }
+    if (Object.keys(settings).length > 0) {
+      const json = JSON.stringify(settings, null, 2);
+      for (const p of getSchoolSettingsFilePaths()) {
+        try {
+          const parent = path.dirname(p);
+          if (!fs.existsSync(parent)) fs.mkdirSync(parent, { recursive: true });
+          fs.writeFileSync(p, json, 'utf8');
+        } catch (e) {}
+      }
+      return true;
+    }
+  } catch (err) {
+    console.warn('⚠️ [Settings Protection] Erreur sauvegarde paramètres vers JSON :', err.message);
+  }
+  return false;
+}
+
+function loadSchoolSettingsFromDisk() {
+  for (const p of getSchoolSettingsFilePaths()) {
+    try {
+      if (fs.existsSync(p)) {
+        const content = fs.readFileSync(p, 'utf8');
+        const parsed = JSON.parse(content);
+        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
+function recoverSchoolSettingsFromBackups() {
+  const backupDirs = [
+    getBackupDirectory(),
+    path.join(__dirname, 'backups')
+  ];
+  const { DatabaseSync } = require('node:sqlite');
+  for (const bDir of backupDirs) {
+    if (!fs.existsSync(bDir)) continue;
+    try {
+      const files = fs.readdirSync(bDir)
+        .filter(f => f.endsWith('.sqlite'))
+        .map(f => ({ name: f, fullPath: path.join(bDir, f), mtime: fs.statSync(path.join(bDir, f)).mtimeMs }))
+        .sort((a, b) => b.mtime - a.mtime);
+
+      for (const item of files) {
+        let tempDb = null;
+        try {
+          tempDb = new DatabaseSync(item.fullPath, { readOnly: true });
+          const rows = tempDb.prepare("SELECT key, value FROM settings").all();
+          const sMap = {};
+          for (const r of rows) sMap[r.key] = r.value;
+          if (sMap.school_name && sMap.school_name.trim() && sMap.school_name !== 'EDUMIND Academy') {
+            console.log(`🛡️ [Settings Protection] Informations de l'établissement récupérées depuis la sauvegarde : ${item.name}`);
+            tempDb.close();
+            return sMap;
+          }
+          tempDb.close();
+        } catch (e) {
+          try { if (tempDb) tempDb.close(); } catch(ce) {}
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ [Settings Protection] Erreur recherche sauvegardes :', err.message);
+    }
+  }
+  return null;
+}
+
+function ensureSchoolSettingsPreserved() {
+  try {
+    let currentSchool = null;
+    try {
+      currentSchool = db.prepare("SELECT value FROM settings WHERE key = 'school_name'").get();
+    } catch (e) {}
+
+    const hasCustomSchoolInDb = currentSchool && currentSchool.value && currentSchool.value.trim() && currentSchool.value !== 'EDUMIND Academy';
+
+    if (hasCustomSchoolInDb) {
+      // Current DB has custom school settings -> sync to persistent JSON on disk immediately!
+      saveSchoolSettingsToDisk();
+      return;
+    }
+
+    // Otherwise, check if we have saved settings in JSON on disk
+    let diskSettings = loadSchoolSettingsFromDisk();
+
+    // If not on disk, check if we can recover from past backups
+    if (!diskSettings || !diskSettings.school_name || diskSettings.school_name === 'EDUMIND Academy') {
+      const recovered = recoverSchoolSettingsFromBackups();
+      if (recovered) {
+        diskSettings = recovered;
+      }
+    }
+
+    if (diskSettings && diskSettings.school_name && diskSettings.school_name.trim() && diskSettings.school_name !== 'EDUMIND Academy') {
+      console.log(`🛡️ [Settings Protection] Restauration automatique des paramètres de l'établissement : "${diskSettings.school_name}"`);
+      for (const [k, v] of Object.entries(diskSettings)) {
+        try {
+          db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)").run(k, String(v));
+        } catch (e) {}
+      }
+      saveSchoolSettingsToDisk();
+      return;
+    }
+
+    // Fallback baseline defaults (ONLY insert if key doesn't exist at all)
+    db.exec(`
+      INSERT OR IGNORE INTO settings (key, value) VALUES
+      ('school_name', 'EDUMIND Academy'),
+      ('school_phone', '0550 00 00 00'),
+      ('school_address', 'Alger, Algérie'),
+      ('active_year', '2026-2027'),
+      ('school_year', '2026-2027'),
+      ('currency', 'DA'),
+      ('language', 'fr'),
+      ('theme', 'dark');
+      UPDATE settings SET value = '2026-2027' WHERE key IN ('active_year', 'school_year') AND (value LIKE '%2025%' OR value IS NULL OR value = '');
+    `);
+    saveSchoolSettingsToDisk();
+  } catch (err) {
+    console.warn('⚠️ [Settings Protection] Erreur ensureSchoolSettingsPreserved :', err.message);
+  }
+}
+
+// =====================================================================
 // Prepared Statement Cache — avoids recompiling SQL on every call
 // This is the key performance optimization for repeated operations.
 // =====================================================================
@@ -379,6 +535,7 @@ const DB = {
   },
   // Clears the cache — call this after restoreDatabase
   clearCache: () => _stmtCache.clear(),
+  prepare: (sql) => db.prepare(sql),
   raw: db,
   close: () => {
     try {
@@ -397,7 +554,12 @@ const DB = {
   restoreDatabase,
   getDataDirectory,
   getBackupDirectory,
-  getDatabasePath
+  getDatabasePath,
+  saveSchoolSettingsToDisk,
+  loadSchoolSettingsFromDisk,
+  recoverSchoolSettingsFromBackups,
+  ensureSchoolSettingsPreserved,
+  getSchoolSettingsFilePaths
 };
 
 process.on('beforeExit', () => {
@@ -676,28 +838,8 @@ function initDatabase() {
     console.warn('Student qr_code sync warning:', e);
   }
 
-  // Populate Default Settings if empty
-  const schoolName = DB.queryOne("SELECT value FROM settings WHERE key = 'school_name'");
-  if (!schoolName) {
-    db.exec(`
-      INSERT INTO settings (key, value) VALUES
-      ('school_name', 'EDUMIND Academy'),
-      ('school_phone', '0550 00 00 00'),
-      ('school_address', 'Alger, Algérie'),
-      ('active_year', '2026-2027'),
-      ('school_year', '2026-2027'),
-      ('currency', 'DA'),
-      ('language', 'fr'),
-      ('theme', 'dark');
-    `);
-  } else {
-    try {
-      db.exec(`
-        INSERT OR IGNORE INTO settings (key, value) VALUES ('school_year', '2026-2027');
-        UPDATE settings SET value = '2026-2027' WHERE key IN ('active_year', 'school_year') AND (value LIKE '%2025%' OR value IS NULL OR value = '');
-      `);
-    } catch (e) {}
-  }
+  // Autonomous School Settings Preservation & Self-Healing across updates
+  ensureSchoolSettingsPreserved();
 
   // Populate Default Levels if empty
   const levelsCount = DB.queryOne("SELECT COUNT(*) as count FROM levels");
@@ -1032,6 +1174,8 @@ function initDatabase() {
     try { db.exec("ALTER TABLE students ADD COLUMN national_id TEXT;"); } catch(e){}
     try { db.exec("ALTER TABLE students ADD COLUMN birth_place TEXT;"); } catch(e){}
     try { db.exec("ALTER TABLE teachers ADD COLUMN grade TEXT DEFAULT 'prof_titulaire';"); } catch(e){}
+    try { db.exec("ALTER TABLE teachers ADD COLUMN employee_type TEXT DEFAULT 'teacher';"); } catch(e){}
+    try { db.exec("ALTER TABLE teachers ADD COLUMN job_title TEXT;"); } catch(e){}
 
     // Ensure Preparatoire level exists for primary education
     try {
@@ -1092,7 +1236,204 @@ function initDatabase() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
       );
+
+      -- ======================================================================
+      -- PRIVATE SCHOOL EXPANSION: Scolarité, Transport & Facturation Trimestrielle / Annuelle
+      -- ======================================================================
+
+      -- 1. Grille Tarifaire de Scolarité par Niveau (Frais de scolarité & Inscription)
+      CREATE TABLE IF NOT EXISTS school_tariffs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        level_id INTEGER,
+        level_name TEXT NOT NULL,
+        cycle TEXT DEFAULT 'CEM',                    -- 'Maternelle', 'Primaire', 'CEM', 'Lycee'
+        registration_fee REAL DEFAULT 0,             -- حقوق التسجيل والتأمين
+        t1_fee REAL DEFAULT 0,                       -- تكلفة التمدرس: الشطر الأول
+        t2_fee REAL DEFAULT 0,                       -- تكلفة التمدرس: الشطر الثاني
+        t3_fee REAL DEFAULT 0,                       -- تكلفة التمدرس: الشطر الثالث
+        annual_fee REAL DEFAULT 0,                   -- تكلفة التمدرس سنوياً (المجموع)
+        school_year TEXT DEFAULT '2026-2027',
+        notes TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (level_id) REFERENCES levels(id) ON DELETE SET NULL
+      );
+
+      -- 2. Lignes & Tarifs de Transport Scolaire (Frais de transport)
+      CREATE TABLE IF NOT EXISTS transport_routes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        route_name TEXT NOT NULL,                    -- اسم الخط أو المسار
+        zone_name TEXT,                              -- الحي / المنطقة
+        t1_fee REAL DEFAULT 0,                       -- نقل: الشطر الأول
+        t2_fee REAL DEFAULT 0,                       -- نقل: الشطر الثاني
+        t3_fee REAL DEFAULT 0,                       -- نقل: الشطر الثالث
+        annual_fee REAL DEFAULT 0,                   -- نقل: المجموع السنوي
+        round_trip_trimester_fee REAL DEFAULT 0,     -- ذهاب وإياب فصلي
+        round_trip_annual_fee REAL DEFAULT 0,        -- ذهاب وإياب سنوي
+        one_way_trimester_fee REAL DEFAULT 0,        -- ذهاب فقط فصلي
+        one_way_annual_fee REAL DEFAULT 0,           -- ذهاب فقط سنوي
+        bus_number TEXT,
+        driver_name TEXT,
+        driver_phone TEXT,
+        active INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+
+      -- 3. Factures & Quittances Officielles des Écoles Privées (Facturation Globale)
+      CREATE TABLE IF NOT EXISTS school_invoices (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        invoice_no TEXT UNIQUE NOT NULL,             -- رقم الفاتورة (Ex: FAC-2026-0001)
+        student_id INTEGER NOT NULL,
+        school_year TEXT DEFAULT '2026-2027',
+        payment_period_type TEXT NOT NULL,           -- 'trimester' (فصلي) أو 'annual' (سنوي)
+        trimester_number INTEGER,                    -- 1, 2, 3 (أو NULL إذا سنوي)
+
+        -- Détail des Prestations
+        tuition_fee REAL DEFAULT 0,                  -- تكلفة التمدرس
+        transport_fee REAL DEFAULT 0,                -- تكلفة النقل
+        transport_route_id INTEGER,
+        transport_type TEXT DEFAULT 'none',          -- 'none', 'round_trip', 'one_way'
+        canteen_fee REAL DEFAULT 0,                  -- تكلفة الإطعام
+        registration_fee REAL DEFAULT 0,             -- حقوق التسجيل والتأمين
+        other_fees REAL DEFAULT 0,                   -- خدمات / مستلزمات أخرى
+
+        -- Totaux & Remises
+        subtotal_amount REAL NOT NULL,               -- المجموع قبل التخفيض
+        discount_amount REAL DEFAULT 0,              -- قيمة التخفيض (خصم إخوة، دفع سنوي)
+        discount_note TEXT,                          -- سبب التخفيض
+        total_amount REAL NOT NULL,                  -- الصافي للدفع
+        paid_amount REAL NOT NULL,                   -- المبلغ المدفوع
+        remaining_amount REAL DEFAULT 0,             -- المتبقي للدفع
+
+        -- Modalités & Statut
+        payment_method TEXT DEFAULT 'espece',        -- 'espece', 'baridimob', 'cheque', 'virement'
+        payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        due_date DATE,                               -- أجل الاستحقاق
+        status TEXT DEFAULT 'paid',                  -- 'paid', 'partial', 'unpaid'
+        notes TEXT,
+        cashier_name TEXT,                           -- المحصل / المستخدم
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+        FOREIGN KEY (transport_route_id) REFERENCES transport_routes(id) ON DELETE SET NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_invoices_student ON school_invoices(student_id);
+      CREATE INDEX IF NOT EXISTS idx_invoices_period ON school_invoices(school_year, payment_period_type, trimester_number);
     `);
+
+    // Migration progressive des colonnes supplémentaires dans students
+    const studentCols = [
+      { name: 'transport_route_id', type: 'INTEGER' },
+      { name: 'transport_type', type: "TEXT DEFAULT 'none'" },
+      { name: 'tuition_payment_type', type: "TEXT DEFAULT 'trimester'" },
+      { name: 'sibling_discount_percent', type: 'REAL DEFAULT 0' }
+    ];
+    for (const col of studentCols) {
+      try {
+        db.exec(`ALTER TABLE students ADD COLUMN ${col.name} ${col.type};`);
+      } catch (e) {}
+    }
+
+    // Migration des colonnes multi-fصول والأقساط في school_invoices
+    const invoiceCols = [
+      { name: 'trimesters_json', type: 'TEXT' },
+      { name: 'transport_installments_json', type: 'TEXT' },
+      { name: 'items_detail_json', type: 'TEXT' }
+    ];
+    for (const col of invoiceCols) {
+      try {
+        db.exec(`ALTER TABLE school_invoices ADD COLUMN ${col.name} ${col.type};`);
+      } catch (e) {}
+    }
+
+    // Auto-seed school tariffs from official Excel if empty
+    try {
+      const tariffCount = DB.queryOne("SELECT COUNT(*) as count FROM school_tariffs");
+      if (!tariffCount || tariffCount.count === 0) {
+        const defaultTariffs = [
+          { name: 'أولى متوسط (1AM)', cycle: 'CEM', annual: 254000, t1: 112000, t2: 85000, t3: 57000 },
+          { name: 'ثانية متوسط (2AM)', cycle: 'CEM', annual: 264000, t1: 117000, t2: 90000, t3: 57000 },
+          { name: 'ثالثة متوسط (3AM)', cycle: 'CEM', annual: 274000, t1: 121000, t2: 93000, t3: 60000 },
+          { name: 'رابعة متوسط (4AM)', cycle: 'CEM', annual: 284000, t1: 124000, t2: 100000, t3: 60000 }
+        ];
+        const insertTariff = db.prepare(`
+          INSERT INTO school_tariffs (level_id, level_name, cycle, annual_fee, t1_fee, t2_fee, t3_fee)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `);
+        for (const t of defaultTariffs) {
+          const codeMatch = t.name.match(/\(([^)]+)\)/);
+          const code = codeMatch ? codeMatch[1] : '';
+          const lvl = DB.queryOne("SELECT id FROM levels WHERE name LIKE ? OR name LIKE ?", [`%${code}%`, `%${t.name.substring(0, 4)}%`]);
+          insertTariff.run(lvl ? lvl.id : null, t.name, t.cycle, t.annual, t.t1, t.t2, t.t3);
+        }
+      }
+    } catch (e) {
+      console.warn('Tariffs seeding error:', e.message);
+    }
+
+    // Auto-seed transport routes from official Excel if empty
+    try {
+      const routeCount = DB.queryOne("SELECT COUNT(*) as count FROM transport_routes");
+      if (!routeCount || routeCount.count === 0) {
+        const defaultRoutes = [
+          { name: 'خط برج منايل', zone: 'برج منايل', annual: 40000, t1: 16000, t2: 16000, t3: 8000 },
+          { name: 'خط يسر', zone: 'يسر', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+          { name: 'خط الناصرية', zone: 'الناصرية', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+          { name: 'خط جنات', zone: 'جنات', annual: 55000, t1: 25000, t2: 20000, t3: 10000 },
+          { name: 'خط تحلية المياه-جنات', zone: 'تحلية المياه-جنات', annual: 50000, t1: 22000, t2: 18000, t3: 10000 },
+          { name: 'خط بغلية', zone: 'بغلية', annual: 55000, t1: 25000, t2: 20000, t3: 10000 },
+          { name: 'خط دلس', zone: 'دلس', annual: 60000, t1: 30000, t2: 20000, t3: 10000 }
+        ];
+        const insertRoute = db.prepare(`
+          INSERT INTO transport_routes (route_name, zone_name, annual_fee, t1_fee, t2_fee, t3_fee, round_trip_annual_fee, round_trip_trimester_fee)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+        for (const r of defaultRoutes) {
+          insertRoute.run(r.name, r.zone, r.annual, r.t1, r.t2, r.t3, r.annual, r.t1);
+        }
+      }
+    } catch (e) {
+      console.warn('Transport routes seeding error:', e.message);
+    }
+    // Migration progressive pour le transport scolaire et les frais annexes
+    try {
+      db.exec(`ALTER TABLE transport_routes ADD COLUMN school_year TEXT DEFAULT '2026-2027';`);
+    } catch (e) {}
+
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS school_extra_fees (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        fee_name TEXT NOT NULL,
+        category TEXT DEFAULT 'autre',               -- 'cantine', 'assurance', 'activite', 'fourniture', 'autre'
+        cycle TEXT DEFAULT 'tous',                   -- 'tous', 'Maternelle', 'Primaire', 'CEM', 'Lycee'
+        amount REAL DEFAULT 0,
+        period_type TEXT DEFAULT 'annual',           -- 'annual', 'trimester', 'monthly', 'one_time'
+        school_year TEXT DEFAULT '2026-2027',
+        notes TEXT,
+        active INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    try {
+      const extraCount = DB.queryOne("SELECT COUNT(*) as count FROM school_extra_fees");
+      if (!extraCount || extraCount.count === 0) {
+        const defaultExtras = [
+          { name: 'حقوق التأمين المدرسي والتسجيل السنوي', cat: 'assurance', cycle: 'tous', amount: 3000, period: 'annual', notes: 'إجباري لجميع الأطوار' },
+          { name: 'اشتراك الإطعام والمطعم المدرسي (فصلي)', cat: 'cantine', cycle: 'tous', amount: 600, period: 'trimester', notes: 'وجبة الغداء نصف داخلي' },
+          { name: 'الأنشطة الثقافية والرياضية المدرسية', cat: 'activite', cycle: 'tous', amount: 2000, period: 'annual', notes: 'خرجات، مسابقات ونوادي' },
+          { name: 'المستلزمات والمطبوعات المدرسية', cat: 'fourniture', cycle: 'CEM', amount: 2500, period: 'annual', notes: 'دفاتر المراسلة والامتحانات' }
+        ];
+        const insertExtra = db.prepare(`
+          INSERT INTO school_extra_fees (fee_name, category, cycle, amount, period_type, school_year, notes)
+          VALUES (?, ?, ?, ?, ?, '2026-2027', ?)
+        `);
+        for (const ex of defaultExtras) {
+          insertExtra.run(ex.name, ex.cat, ex.cycle, ex.amount, ex.period, ex.notes);
+        }
+      }
+    } catch (e) {
+      console.warn('School extra fees seeding error:', e.message);
+    }
   } catch (pubErr) {
     console.warn('Public school extensions migration:', pubErr.message);
   }

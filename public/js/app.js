@@ -755,6 +755,106 @@ const i18n = {
     bulk_lbl_sel_groups: "Groupes sélectionnés",
     bulk_lbl_total_enrollments: "Total des inscriptions",
     bulk_btn_confirm: "Confirmer les inscriptions groupées",
+    // Tarifs & Frais Scolaires
+    nav_tarifs: "Tarifs & Frais Scolaires",
+    tarifs_page_title: "Gestion des Tarifs & Frais Scolaires",
+    tarifs_page_desc: "Configuration des tarifs scolaires, transport, services annexes et importation Excel",
+    tarifs_lbl_school_year: "Année Scolaire :",
+    tarifs_opt_all_years: "Toutes les années",
+    tarifs_btn_import_excel: "Importer Excel",
+    tarifs_btn_export_excel: "Exporter Excel",
+    tarifs_btn_duplicate_year: "Dupliquer l'Année",
+    tarifs_btn_add_tariff: "Nouveau Tarif",
+    tarifs_kpi_levels: "Niveaux Enregistrés",
+    tarifs_kpi_levels_sub: "Cycles CEM / Primaire / Lycée",
+    tarifs_kpi_avg_annual: "Moyenne Annuelle",
+    tarifs_kpi_avg_annual_sub: "Hors frais de transport",
+    tarifs_kpi_routes: "Lignes de Transport",
+    tarifs_kpi_routes_sub: "Lignes de bus actives",
+    tarifs_kpi_extras: "Services & Frais Annexes",
+    tarifs_kpi_extras_sub: "Assurance, cantine, activités",
+    tarifs_tab_scolarite: "Frais de Scolarité",
+    tarifs_tab_transport: "Transport Scolaire",
+    tarifs_tab_extras: "Services & Frais Annexes",
+    tarifs_tab_excel: "Importation & Modèle Excel",
+    tarifs_filter_cycle_lbl: "Filtrer par cycle :",
+    tarifs_all_cycles: "Tous les cycles",
+    tarifs_scolarite_info: "Ces tarifs sont appliqués automatiquement lors de la création des factures des élèves.",
+    tarifs_th_level: "Niveau Scolaire",
+    tarifs_th_cycle: "Cycle",
+    tarifs_th_reg_fee: "Frais d'Inscription",
+    tarifs_th_t1: "1er Trimestre (T1)",
+    tarifs_th_t2: "2ème Trimestre (T2)",
+    tarifs_th_t3: "3ème Trimestre (T3)",
+    tarifs_th_annual: "Total Annuel",
+    tarifs_th_year: "Année Scolaire",
+    tarifs_th_actions: "Actions",
+    tarifs_transport_info: "Tarifs officiels du transport scolaire aller-retour par zone et ligne de bus.",
+    tarifs_btn_add_route: "Nouvelle Ligne de Bus",
+    tarifs_th_route_name: "Ligne / Trajet",
+    tarifs_th_zone: "Zone / Quartier",
+    tarifs_th_bus: "N° Bus",
+    tarifs_th_driver: "Chauffeur",
+    tarifs_extras_info: "Frais de cantine, assurance scolaire, fournitures et activités péri-scolaires.",
+    tarifs_btn_add_extra: "Nouveau Frais / Service",
+    tarifs_th_extra_name: "Désignation du Frais / Service",
+    tarifs_th_category: "Catégorie",
+    tarifs_th_cycle_target: "Cycle Concerné",
+    tarifs_th_amount: "Montant",
+    tarifs_th_period: "Périodicité",
+    tarifs_th_notes: "Remarques",
+    tarifs_excel_badge: "Fichier officiel disponible",
+    tarifs_excel_title: "Frais de scolarité & transport du CEM (.xlsx)",
+    tarifs_excel_desc: "Contient la grille officielle CEM (1AM, 2AM, 3AM, 4AM) et les 7 lignes de transport. Cliquez pour charger en un clic.",
+    tarifs_btn_load_preload: "Charger la grille officielle",
+    tarifs_btn_download_template: "Télécharger le modèle vierge",
+    tarifs_upload_title: "Importer un fichier Excel personnalisé",
+    tarifs_upload_desc: "Glissez-déposez votre fichier Excel ici, ou parcourez vos dossiers pour mettre à jour les tarifs.",
+    tarifs_btn_browse_excel: "Choisir un fichier Excel",
+    tarifs_preview_title: "Aperçu des données avant enregistrement",
+    tarifs_btn_confirm_import: "Confirmer & Enregistrer",
+    tarifs_btn_cancel_preview: "Annuler l'aperçu",
+    modal_tariff_title_add: "Nouveau Tarif Scolaire",
+    modal_tariff_title_edit: "Modifier le Tarif Scolaire",
+    modal_tariff_lbl_level: "Niveau Scolaire *",
+    modal_tariff_lbl_cycle: "Cycle d'enseignement",
+    modal_tariff_lbl_reg: "Frais d'inscription & assurance (DA)",
+    modal_tariff_lbl_year: "Année Scolaire",
+    modal_tariff_lbl_breakdown: "Répartition trimestrielle & Total annuel (DA)",
+    modal_tariff_lbl_t1: "1er Trimestre (T1)",
+    modal_tariff_lbl_t2: "2ème Trimestre (T2)",
+    modal_tariff_lbl_t3: "3ème Trimestre (T3)",
+    modal_tariff_lbl_annual: "Total Général Annuel (DA)",
+    modal_tariff_lbl_notes: "Remarques",
+    modal_tariff_btn_save: "Enregistrer le Tarif",
+    modal_route_title_add: "Nouvelle Ligne de Transport",
+    modal_route_title_edit: "Modifier la Ligne de Transport",
+    modal_route_lbl_name: "Nom de la Ligne / Trajet *",
+    modal_route_lbl_zone: "Zone / Quartier",
+    modal_route_lbl_fees: "Tarif du Transport Scolaire (DA)",
+    modal_route_lbl_annual: "Total Général Annuel (Aller-Retour) (DA)",
+    modal_route_lbl_bus: "N° Bus",
+    modal_route_lbl_driver: "Nom du Chauffeur",
+    modal_route_lbl_driver_phone: "Téléphone du Chauffeur",
+    modal_route_btn_save: "Enregistrer la Ligne",
+    modal_extra_title_add: "Nouveau Frais / Service",
+    modal_extra_title_edit: "Modifier le Frais / Service",
+    modal_extra_lbl_name: "Nom du Frais ou Service *",
+    modal_extra_lbl_cat: "Catégorie",
+    modal_extra_lbl_cycle: "Cycle Concerné",
+    modal_extra_lbl_amount: "Montant (DA) *",
+    modal_extra_lbl_period: "Périodicité",
+    modal_extra_lbl_notes: "Remarques",
+    modal_extra_btn_save: "Enregistrer",
+    modal_dup_title: "Dupliquer les Tarifs d'une Année",
+    modal_dup_desc: "Permet de dupliquer les frais de scolarité, transport et services d'une année vers une autre avec une éventuelle augmentation en %.",
+    modal_dup_from: "De l'Année Scolaire *",
+    modal_dup_to: "Vers l'Année Scolaire *",
+    modal_dup_increase: "Augmentation générale (%) [Optionnel]",
+    modal_dup_increase_hint: "Laissez 0% pour conserver les mêmes tarifs, ou indiquez par ex. 5 pour +5% par tranche.",
+    modal_dup_copy_transport: "Dupliquer également les lignes de transport",
+    modal_dup_copy_extras: "Dupliquer également les frais annexes (cantine, assurance...)",
+    modal_dup_btn_confirm: "Confirmer la Duplication",
   },
   ar: {
             // Dashboard Keys
@@ -1508,6 +1608,106 @@ const i18n = {
     bulk_lbl_sel_groups: "الأقسام المحددة",
     bulk_lbl_total_enrollments: "مجموع التسجيلات",
     bulk_btn_confirm: "تأكيد التسجيلات الجماعية",
+    // Tarifs & Frais Scolaires
+    nav_tarifs: "المصاريف والتسعيرات",
+    tarifs_page_title: "إدارة المصاريف وتكاليف التمدرس",
+    tarifs_page_desc: "ضبط تسعيرات الأطوار والمستويات، اشتراكات النقل، الخدمات الملحقة واستيراد الأسعار من ملفات إكسل",
+    tarifs_lbl_school_year: "السنة الدراسية:",
+    tarifs_opt_all_years: "جميع السنوات",
+    tarifs_btn_import_excel: "استيراد من إكسل",
+    tarifs_btn_export_excel: "تصدير إلى إكسل",
+    tarifs_btn_duplicate_year: "نسخ لسنة جديدة",
+    tarifs_btn_add_tariff: "إضافة تسعيرة جديدة",
+    tarifs_kpi_levels: "المستويات المسجلة",
+    tarifs_kpi_levels_sub: "طور متوسط / ابتدائي / ثانوي",
+    tarifs_kpi_avg_annual: "متوسط التمدرس السنوي",
+    tarifs_kpi_avg_annual_sub: "دون احتساب تكاليف النقل",
+    tarifs_kpi_routes: "خطوط النقل المدرسي",
+    tarifs_kpi_routes_sub: "مسارات الحافلات المعتمدة",
+    tarifs_kpi_extras: "الرسوم والخدمات الملحقة",
+    tarifs_kpi_extras_sub: "تأمين، إطعام ومستلزمات",
+    tarifs_tab_scolarite: "تكاليف التمدرس والأشطر",
+    tarifs_tab_transport: "اشتراكات النقل المدرسي",
+    tarifs_tab_extras: "الخدمات والرسوم الملحقة",
+    tarifs_tab_excel: "استيراد وتحديث الأسعار عبر إكسل",
+    tarifs_filter_cycle_lbl: "فلترة حسب الطور التعليمي:",
+    tarifs_all_cycles: "جميع الأطوار",
+    tarifs_scolarite_info: "يتم اعتماد هذه المبالغ تلقائياً عند إنشاء فواتير الطلاب وفق الشطر أو الدفع السنوي.",
+    tarifs_th_level: "المستوى الدراسي",
+    tarifs_th_cycle: "الطور",
+    tarifs_th_reg_fee: "حقوق التسجيل",
+    tarifs_th_t1: "الشطر الأول (T1)",
+    tarifs_th_t2: "الشطر الثاني (T2)",
+    tarifs_th_t3: "الشطر الثالث (T3)",
+    tarifs_th_annual: "المجموع السنوي",
+    tarifs_th_year: "السنة الدراسية",
+    tarifs_th_actions: "الإجراءات",
+    tarifs_transport_info: "تسعيرات خطوط النقل المدرسي الرسمية للذهاب والإياب، قابلة للتعديل والربط مع الحافلات والسائقين.",
+    tarifs_btn_add_route: "إضافة مسار نقل جديد",
+    tarifs_th_route_name: "اسم الخط / المسار",
+    tarifs_th_zone: "المنطقة / الحي",
+    tarifs_th_bus: "رقم الحافلة",
+    tarifs_th_driver: "السائق",
+    tarifs_extras_info: "تعريف مصاريف الإطعام المدرسي، حقوق التأمين، الأنشطة اللاصفية والزي المدرسي والمطبوعات.",
+    tarifs_btn_add_extra: "إضافة رسم أو خدمة",
+    tarifs_th_extra_name: "اسم الرسم / الخدمة",
+    tarifs_th_category: "التصنيف",
+    tarifs_th_cycle_target: "الطور المعني",
+    tarifs_th_amount: "المبلغ",
+    tarifs_th_period: "دورية الدفع",
+    tarifs_th_notes: "ملاحظات",
+    tarifs_excel_badge: "ملف الإكسل الرسمي متوفر في النظام",
+    tarifs_excel_title: "ملف \"تكاليف التمدرس للطور المتوسط\" (.xlsx)",
+    tarifs_excel_desc: "تم الكشف عن ملف الأسعار الرسمي المرفق الذي يحتوي على جداول تكاليف التمدرس لسنوات (أولى، ثانية، ثالثة، رابعة متوسط) وخطوط النقل السبعة. يمكنك اعتماده بنقرة زر واحدة أو استيراد ملف جديد.",
+    tarifs_btn_load_preload: "استيراد وتثبيت الأسعار من الملف المرفق",
+    tarifs_btn_download_template: "تحميل نموذج إكسل فارغ",
+    tarifs_upload_title: "رفع وتحديث الأسعار عبر ملف إكسل مخصص",
+    tarifs_upload_desc: "اسحب وأفلت ملف الإكسل هنا، أو انقر لاختيار ملف من جهازك لتحديث تسعيرات التمدرس ومسارات النقل تلقائياً.",
+    tarifs_btn_browse_excel: "اختيار ملف إكسل من الجهاز",
+    tarifs_preview_title: "معاينة البيانات المستخرجة قبل الحفظ النهائي",
+    tarifs_btn_confirm_import: "تأكيد وحفظ في قاعدة البيانات",
+    tarifs_btn_cancel_preview: "إلغاء المعاينة",
+    modal_tariff_title_add: "إضافة تسعيرة تمدرس جديدة",
+    modal_tariff_title_edit: "تعديل تسعيرة تمدرس",
+    modal_tariff_lbl_level: "اسم المستوى الدراسي *",
+    modal_tariff_lbl_cycle: "الطور التعليمي",
+    modal_tariff_lbl_reg: "حقوق التسجيل والتأمين (DA)",
+    modal_tariff_lbl_year: "السنة الدراسية",
+    modal_tariff_lbl_breakdown: "تقسيم الأشطر والمجموع السنوي (DA)",
+    modal_tariff_lbl_t1: "الشطر الأول (T1)",
+    modal_tariff_lbl_t2: "الشطر الثاني (T2)",
+    modal_tariff_lbl_t3: "الشطر الثالث (T3)",
+    modal_tariff_lbl_annual: "المجموع السنوي الإجمالي (DA)",
+    modal_tariff_lbl_notes: "ملاحظات إضافية",
+    modal_tariff_btn_save: "حفظ التسعيرة",
+    modal_route_title_add: "إضافة خط نقل مدرسي جديد",
+    modal_route_title_edit: "تعديل خط نقل مدرسي",
+    modal_route_lbl_name: "اسم الخط / المسار *",
+    modal_route_lbl_zone: "المنطقة / الحي",
+    modal_route_lbl_fees: "تكلفة الاشتراك في النقل (DA)",
+    modal_route_lbl_annual: "المجموع السنوي (ذهاب وإياب) (DA)",
+    modal_route_lbl_bus: "رقم الحافلة",
+    modal_route_lbl_driver: "اسم السائق",
+    modal_route_lbl_driver_phone: "هاتف السائق",
+    modal_route_btn_save: "حفظ المسار",
+    modal_extra_title_add: "إضافة رسم أو خدمة جديدة",
+    modal_extra_title_edit: "تعديل رسم أو خدمة ملحقة",
+    modal_extra_lbl_name: "اسم الخدمة أو الرسم *",
+    modal_extra_lbl_cat: "التصنيف",
+    modal_extra_lbl_cycle: "الطور المعني",
+    modal_extra_lbl_amount: "المبلغ (DA) *",
+    modal_extra_lbl_period: "دورية الدفع",
+    modal_extra_lbl_notes: "ملاحظات توضيحية",
+    modal_extra_btn_save: "حفظ",
+    modal_dup_title: "نسخ أسعار سنة دراسية لسنة جديدة",
+    modal_dup_desc: "تتيح لك هذه الميزة نسخ جميع تسعيرات التمدرس، مسارات النقل والرسوم الملحقة المعتمدة في سنة معينة إلى سنة دراسية جديدة بضغطة زر مع إمكانية تطبيق نسبة زيادة عامة.",
+    modal_dup_from: "من السنة الدراسية *",
+    modal_dup_to: "إلى السنة الدراسية *",
+    modal_dup_increase: "نسبة الزيادة التقديرية المئوية (%) [اختياري]",
+    modal_dup_increase_hint: "اتركها 0% لنسخ نفس الأسعار تماماً، أو أدخل مثلاً 5 لزيادة 5% على كل قسط.",
+    modal_dup_copy_transport: "نسخ خطوط ومسارات النقل المدرسي أيضاً",
+    modal_dup_copy_extras: "نسخ الخدمات والرسوم الملحقة (إطعام، تأمين...)",
+    modal_dup_btn_confirm: "تأكيد النسخ",
   }
 };
 
@@ -2813,6 +3013,9 @@ class EdumindApp {
       if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
         this.closeModals();
       }
+      if (!e.target.closest || !e.target.closest('.parent-combobox-container')) {
+        this.closeParentSearchDropdown?.();
+      }
     });
 
     // Debounced student and teacher search to avoid freezing the database
@@ -3247,6 +3450,13 @@ class EdumindApp {
       this.loadRooms();
     } else if (this.currentView === 'enseignants') {
       this.loadTeachers();
+    } else if (this.currentView === 'tarifs') {
+      this.loadTarifsView();
+    }
+
+    const tarifsCycle = document.getElementById('tarifsCycleFilter');
+    if (tarifsCycle && tarifsCycle.options && tarifsCycle.options.length > 0) {
+      tarifsCycle.options[0].text = isAr ? 'جميع الأطوار' : 'Tous les cycles';
     }
 
     const searchRooms = document.getElementById('roomsFilterSearch');
@@ -3418,6 +3628,9 @@ class EdumindApp {
     }
     else if (viewName === 'cantine') {
       this.loadCantineData();
+    }
+    else if (viewName === 'tarifs') {
+      this.loadTarifsView();
     }
   }
 
@@ -5996,17 +6209,34 @@ class EdumindApp {
   }
 
   // -------------------------------------------------------------
-  // STUDENT MODAL PARENT HELPERS
+  // STUDENT MODAL PARENT HELPERS & LIVE SEARCHABLE COMBOBOX
   // -------------------------------------------------------------
+  normalizeSearchText(text) {
+    if (!text) return '';
+    return text
+      .toString()
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove French accents
+      .replace(/[\u064B-\u065F\u0670]/g, '') // remove Arabic tashkeel / harakat
+      .replace(/[أإآٱ]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/ى/g, 'ي')
+      .replace(/ؤ/g, 'و')
+      .replace(/ئ/g, 'ي')
+      .trim();
+  }
+
   onStudentParentSelectChange() {
     const parentId = document.getElementById('studentParentId')?.value;
     const badgeBox = document.getElementById('parentDiscountPreviewBox');
     const badgeVal = document.getElementById('parentDiscountBadgeVal');
     const nameInput = document.getElementById('studentParentName');
     const phoneInput = document.getElementById('studentParentPhone');
+    const clearBtn = document.getElementById('btnClearParentSearch');
 
     if (!parentId) {
       if (badgeBox) badgeBox.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'none';
       return;
     }
 
@@ -6018,6 +6248,7 @@ class EdumindApp {
         badgeVal.textContent = p.discount_percent || 0;
         badgeBox.style.display = (p.discount_percent > 0) ? 'inline-block' : 'none';
       }
+      if (clearBtn) clearBtn.style.display = 'inline-flex';
     }
   }
 
@@ -6037,31 +6268,293 @@ class EdumindApp {
 
   populateStudentParentSelect(selectedParentId = null) {
     const select = document.getElementById('studentParentId');
-    if (!select) return;
-
+    const searchInput = document.getElementById('parentSearchInput');
+    const clearBtn = document.getElementById('btnClearParentSearch');
     const isAr = this.lang === 'ar';
     const list = this.parents || [];
-    let html = `<option value="">${isAr ? '-- اختار ولي أمر مسجل مسبقاً (أو أدخل بياناته أدناه) --' : '-- Choisir un parent d\'élève existant (ou saisir ci-dessous) --'}</option>`;
 
-    list.forEach(p => {
-      const discText = p.discount_percent > 0 ? ` (${p.discount_percent}%)` : '';
-      const phoneText = p.phone ? ` - ${p.phone}` : '';
-      const isSel = selectedParentId && String(p.id) === String(selectedParentId);
-      html += `<option value="${p.id}" ${isSel ? 'selected' : ''}>${this.escapeHtml(p.full_name)}${phoneText}${discText}</option>`;
-    });
-
-    select.innerHTML = html;
+    if (select) {
+      let html = `<option value="">${isAr ? '-- اختار ولي أمر مسجل مسبقاً (أو أدخل بياناته أدناه) --' : '-- Choisir un parent d\'élève existant (ou saisir ci-dessous) --'}</option>`;
+      list.forEach(p => {
+        const discText = p.discount_percent > 0 ? ` (${p.discount_percent}%)` : '';
+        const phoneText = p.phone ? ` - ${p.phone}` : '';
+        const isSel = selectedParentId && String(p.id) === String(selectedParentId);
+        html += `<option value="${p.id}" ${isSel ? 'selected' : ''}>${this.escapeHtml(p.full_name)}${phoneText}${discText}</option>`;
+      });
+      select.innerHTML = html;
+      select.value = selectedParentId ? String(selectedParentId) : '';
+    }
 
     const badgeBox = document.getElementById('parentDiscountPreviewBox');
     const badgeVal = document.getElementById('parentDiscountBadgeVal');
+
     if (selectedParentId) {
       const p = list.find(item => String(item.id) === String(selectedParentId));
-      if (p && badgeBox && badgeVal) {
+      if (p) {
+        if (searchInput) {
+          const disc = p.discount_percent > 0 ? ` (${p.discount_percent}%)` : '';
+          searchInput.value = `${p.full_name}${p.phone ? ' - ' + p.phone : ''}${disc}`;
+        }
+        if (clearBtn) clearBtn.style.display = 'inline-flex';
+        if (badgeBox && badgeVal) {
+          badgeVal.textContent = p.discount_percent || 0;
+          badgeBox.style.display = (p.discount_percent > 0) ? 'inline-block' : 'none';
+        }
+      }
+    } else {
+      if (searchInput) searchInput.value = '';
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (badgeBox) badgeBox.style.display = 'none';
+    }
+
+    this.renderParentSearchResults(list, '');
+  }
+
+  openParentSearchDropdown() {
+    const dropdown = document.getElementById('parentSearchResults');
+    const chevron = document.getElementById('parentSearchChevron');
+    const searchInput = document.getElementById('parentSearchInput');
+    if (!dropdown) return;
+
+    dropdown.style.display = 'block';
+    if (chevron) chevron.style.transform = 'rotate(180deg)';
+
+    const query = searchInput ? searchInput.value.trim() : '';
+    this.filterAndRenderParentList(query);
+  }
+
+  closeParentSearchDropdown() {
+    const dropdown = document.getElementById('parentSearchResults');
+    const chevron = document.getElementById('parentSearchChevron');
+    if (dropdown) dropdown.style.display = 'none';
+    if (chevron) chevron.style.transform = 'rotate(0deg)';
+  }
+
+  toggleParentSearchDropdown() {
+    const dropdown = document.getElementById('parentSearchResults');
+    if (dropdown && dropdown.style.display === 'block') {
+      this.closeParentSearchDropdown();
+    } else {
+      this.openParentSearchDropdown();
+      document.getElementById('parentSearchInput')?.focus();
+    }
+  }
+
+  onParentSearchInput(val) {
+    this.openParentSearchDropdown();
+    this.filterAndRenderParentList(val);
+  }
+
+  filterAndRenderParentList(rawQuery = '') {
+    const list = this.parents || [];
+    const query = this.normalizeSearchText(rawQuery);
+
+    if (!query) {
+      this.renderParentSearchResults(list, '');
+      return;
+    }
+
+    const filtered = list.filter(p => {
+      const normName = this.normalizeSearchText(p.full_name);
+      const normPhone = (p.phone || '').replace(/\D/g, '');
+      const cleanQDigits = rawQuery.replace(/\D/g, '');
+
+      if (normName.includes(query)) return true;
+      if (cleanQDigits && normPhone.includes(cleanQDigits)) return true;
+      if (p.email && p.email.toLowerCase().includes(query)) return true;
+      return false;
+    });
+
+    this.renderParentSearchResults(filtered, rawQuery);
+  }
+
+  renderParentSearchResults(list, query = '') {
+    const container = document.getElementById('parentSearchResults');
+    if (!container) return;
+
+    const isAr = this.lang === 'ar';
+    const currentId = document.getElementById('studentParentId')?.value;
+
+    let html = '';
+
+    // Reset / Manual Entry Option at Top
+    html += `
+      <div class="parent-search-item parent-search-item-reset" onclick="app.clearSelectedParent()">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <i class="fa-solid fa-user-plus" style="font-size: 13px; color: #3b82f6;"></i>
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">${isAr ? '-- ولي أمر جديد / إدخال يدوي (إلغاء التحديد) --' : '-- Nouveau parent / Saisie manuelle --'}</div>
+            <div style="font-size: 11px; opacity: 0.7;">${isAr ? 'اضغط هنا لكتابة اسم وهاتف ولي جديد يدوياً' : 'Cliquer pour saisir manuellement'}</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-arrow-turn-down" style="font-size: 11px; opacity: 0.5;"></i>
+      </div>
+    `;
+
+    if (!list || list.length === 0) {
+      html += `
+        <div style="padding: 18px 12px; text-align: center; color: var(--text-muted); font-size: 13px;">
+          <i class="fa-solid fa-user-xmark" style="font-size: 24px; color: #ef4444; margin-bottom: 6px; display: block; opacity: 0.8;"></i>
+          <span style="font-weight: 600;">${isAr ? 'لم يتم العثور على أي ولي بهذا الاسم أو الرقم' : 'Aucun parent trouvé'}</span>
+          <p style="font-size: 11.5px; color: #3b82f6; margin: 6px 0 0 0;">
+            ${isAr ? 'يمكنك تسجيل تلميذ جديد مع إدخال اسم الولي وهاتفه في الخانات أدناه لتسجيله تلقائياً' : 'Vous pouvez saisir ses coordonnées ci-dessous pour l\'enregistrer.'}
+          </p>
+        </div>
+      `;
+    } else {
+      list.forEach((p, idx) => {
+        const isSel = currentId && String(p.id) === String(currentId);
+        const discBadge = p.discount_percent > 0
+          ? `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; font-size: 11px; padding: 2px 7px; border-radius: 20px; display: inline-flex; align-items: center; gap: 3px;">
+               <i class="fa-solid fa-percent" style="font-size: 9px;"></i> ${p.discount_percent}% ${isAr ? 'تخفيض' : 'Remise'}
+             </span>`
+          : '';
+
+        const childrenBadge = p.children_count > 0
+          ? `<span style="font-size: 11px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;">
+               <i class="fa-solid fa-children" style="font-size: 11px; color: #8b5cf6;"></i> ${p.children_count} ${isAr ? 'أبناء' : 'enfants'}
+             </span>`
+          : '';
+
+        html += `
+          <div class="parent-search-item ${isSel ? 'selected' : ''}" data-index="${idx}" onclick="app.selectParentById(${p.id})">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <div style="min-width: 0;">
+                <div style="font-weight: 700; font-size: 13.5px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  ${this.escapeHtml(p.full_name)}
+                </div>
+                <div style="font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; font-family: monospace;">
+                  <span><i class="fa-solid fa-phone" style="font-size: 10px; color: #10b981; margin-inline-end: 2px;"></i> ${this.escapeHtml(p.phone || (isAr ? 'بدون هاتف' : 'Sans tél'))}</span>
+                  ${childrenBadge}
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+              ${discBadge}
+              ${isSel ? '<i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 15px;"></i>' : ''}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    container.innerHTML = html;
+  }
+
+  selectParentById(id) {
+    const p = (this.parents || []).find(item => Number(item.id) === Number(id));
+    if (p) {
+      this.selectParent(p, true);
+    }
+  }
+
+  selectParent(p, triggerChange = true) {
+    const select = document.getElementById('studentParentId');
+    const searchInput = document.getElementById('parentSearchInput');
+    const clearBtn = document.getElementById('btnClearParentSearch');
+    const nameInput = document.getElementById('studentParentName');
+    const phoneInput = document.getElementById('studentParentPhone');
+    const badgeBox = document.getElementById('parentDiscountPreviewBox');
+    const badgeVal = document.getElementById('parentDiscountBadgeVal');
+
+    if (select) {
+      select.value = p ? String(p.id) : '';
+    }
+
+    if (p) {
+      const disc = p.discount_percent > 0 ? ` (${p.discount_percent}%)` : '';
+      if (searchInput) searchInput.value = `${p.full_name}${p.phone ? ' - ' + p.phone : ''}${disc}`;
+      if (nameInput) nameInput.value = p.full_name || '';
+      if (phoneInput && p.phone) phoneInput.value = p.phone;
+      if (clearBtn) clearBtn.style.display = 'inline-flex';
+
+      if (badgeBox && badgeVal) {
         badgeVal.textContent = p.discount_percent || 0;
         badgeBox.style.display = (p.discount_percent > 0) ? 'inline-block' : 'none';
       }
-    } else if (badgeBox) {
-      badgeBox.style.display = 'none';
+    } else {
+      if (searchInput) searchInput.value = '';
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (badgeBox) badgeBox.style.display = 'none';
+    }
+
+    this.closeParentSearchDropdown();
+
+    if (triggerChange) {
+      this.onStudentParentSelectChange();
+    }
+  }
+
+  clearSelectedParent(focus = false) {
+    const select = document.getElementById('studentParentId');
+    const searchInput = document.getElementById('parentSearchInput');
+    const clearBtn = document.getElementById('btnClearParentSearch');
+    const badgeBox = document.getElementById('parentDiscountPreviewBox');
+
+    if (select) select.value = '';
+    if (searchInput) searchInput.value = '';
+    if (clearBtn) clearBtn.style.display = 'none';
+    if (badgeBox) badgeBox.style.display = 'none';
+
+    this.closeParentSearchDropdown();
+
+    if (focus && searchInput) {
+      searchInput.focus();
+    }
+
+    this.onStudentParentSelectChange();
+  }
+
+  handleParentSearchKeydown(e) {
+    const dropdown = document.getElementById('parentSearchResults');
+    if (!dropdown || dropdown.style.display !== 'block') {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+        this.openParentSearchDropdown();
+        e.preventDefault();
+      }
+      return;
+    }
+
+    const items = dropdown.querySelectorAll('.parent-search-item');
+    if (items.length === 0) return;
+
+    let highlightedIndex = -1;
+    items.forEach((item, index) => {
+      if (item.classList.contains('highlighted')) highlightedIndex = index;
+    });
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (highlightedIndex < items.length - 1) {
+        highlightedIndex++;
+      } else {
+        highlightedIndex = 0;
+      }
+      items.forEach((item, idx) => {
+        item.classList.toggle('highlighted', idx === highlightedIndex);
+        if (idx === highlightedIndex) item.scrollIntoView({ block: 'nearest' });
+      });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (highlightedIndex > 0) {
+        highlightedIndex--;
+      } else {
+        highlightedIndex = items.length - 1;
+      }
+      items.forEach((item, idx) => {
+        item.classList.toggle('highlighted', idx === highlightedIndex);
+        if (idx === highlightedIndex) item.scrollIntoView({ block: 'nearest' });
+      });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (highlightedIndex >= 0 && items[highlightedIndex]) {
+        items[highlightedIndex].click();
+      }
+    } else if (e.key === 'Escape') {
+      this.closeParentSearchDropdown();
     }
   }
 
@@ -9332,7 +9825,7 @@ class EdumindApp {
         <td><span style="text-transform: uppercase; font-size: 11px; font-weight: 700;">${p.payment_method}</span></td>
         <td style="color: var(--text-muted); font-size: 12px;">${p.payment_date ? p.payment_date.slice(0, 10) : ''}</td>
         <td>
-          <button class="btn-primary" style="padding: 5px 12px; font-size: 12px;" onclick="app.showReceipt(${p.id})">
+          <button class="btn-primary" style="padding: 5px 12px; font-size: 12px;" onclick="app.showReceipt(${p.invoice_id || p.id}, ${p.is_school_invoice ? true : false})">
             <i class="fa-solid fa-print"></i> Reçu
           </button>
         </td>
@@ -9913,8 +10406,527 @@ class EdumindApp {
     }
   }
 
-  async showReceipt(paymentId) {
+  // ===========================================================================
+  // PRIVATE SCHOOL INVOICE: SCOLARITÉ & TRANSPORT (TRIMESTRE / ANNUEL)
+  // ===========================================================================
+
+  async openModalSchoolInvoice(preselectedStudentId = null) {
     try {
+      const res = await fetch('/api/students?status=all');
+      const data = await res.json();
+      this.studentsForInvoice = (data && data.success && Array.isArray(data.students)) ? data.students : (this.students || []);
+    } catch (e) {
+      this.studentsForInvoice = this.students || [];
+    }
+
+    try {
+      const [tRes, rRes] = await Promise.all([
+        fetch('/api/school-tariffs'),
+        fetch('/api/transport-routes')
+      ]);
+      const tData = await tRes.json();
+      const rData = await rRes.json();
+      this.schoolTariffs = (tData && tData.success) ? tData.tariffs : [];
+      this.transportRoutes = (rData && rData.success) ? rData.routes : [];
+    } catch (e) {
+      console.warn('Failed to load tariffs/routes:', e);
+    }
+
+    const routeSelect = document.getElementById('invTransportRouteSelect');
+    if (routeSelect) {
+      routeSelect.innerHTML = '<option value="">-- بدون نقل (0 دج) --</option>' +
+        (this.transportRoutes || []).map(r => `<option value="${r.id}" data-t1="${r.t1_fee}" data-t2="${r.t2_fee}" data-t3="${r.t3_fee}" data-annual="${r.annual_fee}">${r.route_name} (${r.zone_name})</option>`).join('');
+    }
+
+    const searchInput = document.getElementById('invStudentSearch');
+    if (searchInput) searchInput.value = '';
+
+    this.renderInvoiceStudentOptions('', preselectedStudentId);
+
+    // Initialize multi-selection state
+    this._invSelectedTrimesters = [1];
+    this._invSelectedTrans = [1];
+    this._invCurrentTariff = null;
+    this._invCurrentRoute = null;
+    this._invStudentHistory = null;
+
+    const discountInput = document.getElementById('invDiscountAmount');
+    if (discountInput) discountInput.value = '0';
+    const discHint = document.getElementById('invDiscountAutoHint');
+    if (discHint) discHint.textContent = '';
+
+    const transFeeInput = document.getElementById('invTransportFee');
+    if (transFeeInput) transFeeInput.value = '0';
+
+    const tuitionFeeInput = document.getElementById('invTuitionFee');
+    if (tuitionFeeInput) tuitionFeeInput.value = '0';
+
+    const paidInput = document.getElementById('invPaidAmount');
+    if (paidInput) {
+      paidInput.value = '0';
+      delete paidInput.dataset.manualEdited;
+      paidInput.oninput = () => {
+        paidInput.dataset.manualEdited = 'true';
+        this.calculateInvoiceTotals();
+      };
+    }
+
+    if (routeSelect) routeSelect.value = '';
+
+    const transContainer = document.getElementById('invTransportInstallmentsContainer');
+    if (transContainer) transContainer.style.display = 'none';
+
+    const syncBtnWrapper = document.getElementById('btnSyncTransportWrapper');
+    if (syncBtnWrapper) syncBtnWrapper.style.display = 'none';
+
+    this.updateTrimestersCardsUI();
+    this.updateTransportCardsUI();
+
+    if (preselectedStudentId) {
+      document.getElementById('invStudentSelect').value = String(preselectedStudentId);
+      await this.onInvoiceStudentChange();
+    } else {
+      this.calculateInvoiceTotals();
+    }
+
+    document.getElementById('modalSchoolInvoice').classList.add('active');
+    if (!preselectedStudentId && searchInput) {
+      setTimeout(() => searchInput.focus(), 150);
+    }
+  }
+
+  filterInvoiceStudents(query = '') {
+    this.renderInvoiceStudentOptions(query);
+  }
+
+  renderInvoiceStudentOptions(filter = '', selectedId = null) {
+    const studentSelect = document.getElementById('invStudentSelect');
+    if (!studentSelect) return;
+    const list = this.studentsForInvoice || this.students || [];
+    const term = (filter || '').trim().toLowerCase();
+    const filtered = !term ? list : list.filter(s => {
+      const full = `${s.first_name || ''} ${s.last_name || ''}`.toLowerCase();
+      const mat = (s.matricule || '').toLowerCase();
+      return full.includes(term) || mat.includes(term);
+    });
+
+    const isAr = this.lang === 'ar';
+    let defaultLabel = isAr ? '-- اختر تلميذاً --' : '-- Choisir un élève --';
+    const currentVal = selectedId !== null && selectedId !== undefined ? String(selectedId) : studentSelect.value;
+
+    studentSelect.innerHTML = `<option value="">${defaultLabel}</option>` +
+      filtered.map(s => {
+        const isSel = currentVal && String(s.id) === currentVal;
+        return `<option value="${s.id}" ${isSel ? 'selected' : ''}>${s.first_name} ${s.last_name} (${s.matricule || ''} - ${s.level_name || ''})</option>`;
+      }).join('');
+
+    if (term && filtered.length === 1) {
+      studentSelect.value = String(filtered[0].id);
+      this.onInvoiceStudentChange();
+    }
+  }
+
+  async onInvoiceStudentChange() {
+    const studentSelect = document.getElementById('invStudentSelect');
+    const studentId = studentSelect ? studentSelect.value : '';
+    const infoBox = document.getElementById('invStudentInfoBox');
+    if (!studentId) {
+      if (infoBox) infoBox.style.display = 'none';
+      this._invCurrentTariff = null;
+      this._invStudentHistory = null;
+      this.calculateInvoiceTotals();
+      return;
+    }
+    const student = (this.studentsForInvoice || []).find(s => String(s.id) === String(studentId));
+    if (!student) return;
+
+    if (infoBox) {
+      infoBox.style.display = 'block';
+      const levelEl = document.getElementById('invStudentLevelName');
+      if (levelEl) levelEl.textContent = student.level_name || 'طور متوسط';
+      const matEl = document.getElementById('invStudentMatricule');
+      if (matEl) matEl.textContent = student.matricule || '-';
+    }
+
+    // Match student tariff
+    let tariff = null;
+    if (this.schoolTariffs && this.schoolTariffs.length > 0) {
+      const levelName = (student.level_name || '').toLowerCase();
+      tariff = this.schoolTariffs.find(t =>
+        (student.level_id && t.level_id === student.level_id) ||
+        (t.level_name && levelName.includes(t.level_name.toLowerCase()))
+      );
+      if (!tariff) {
+        if (levelName.includes('1') || levelName.includes('أولى')) tariff = this.schoolTariffs[0];
+        else if (levelName.includes('2') || levelName.includes('ثانية')) tariff = this.schoolTariffs[1];
+        else if (levelName.includes('3') || levelName.includes('ثالثة')) tariff = this.schoolTariffs[2];
+        else if (levelName.includes('4') || levelName.includes('رابعة')) tariff = this.schoolTariffs[3];
+        else tariff = this.schoolTariffs[0];
+      }
+    }
+    this._invCurrentTariff = tariff;
+
+    // Fetch student payment history (paid trimesters & transport installments)
+    let history = { paidTrimesters: [], paidTransportInstallments: [] };
+    try {
+      const hRes = await fetch(`/api/school-invoices/student-history/${studentId}`);
+      const hData = await hRes.json();
+      if (hData && hData.success) {
+        history = hData;
+      }
+    } catch (e) {
+      console.warn('Failed to load student invoice history:', e);
+    }
+    this._invStudentHistory = history;
+
+    // Check sibling discount
+    const discHint = document.getElementById('invDiscountAutoHint');
+    if (student.sibling_discount_percent && student.sibling_discount_percent > 0) {
+      if (discHint) discHint.textContent = `(تخفيض إخوة: ${student.sibling_discount_percent}%)`;
+    } else {
+      if (discHint) discHint.textContent = '';
+    }
+
+    // Auto-select next unpaid trimester
+    const paidT = history.paidTrimesters || [];
+    if (!paidT.includes(1)) {
+      this._invSelectedTrimesters = [1];
+    } else if (!paidT.includes(2)) {
+      this._invSelectedTrimesters = [2];
+    } else if (!paidT.includes(3)) {
+      this._invSelectedTrimesters = [3];
+    } else {
+      this._invSelectedTrimesters = [1];
+    }
+
+    // Auto-select transport route if registered in student profile
+    const routeSelect = document.getElementById('invTransportRouteSelect');
+    if (student.transport_route_id && routeSelect) {
+      routeSelect.value = String(student.transport_route_id);
+      this.onInvoiceTransportRouteChanged(false);
+    } else {
+      if (routeSelect) routeSelect.value = '';
+      this.onInvoiceTransportRouteChanged(false);
+    }
+
+    this.updateTrimestersCardsUI();
+    this.updateTuitionFromSelectedTrimesters();
+    this.updateTransportFromSelectedInstallments();
+    this.calculateInvoiceTotals();
+  }
+
+  toggleInvoiceTrimester(num) {
+    num = parseInt(num, 10);
+    if (this._invSelectedTrimesters.includes(num)) {
+      this._invSelectedTrimesters = this._invSelectedTrimesters.filter(t => t !== num);
+    } else {
+      this._invSelectedTrimesters.push(num);
+      this._invSelectedTrimesters.sort((a, b) => a - b);
+    }
+    this.updateTrimestersCardsUI();
+    this.updateTuitionFromSelectedTrimesters();
+    this.calculateInvoiceTotals();
+  }
+
+  setAllInvoiceTrimesters(selectAll) {
+    if (selectAll) {
+      this._invSelectedTrimesters = [1, 2, 3];
+    } else {
+      this._invSelectedTrimesters = [];
+    }
+    this.updateTrimestersCardsUI();
+    this.updateTuitionFromSelectedTrimesters();
+    this.calculateInvoiceTotals();
+  }
+
+  updateTrimestersCardsUI() {
+    const tariff = this._invCurrentTariff;
+    const history = this._invStudentHistory || { paidTrimesters: [] };
+    const paidT = history.paidTrimesters || [];
+
+    [1, 2, 3].forEach(t => {
+      const card = document.getElementById(`cardInvT${t}`);
+      const chk = document.getElementById(`chkInvT${t}`);
+      const priceEl = document.getElementById(`priceInvT${t}`);
+      const badgePaid = document.getElementById(`badgePaidInvT${t}`);
+
+      const fee = tariff ? (t === 1 ? tariff.t1_fee : t === 2 ? tariff.t2_fee : tariff.t3_fee) : 0;
+      if (priceEl) priceEl.textContent = `${Number(fee).toLocaleString('fr-FR')} DA`;
+
+      const isPaid = paidT.includes(t);
+      if (badgePaid) badgePaid.style.display = isPaid ? 'inline-block' : 'none';
+
+      const isSelected = this._invSelectedTrimesters.includes(t);
+      if (chk) chk.checked = isSelected;
+      if (card) {
+        if (isSelected) {
+          card.classList.add('active');
+          card.style.borderColor = '#3b82f6';
+          card.style.background = 'rgba(59, 130, 246, 0.12)';
+          if (priceEl) priceEl.style.color = '#2563eb';
+        } else {
+          card.classList.remove('active');
+          card.style.borderColor = 'var(--border-color, #cbd5e1)';
+          card.style.background = 'var(--bg-card, #ffffff)';
+          if (priceEl) priceEl.style.color = 'var(--text-muted, #64748b)';
+        }
+      }
+    });
+  }
+
+  updateTuitionFromSelectedTrimesters() {
+    const tariff = this._invCurrentTariff;
+    let fee = 0;
+    if (tariff) {
+      if (this._invSelectedTrimesters.length === 3 && tariff.annual_fee > 0) {
+        fee = tariff.annual_fee;
+      } else {
+        fee = this._invSelectedTrimesters.reduce((sum, t) => {
+          return sum + (t === 1 ? tariff.t1_fee : t === 2 ? tariff.t2_fee : tariff.t3_fee);
+        }, 0);
+      }
+    }
+    const tuitionInput = document.getElementById('invTuitionFee');
+    if (tuitionInput) tuitionInput.value = fee;
+  }
+
+  onInvoiceTransportRouteChanged(resetSelection = true) {
+    const routeSelect = document.getElementById('invTransportRouteSelect');
+    const routeId = routeSelect ? routeSelect.value : '';
+    const container = document.getElementById('invTransportInstallmentsContainer');
+    const syncBtn = document.getElementById('btnSyncTransportWrapper');
+
+    if (!routeId) {
+      this._invCurrentRoute = null;
+      if (container) container.style.display = 'none';
+      if (syncBtn) syncBtn.style.display = 'none';
+      const transInput = document.getElementById('invTransportFee');
+      if (transInput) transInput.value = '0';
+      this.calculateInvoiceTotals();
+      return;
+    }
+
+    const route = (this.transportRoutes || []).find(r => String(r.id) === String(routeId));
+    this._invCurrentRoute = route;
+
+    if (container) container.style.display = 'block';
+    if (syncBtn) syncBtn.style.display = 'block';
+
+    if (resetSelection) {
+      const paidTrans = (this._invStudentHistory && this._invStudentHistory.paidTransportInstallments) || [];
+      if (!paidTrans.includes(1)) {
+        this._invSelectedTrans = [1];
+      } else if (!paidTrans.includes(2)) {
+        this._invSelectedTrans = [2];
+      } else if (!paidTrans.includes(3)) {
+        this._invSelectedTrans = [3];
+      } else {
+        this._invSelectedTrans = [1];
+      }
+    }
+
+    this.updateTransportCardsUI();
+    this.updateTransportFromSelectedInstallments();
+    this.calculateInvoiceTotals();
+  }
+
+  toggleInvoiceTransInstallment(num) {
+    num = parseInt(num, 10);
+    if (this._invSelectedTrans.includes(num)) {
+      this._invSelectedTrans = this._invSelectedTrans.filter(t => t !== num);
+    } else {
+      this._invSelectedTrans.push(num);
+      this._invSelectedTrans.sort((a, b) => a - b);
+    }
+    this.updateTransportCardsUI();
+    this.updateTransportFromSelectedInstallments();
+    this.calculateInvoiceTotals();
+  }
+
+  syncTransportWithTuition() {
+    this._invSelectedTrans = [...this._invSelectedTrimesters];
+    this.updateTransportCardsUI();
+    this.updateTransportFromSelectedInstallments();
+    this.calculateInvoiceTotals();
+  }
+
+  updateTransportCardsUI() {
+    const route = this._invCurrentRoute;
+    const history = this._invStudentHistory || { paidTransportInstallments: [] };
+    const paidTrans = history.paidTransportInstallments || [];
+
+    [1, 2, 3].forEach(t => {
+      const card = document.getElementById(`cardInvTrans${t}`);
+      const chk = document.getElementById(`chkInvTrans${t}`);
+      const priceEl = document.getElementById(`priceInvTrans${t}`);
+      const badgePaid = document.getElementById(`badgePaidInvTrans${t}`);
+
+      const fee = route ? (t === 1 ? route.t1_fee : t === 2 ? route.t2_fee : route.t3_fee) : 0;
+      if (priceEl) priceEl.textContent = `${Number(fee).toLocaleString('fr-FR')} DA`;
+
+      const isPaid = paidTrans.includes(t);
+      if (badgePaid) badgePaid.style.display = isPaid ? 'inline-block' : 'none';
+
+      const isSelected = this._invSelectedTrans.includes(t);
+      if (chk) chk.checked = isSelected;
+      if (card) {
+        if (isSelected) {
+          card.classList.add('active');
+          card.style.borderColor = '#f59e0b';
+          card.style.background = 'rgba(245, 158, 11, 0.12)';
+          if (priceEl) priceEl.style.color = '#d97706';
+        } else {
+          card.classList.remove('active');
+          card.style.borderColor = 'var(--border-color, #cbd5e1)';
+          card.style.background = 'var(--bg-card, #ffffff)';
+          if (priceEl) priceEl.style.color = 'var(--text-muted, #64748b)';
+        }
+      }
+    });
+  }
+
+  updateTransportFromSelectedInstallments() {
+    const route = this._invCurrentRoute;
+    let fee = 0;
+    if (route) {
+      if (this._invSelectedTrans.length === 3 && route.annual_fee > 0) {
+        fee = route.annual_fee;
+      } else {
+        fee = this._invSelectedTrans.reduce((sum, t) => {
+          return sum + (t === 1 ? route.t1_fee : t === 2 ? route.t2_fee : route.t3_fee);
+        }, 0);
+      }
+    }
+    const transInput = document.getElementById('invTransportFee');
+    if (transInput) transInput.value = fee;
+  }
+
+  calculateInvoiceTotals() {
+    const tuition = parseFloat(document.getElementById('invTuitionFee')?.value) || 0;
+    const transport = parseFloat(document.getElementById('invTransportFee')?.value) || 0;
+    const discount = parseFloat(document.getElementById('invDiscountAmount')?.value) || 0;
+    const netTotal = Math.max(0, (tuition + transport) - discount);
+
+    const paidInput = document.getElementById('invPaidAmount');
+    if (paidInput && (!paidInput.dataset.manualEdited || parseFloat(paidInput.value) === 0)) {
+      paidInput.value = netTotal;
+    }
+    const paid = parseFloat(paidInput?.value) || 0;
+    const remaining = Math.max(0, netTotal - paid);
+
+    const netDisplay = document.getElementById('invNetTotalDisplay');
+    if (netDisplay) netDisplay.textContent = `${Number(netTotal).toLocaleString('fr-FR')} دج`;
+    const remDisplay = document.getElementById('invRemainingDisplay');
+    if (remDisplay) remDisplay.textContent = `${Number(remaining).toLocaleString('fr-FR')} دج`;
+  }
+
+  async saveSchoolInvoice() {
+    const studentSelect = document.getElementById('invStudentSelect');
+    const studentId = studentSelect ? studentSelect.value : '';
+    if (!studentId) {
+      alert('يرجى اختيار التلميذ أولاً.');
+      return;
+    }
+
+    const trimesters = [...(this._invSelectedTrimesters || [])];
+    const transportInstallments = [...(this._invSelectedTrans || [])];
+    const routeId = document.getElementById('invTransportRouteSelect')?.value || null;
+
+    if (trimesters.length === 0 && (!routeId || transportInstallments.length === 0)) {
+      alert('يرجى تحديد فصل دراسي أو شطر نقل واحد على الأقل لتسديده.');
+      return;
+    }
+
+    const tuition = parseFloat(document.getElementById('invTuitionFee')?.value) || 0;
+    const transport = parseFloat(document.getElementById('invTransportFee')?.value) || 0;
+    const discount = parseFloat(document.getElementById('invDiscountAmount')?.value) || 0;
+    const paid = parseFloat(document.getElementById('invPaidAmount')?.value) || 0;
+    const method = document.getElementById('invPaymentMethod')?.value || 'espece';
+
+    // Detailed line items for the invoice receipt
+    const itemsDetail = [];
+    const tariff = this._invCurrentTariff;
+    for (const t of trimesters) {
+      const tPrice = tariff ? (t === 1 ? tariff.t1_fee : t === 2 ? tariff.t2_fee : tariff.t3_fee) : 0;
+      itemsDetail.push({
+        type: 'tuition',
+        name: `مصاريف التمدرس - الفصل ${t} (T${t})`,
+        period: `الفصل ${t}`,
+        trimester: t,
+        amount: tPrice
+      });
+    }
+
+    if (routeId && transportInstallments.length > 0) {
+      const route = this._invCurrentRoute || (this.transportRoutes || []).find(r => String(r.id) === String(routeId));
+      for (const t of transportInstallments) {
+        const transPrice = route ? (t === 1 ? route.t1_fee : t === 2 ? route.t2_fee : route.t3_fee) : 0;
+        itemsDetail.push({
+          type: 'transport',
+          name: `مصاريف النقل - الشطر ${t} (T${t})${route ? ' - ' + route.route_name : ''}`,
+          period: `الشطر ${t}`,
+          installment: t,
+          amount: transPrice
+        });
+      }
+    }
+
+    let periodType = 'trimester';
+    if (trimesters.length === 3) {
+      periodType = 'annual';
+    } else if (trimesters.length > 1) {
+      periodType = 'multi_trimester';
+    }
+
+    const payload = {
+      student_id: studentId,
+      payment_period_type: periodType,
+      trimester_number: trimesters.length === 1 ? trimesters[0] : (trimesters.length > 0 ? trimesters[0] : null),
+      trimesters: trimesters,
+      transport_installments: routeId ? transportInstallments : [],
+      items_detail: itemsDetail,
+      tuition_fee: tuition,
+      transport_fee: transport,
+      transport_route_id: routeId ? parseInt(routeId, 10) : null,
+      transport_type: routeId ? 'round_trip' : 'none',
+      discount_amount: discount,
+      paid_amount: paid,
+      payment_method: method
+    };
+
+    try {
+      const res = await fetch('/api/school-invoices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success && data.invoice) {
+        this.closeModals();
+        if (this.showToast) this.showToast('تم تسجيل الفاتورة بنجاح!', 'success');
+        this.renderReceipt(data.invoice);
+        if (this.loadPayments) this.loadPayments();
+        if (this.loadDashboardData) this.loadDashboardData();
+        if (this.loadCaisse) this.loadCaisse();
+      } else {
+        alert(data.error || 'حدث خطأ أثناء حفظ الفاتورة');
+      }
+    } catch (err) {
+      console.error('saveSchoolInvoice error:', err);
+      alert('حدث خطأ في الاتصال بالخادم.');
+    }
+  }
+
+  async showReceipt(paymentId, isSchoolInvoice = false) {
+    try {
+      if (isSchoolInvoice) {
+        const res = await fetch(`/api/school-invoices/${paymentId}`);
+        const data = await res.json();
+        if (data.success && data.invoice) {
+          this.renderReceipt(data.invoice);
+          return;
+        }
+      }
       const res = await fetch(`/api/payments/${paymentId}`);
       const data = await res.json();
       if (data.success && data.payment) {
@@ -9931,24 +10943,61 @@ class EdumindApp {
 
   renderReceipt(p) {
     const isAr = this.lang === 'ar';
-    document.getElementById('rcptSchoolName').textContent = this.settings.school_name || 'EDUMIND ACADEMY';
-    document.getElementById('rcptSchoolContact').textContent = `${this.settings.school_address || 'Alger, Algérie'} | Tél: ${this.settings.school_phone || '0550 00 00 00'}`;
-    document.getElementById('rcptNumber').textContent = p.receipt_no;
+    const schoolNameEl = document.getElementById('rcptSchoolName');
+    if (schoolNameEl) schoolNameEl.textContent = this.settings?.school_name || 'جواهر المعرفة الخاصة';
+    const schoolDetailsEl = document.getElementById('rcptSchoolDetails');
+    if (schoolDetailsEl) schoolDetailsEl.textContent = this.settings?.school_type || "مؤسسة التربية والتعليم الخاصة (ابتدائي - متوسط - ثانوي)";
+    const contactEl = document.getElementById('rcptSchoolContact');
+    if (contactEl) contactEl.textContent = `${this.settings?.school_address || 'ذراع القهوة برج منايل - بومرداس'} | Tél: ${this.settings?.school_phone || '0699879822'}`;
+
+    document.getElementById('rcptNumber').textContent = p.receipt_no || p.invoice_no || 'REC-2026-00001';
 
     const pDate = p.payment_date ? new Date(p.payment_date) : new Date();
-    document.getElementById('rcptDate').textContent = pDate.toLocaleString(isAr ? 'ar-DZ' : 'fr-FR');
+    const formattedDate = `${pDate.getFullYear()}/${String(pDate.getMonth() + 1).padStart(2, '0')}/${String(pDate.getDate()).padStart(2, '0')}`;
+    document.getElementById('rcptDate').textContent = formattedDate;
 
-    const lblStudent = document.getElementById('rcptStudentLabel');
-    const lblMatricule = document.getElementById('rcptMatriculeLabel');
-    if (lblStudent) lblStudent.textContent = isAr ? 'التلميذ:' : 'Élève:';
-    if (lblMatricule) lblMatricule.textContent = isAr ? 'رقم القيد:' : 'Matricule:';
+    document.getElementById('rcptStudent').textContent = `${p.first_name || ''} ${p.last_name || ''}`.trim() || (isAr ? 'التلميذ' : 'Élève');
+    document.getElementById('rcptMatricule').textContent = p.matricule || '-';
 
-    document.getElementById('rcptStudent').textContent = `${p.first_name} ${p.last_name}`;
-    document.getElementById('rcptMatricule').textContent = p.matricule;
-    document.getElementById('rcptGroup').textContent = `${p.group_name} (${p.subject_name || ''})`;
-    document.getElementById('rcptTeacher').textContent = p.teacher_name || 'Équipe pédagogique';
-    document.getElementById('rcptMonth').textContent = p.month_period;
-    document.getElementById('rcptMethod').textContent = p.payment_method;
+    const classEl = document.getElementById('rcptClass');
+    if (classEl) classEl.textContent = p.level_name || p.level || p.group_name || '1 متوسط';
+
+    const trimEl = document.getElementById('rcptTrimestre');
+    if (trimEl) {
+      let trimestersList = [];
+      if (p.trimesters_json) {
+        try {
+          const parsed = JSON.parse(p.trimesters_json);
+          if (Array.isArray(parsed)) trimestersList = parsed;
+        } catch(e) {}
+      }
+      if (trimestersList.length === 3 || p.payment_period_type === 'annual' || p.is_annual) {
+        trimEl.textContent = isAr ? 'كامل السنة (سنوي)' : 'Paiement Annuel';
+      } else if (trimestersList.length > 1) {
+        trimEl.textContent = isAr
+          ? trimestersList.map(t => `الفصل ${t}`).join(' + ')
+          : trimestersList.map(t => `T${t}`).join(' + ');
+      } else if (p.trimester_number) {
+        trimEl.textContent = isAr ? `الفصل ${p.trimester_number} (الشطر ${p.trimester_number})` : `Trimestre ${p.trimester_number} (T${p.trimester_number})`;
+      } else {
+        trimEl.textContent = p.month_period || `الفصل 1`;
+      }
+    }
+
+    const methodLabels = {
+      espece: isAr ? 'نقداً (ESPÈCES)' : 'Espèces (Caisse)',
+      baridimob: 'BaridiMob (بريدي موب)',
+      cheque: isAr ? 'شيك (CHÈQUE)' : 'Chèque bancaire',
+      virement: isAr ? 'تحويل بنكي (VIREMENT)' : 'Virement bancaire'
+    };
+    document.getElementById('rcptMethod').textContent = methodLabels[p.payment_method] || (p.payment_method ? p.payment_method.toUpperCase() : 'نقداً (ESPÈCES)');
+
+    // Transport route display
+    const transRouteEl = document.getElementById('rcptTransportRoute');
+    const transRouteBox = document.getElementById('rcptTransportRouteBox');
+    const routeName = p.transport_route_name || (p.transport_fee > 0 ? (isAr ? 'مشترك بالنقل' : 'Inscrit') : (isAr ? 'بدون نقل' : 'Non inscrit'));
+    if (transRouteEl) transRouteEl.textContent = routeName;
+    if (transRouteBox) transRouteBox.style.display = 'block';
 
     const singleTable = document.getElementById('rcptSingleTable');
     const multiTable = document.getElementById('rcptMultiTable');
@@ -9960,10 +11009,155 @@ class EdumindApp {
     if (familyTable) familyTable.style.display = 'none';
     if (familyRemBox) familyRemBox.style.display = 'none';
 
-    document.getElementById('rcptBasePrice').textContent = `${Number(p.base_amount).toLocaleString()} DA`;
-    document.getElementById('rcptDiscount').textContent = `${Number(p.discount || 0).toLocaleString()} DA`;
-    document.getElementById('rcptRemaining').textContent = `${Number(p.remaining_amount || 0).toLocaleString()} DA`;
-    document.getElementById('rcptTotalPaid').textContent = `${Number(p.paid_amount).toLocaleString()} DA`;
+    const tuitionAmt = parseFloat(p.tuition_fee !== undefined ? p.tuition_fee : (p.base_amount || 0)) || 0;
+    const transportAmt = parseFloat(p.transport_fee !== undefined ? p.transport_fee : 0) || 0;
+    const regAmt = parseFloat(p.registration_fee || 0);
+    const discountAmt = parseFloat(p.discount_amount !== undefined ? p.discount_amount : (p.discount || 0)) || 0;
+    const remainingAmt = parseFloat(p.remaining_amount !== undefined ? p.remaining_amount : 0) || 0;
+    const paidAmt = parseFloat(p.paid_amount !== undefined ? p.paid_amount : (p.base_amount || 0)) || 0;
+
+    let items = [];
+    if (p.items_detail_json) {
+      try { items = typeof p.items_detail_json === 'string' ? JSON.parse(p.items_detail_json) : p.items_detail_json; } catch(e){}
+    } else if (Array.isArray(p.items_detail)) {
+      items = p.items_detail;
+    }
+
+    const singleTbody = document.querySelector('#rcptSingleTable tbody');
+    if (singleTbody && items && items.length > 0) {
+      let rowsHtml = '';
+      for (const item of items) {
+        const isTrans = item.type === 'transport';
+        const icon = isTrans ? 'fa-bus' : 'fa-graduation-cap';
+        const iconColor = isTrans ? '#f59e0b' : '#3b82f6';
+        const netColor = isTrans ? '#d97706' : '#0284c7';
+        rowsHtml += `
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 9px 12px; font-weight: 700; color: #1e293b;">
+              <i class="fa-solid ${icon}" style="color: ${iconColor}; margin-left: 6px;"></i>
+              <span>${item.name || (isTrans ? 'مصاريف النقل' : 'مصاريف التمدرس')}</span>
+            </td>
+            <td style="text-align: center; padding: 9px 10px; color: #475569;">${item.period || '-'}</td>
+            <td style="text-align: right; padding: 9px 12px; font-weight: 600; color: #334155;">${Number(item.amount || 0).toLocaleString('fr-FR')} DA</td>
+            <td style="text-align: right; padding: 9px 12px; font-weight: 700; color: ${netColor};">${Number(item.amount || 0).toLocaleString('fr-FR')} DA</td>
+          </tr>
+        `;
+      }
+      if (regAmt > 0) {
+        rowsHtml += `
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 9px 12px; font-weight: 700; color: #1e293b;">
+              <i class="fa-solid fa-id-card" style="color: #10b981; margin-left: 6px;"></i>
+              <span>حقوق التسجيل والتأمين / Frais d'inscription & assurance</span>
+            </td>
+            <td style="text-align: center; padding: 9px 10px; color: #475569;">سنوي</td>
+            <td style="text-align: right; padding: 9px 12px; font-weight: 600;">${regAmt.toLocaleString('fr-FR')} DA</td>
+            <td style="text-align: right; padding: 9px 12px; font-weight: 700; color: #10b981;">${regAmt.toLocaleString('fr-FR')} DA</td>
+          </tr>
+        `;
+      }
+      if (discountAmt > 0) {
+        rowsHtml += `
+          <tr style="border-bottom: 1px solid #e2e8f0; background: #f0fdf4;">
+            <td colspan="3" style="padding: 8px 12px; font-weight: 700; color: #166534;">
+              <i class="fa-solid fa-tags" style="color: #16a34a; margin-left: 6px;"></i>
+              <span>تخفيض ممنوح / Remise accordée (خصم عائلي أو إخوة)</span>
+            </td>
+            <td style="text-align: right; padding: 8px 12px; color: #16a34a; font-weight: 800;">- ${discountAmt.toLocaleString('fr-FR')} DA</td>
+          </tr>
+        `;
+      }
+      singleTbody.innerHTML = rowsHtml;
+    } else {
+      // Fallback to static table rows
+      const periodLabel = p.payment_period_type === 'annual' ? (isAr ? 'سنوي' : 'Annuel') : (isAr ? `الفصل ${p.trimester_number || 1}` : `T${p.trimester_number || 1}`);
+      const baseEl = document.getElementById('rcptBasePrice');
+      if (baseEl) baseEl.textContent = `${tuitionAmt.toLocaleString('fr-FR')} DA`;
+      const tNetEl = document.getElementById('rcptTuitionNet');
+      if (tNetEl) tNetEl.textContent = `${tuitionAmt.toLocaleString('fr-FR')} DA`;
+      const tPeriodEl = document.getElementById('rcptTuitionPeriod');
+      if (tPeriodEl) tPeriodEl.textContent = periodLabel;
+
+      const rowTrans = document.getElementById('rcptRowTransport');
+      const trEl = document.getElementById('rcptTransportPrice');
+      const trNetEl = document.getElementById('rcptTransportNet');
+      const trPeriodEl = document.getElementById('rcptTransportPeriod');
+      const trSubEl = document.getElementById('rcptTransportSubline');
+      if (trEl) trEl.textContent = `${transportAmt.toLocaleString('fr-FR')} DA`;
+      if (trNetEl) trNetEl.textContent = `${transportAmt.toLocaleString('fr-FR')} DA`;
+      if (trPeriodEl) trPeriodEl.textContent = periodLabel;
+      if (trSubEl) trSubEl.textContent = p.transport_route_name ? `(خط السير: ${p.transport_route_name})` : '';
+      if (rowTrans) rowTrans.style.display = transportAmt > 0 ? 'table-row' : 'none';
+
+      const rowReg = document.getElementById('rcptRowRegistration');
+      const regBaseEl = document.getElementById('rcptRegBasePrice');
+      const regNetEl = document.getElementById('rcptRegNet');
+      if (rowReg) {
+        if (regAmt > 0) {
+          rowReg.style.display = 'table-row';
+          if (regBaseEl) regBaseEl.textContent = `${regAmt.toLocaleString('fr-FR')} DA`;
+          if (regNetEl) regNetEl.textContent = `${regAmt.toLocaleString('fr-FR')} DA`;
+        } else {
+          rowReg.style.display = 'none';
+        }
+      }
+
+      const rowDisc = document.getElementById('rcptRowDiscount');
+      const discEl = document.getElementById('rcptDiscount');
+      if (rowDisc) {
+        if (discountAmt > 0) {
+          rowDisc.style.display = 'table-row';
+          if (discEl) discEl.textContent = `- ${discountAmt.toLocaleString('fr-FR')} DA`;
+        } else {
+          rowDisc.style.display = 'none';
+        }
+      }
+    }
+
+    // Subtotal Net
+    const subtotalNet = Math.max(0, (tuitionAmt + transportAmt + regAmt) - discountAmt);
+    const subtotalEl = document.getElementById('rcptSubtotalNet');
+    if (subtotalEl) subtotalEl.textContent = `${subtotalNet.toLocaleString('fr-FR')} DA`;
+
+    // Paid & Remaining for this invoice
+    const totalEl = document.getElementById('rcptTotalPaid');
+    if (totalEl) totalEl.textContent = `${paidAmt.toLocaleString('fr-FR')} DA`;
+
+    const remEl = document.getElementById('rcptRemaining');
+    if (remEl) remEl.textContent = `${remainingAmt.toLocaleString('fr-FR')} DA`;
+
+    // Overall total remaining debt across all prestations (tuition + transport)
+    let totalDebt = (p.total_student_debt !== undefined && p.total_student_debt !== null)
+      ? Number(p.total_student_debt)
+      : Number(remainingAmt);
+
+    if (totalDebt < remainingAmt) {
+      totalDebt = remainingAmt;
+    }
+
+    const totalDebtRow = document.getElementById('rcptRowTotalStudentDebt');
+    const totalDebtEl = document.getElementById('rcptTotalStudentDebt');
+    const debtTitleEl = document.getElementById('rcptDebtTitle');
+    const debtSubEl = document.getElementById('rcptDebtSubtitle');
+
+    if (totalDebtEl) {
+      totalDebtEl.textContent = `${totalDebt.toLocaleString('fr-FR')} DA`;
+    }
+    if (debtTitleEl) {
+      debtTitleEl.textContent = isAr
+        ? 'المتبقي السنوي الإجمالي على التلميذ (الواجب السنوي - مجموع المدفوع) / RESTE ANNUEL TOTAL DÛ'
+        : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
+    }
+    if (debtSubEl) {
+      if (p.total_annual_obligation !== undefined && p.total_annual_obligation !== null) {
+        debtSubEl.textContent = isAr
+          ? `(الواجب السنوي الصافي: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`
+          : `(Total annuel: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`;
+      }
+    }
+    if (totalDebtRow) {
+      totalDebtRow.style.display = 'flex';
+    }
 
     document.getElementById('modalReceipt').classList.add('active');
   }
@@ -10154,6 +11348,12 @@ class EdumindApp {
       }
 
       this._fastPayData = data;
+      if (!this._fastPayPeriodType) this._fastPayPeriodType = 'trimester';
+      if (data.tariff && data.tariff.id) {
+        this._fastPaySelectedTariffId = data.tariff.id;
+      } else if (data.all_tariffs && data.all_tariffs.length > 0) {
+        this._fastPaySelectedTariffId = data.all_tariffs[0].id;
+      }
 
       const searchInput = document.getElementById('fastPayStudentSearch');
       if (searchInput) {
@@ -10199,6 +11399,26 @@ class EdumindApp {
     ];
   }
 
+  setFastPayPeriodType(periodType) {
+    this._fastPayPeriodType = periodType;
+    this.renderFastPayStudentPanel();
+  }
+
+  onFastPayTariffChange(tariffId) {
+    this._fastPaySelectedTariffId = parseInt(tariffId, 10);
+    this.renderFastPayStudentPanel();
+  }
+
+  getActiveTariff() {
+    if (!this._fastPayData) return null;
+    const { tariff, all_tariffs = [] } = this._fastPayData;
+    if (this._fastPaySelectedTariffId) {
+      const found = all_tariffs.find(t => t.id === this._fastPaySelectedTariffId);
+      if (found) return found;
+    }
+    return tariff || (all_tariffs.length > 0 ? all_tariffs[0] : null);
+  }
+
   renderFastPayStudentPanel() {
     const activeContainer = document.getElementById('fastPayActiveContainer');
     const emptyPlaceholder = document.getElementById('fastPayEmptyPlaceholder');
@@ -10207,170 +11427,330 @@ class EdumindApp {
     if (emptyPlaceholder) emptyPlaceholder.style.display = 'none';
     activeContainer.style.display = 'block';
 
-    const { student, enrollments, payments } = this._fastPayData;
+    const { student, all_tariffs = [], all_routes = [], invoices = [] } = this._fastPayData;
     const isAr = this.lang === 'ar';
+    const periodType = this._fastPayPeriodType || 'trimester';
+    const activeTariff = this.getActiveTariff();
+
     const initials = `${(student.first_name || '')[0] || ''}${(student.last_name || '')[0] || ''}`.toUpperCase() || 'E';
-
     const avatarHtml = student.photo_url
-      ? `<img src="${student.photo_url}" style="width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid #10b981;">`
-      : `<div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:15px; border:2px solid #10b981;">${initials}</div>`;
+      ? `<img src="${student.photo_url}" style="width:46px; height:46px; border-radius:50%; object-fit:cover; border:2px solid #10b981;">`
+      : `<div style="width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; border:2px solid #10b981;">${initials}</div>`;
 
-    const months = this.getFastPayMonthsList();
-    const defaultMonth = months[0];
+    // Tariff select options
+    const tariffOptionsHtml = (all_tariffs || []).map(t => {
+      const isSelected = activeTariff && activeTariff.id === t.id;
+      return `<option value="${t.id}" ${isSelected ? 'selected' : ''}>${this.escapeHtml(t.level_name)} (سنوي: ${Number(t.annual_fee).toLocaleString()} DA)</option>`;
+    }).join('');
 
-    // If no enrollments
-    let coursesHtml = '';
-    if (!enrollments || enrollments.length === 0) {
-      coursesHtml = `
+    // Sibling discount percentage
+    const siblingDiscountPct = parseFloat(student.sibling_discount_percent) || parseFloat(student.parent_discount_percent) || 0;
+
+    // Check previous payments from school_invoices
+    const isAnnualPaid = invoices.some(inv => inv.payment_period_type === 'annual' && (parseFloat(inv.remaining_amount) <= 0));
+    
+    // Check Trimesters status
+    const getTrimesterInfo = (tNum) => {
+      if (isAnnualPaid) {
+        return { isPaid: true, isPartial: false, paidAmt: 0, remainingDue: 0, invoice: null };
+      }
+      const inv = invoices.find(i => i.payment_period_type === 'trimester' && parseInt(i.trimester_number, 10) === tNum);
+      if (!inv) {
+        const baseFee = activeTariff ? (parseFloat(activeTariff['t' + tNum + '_fee']) || 0) : 0;
+        return { isPaid: false, isPartial: false, paidAmt: 0, remainingDue: baseFee, invoice: null };
+      }
+      const rem = parseFloat(inv.remaining_amount) || 0;
+      const paid = parseFloat(inv.paid_amount) || 0;
+      if (rem <= 0 && paid > 0) {
+        return { isPaid: true, isPartial: false, paidAmt: paid, remainingDue: 0, invoice: inv };
+      }
+      return { isPaid: false, isPartial: paid > 0, paidAmt: paid, remainingDue: rem, invoice: inv };
+    };
+
+    // Build Trimester or Annual Content
+    let pricingBodyHtml = '';
+
+    if (!activeTariff) {
+      pricingBodyHtml = `
         <div style="padding: 24px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.15); border-radius: 8px;">
-          <i class="fa-solid fa-graduation-cap" style="font-size: 24px; opacity: 0.6; margin-bottom: 6px; display: block;"></i>
-          <span>${isAr ? 'هذا التلميذ غير مسجل في أي فوج نشط حالياً.' : 'Cet élève n’est inscrit dans aucun groupe actif.'}</span>
+          <i class="fa-solid fa-tags" style="font-size: 26px; opacity: 0.6; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
+          <span>${isAr ? 'لم يتم العثور على تسعيرة لهذا المستوى. يرجى إضافة تسعيرة من صفحة التسعيرات أو اختيار تسعيرة يدوياً أعلاه.' : 'Aucun tarif configuré pour ce niveau.'}</span>
           <div style="margin-top: 10px;">
-            <button class="btn-secondary" style="font-size: 12px; padding: 6px 14px;" onclick="app.switchView('inscriptions')">
-              <i class="fa-solid fa-plus"></i> ${isAr ? 'تسجيل التلميذ في فوج' : 'Inscrire à un cours'}
+            <button class="btn-primary" style="font-size: 12px; padding: 6px 14px;" onclick="app.switchView('school-tariffs')">
+              <i class="fa-solid fa-plus"></i> ${isAr ? 'الانتقال لصفحة التسعيرات' : 'Gérer les Tarifs'}
             </button>
           </div>
         </div>
       `;
-    } else {
-      const rowsHtml = enrollments.map((g, idx) => {
-        const basePrice = parseFloat(g.price_monthly) || 0;
-        let defaultDiscount = parseFloat(g.discount_amount) || 0;
-        // Apply parent family discount percentage automatically if no custom course discount
-        if (defaultDiscount === 0 && student.parent_discount_percent > 0) {
-          defaultDiscount = Math.round(basePrice * (student.parent_discount_percent / 100));
+    } else if (periodType === 'trimester') {
+      // 3 Trimesters View
+      const trimesters = [
+        { num: 1, name: isAr ? 'الفصل الأول (الشطر 1)' : 'Trimestre 1 (T1)', fee: parseFloat(activeTariff.t1_fee) || 0, icon: 'fa-1' },
+        { num: 2, name: isAr ? 'الفصل الثاني (الشطر 2)' : 'Trimestre 2 (T2)', fee: parseFloat(activeTariff.t2_fee) || 0, icon: 'fa-2' },
+        { num: 3, name: isAr ? 'الفصل الثالث (الشطر 3)' : 'Trimestre 3 (T3)', fee: parseFloat(activeTariff.t3_fee) || 0, icon: 'fa-3' }
+      ];
+
+      const cardsHtml = trimesters.map(t => {
+        const info = getTrimesterInfo(t.num);
+        const baseFee = t.fee;
+        let defaultDiscount = 0;
+        if (!info.isPaid && siblingDiscountPct > 0) {
+          defaultDiscount = Math.round(baseFee * (siblingDiscountPct / 100));
         }
-        const netDue = Math.max(0, basePrice - defaultDiscount);
+        const netDue = Math.max(0, (info.isPartial ? info.remainingDue : baseFee) - defaultDiscount);
+        const defaultToPay = info.isPaid ? 0 : netDue;
+        const isChecked = !info.isPaid;
 
-        // Check if already paid for defaultMonth
-        const paidRecord = payments.find(p => String(p.group_id) === String(g.group_id) && p.month_period === defaultMonth);
-        let isFullyPaid = false;
-        let isPartiallyPaid = false;
-        let remainingDue = netDue;
-        let defaultToPay = netDue;
-
-        if (paidRecord) {
-          const r = parseFloat(paidRecord.remaining_amount) || 0;
-          if (r <= 0) {
-            isFullyPaid = true;
-            defaultToPay = 0;
-            remainingDue = 0;
-          } else {
-            isPartiallyPaid = true;
-            remainingDue = r;
-            defaultToPay = r;
-          }
-        }
-
-        const isChecked = !isFullyPaid;
-
-        const statusTag = isFullyPaid
-          ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
-          : (isPartiallyPaid
-            ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight:700;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${remainingDue} دج` : `Reste ${remainingDue} DA`}</span>`
-            : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight:700;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
-
-        const monthOptions = months.map(m => `<option value="${m}" ${m === defaultMonth ? 'selected' : ''}>${m}</option>`).join('');
+        const statusBadge = info.isPaid
+          ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:800; font-size:12px;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص (مسدد)' : 'Réglé'}</span>`
+          : (info.isPartial
+            ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-weight:800; font-size:12px;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${info.remainingDue.toLocaleString()} دج` : `Reste ${info.remainingDue.toLocaleString()} DA`}</span>`
+            : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight:800; font-size:12px;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
 
         return `
-          <tr id="fastPayRow_${g.group_id}" style="transition: background 0.15s; background: ${isChecked ? 'rgba(16, 185, 129, 0.05)' : ''};">
-            <td style="text-align: center; width: 40px;">
-              <input type="checkbox" class="fastpay-row-chk" data-group-id="${g.group_id}"
-                     ${isChecked ? 'checked' : ''} onchange="app.onFastPayRowCheckChange(${g.group_id})">
-            </td>
-            <td>
-              <div style="font-weight: 700; color: var(--text-heading); font-size: 13.5px;">${this.escapeHtml(g.group_name)}</div>
-              <div style="font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                <span style="color: ${g.subject_color || '#3b82f6'}; font-weight: 600;">${this.escapeHtml(g.subject_name || '')}</span>
-                <span>&bull;</span>
-                <span>${this.escapeHtml(g.teacher_name || '')}</span>
+          <div class="card fastpay-trimester-card" id="fastPayTrimesterCard_${t.num}"
+               style="background: ${isChecked ? 'rgba(16, 185, 129, 0.06)' : 'rgba(0, 0, 0, 0.25)'}; border: 1px solid ${isChecked ? 'rgba(16, 185, 129, 0.45)' : 'var(--border-color)'}; border-radius: 12px; padding: 14px; transition: all 0.2s;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" class="fastpay-trimester-chk" data-trimester="${t.num}"
+                       ${isChecked ? 'checked' : ''} ${info.isPaid ? 'disabled' : ''}
+                       onchange="app.onFastPayTrimesterCheckChange(${t.num})"
+                       style="width: 17px; height: 17px; cursor: pointer; accent-color: #10b981;">
+                <strong style="color: var(--text-heading); font-size: 14.5px;">${t.name}</strong>
               </div>
-            </td>
-            <td style="width: 150px;">
-              <select class="form-control fastpay-month-select" data-group-id="${g.group_id}"
-                      style="padding: 5px 8px; font-size: 12px; height: 32px;"
-                      onchange="app.onFastPayRowMonthChange(${g.group_id})">
-                ${monthOptions}
-              </select>
-            </td>
-            <td style="text-align: center; width: 110px;" id="fastPayStatus_${g.group_id}">
-              ${statusTag}
-            </td>
-            <td style="text-align: right; width: 90px; font-weight: 600;" id="fastPayBase_${g.group_id}" data-base="${basePrice}">
-              ${basePrice.toLocaleString('fr-FR')} DA
-            </td>
-            <td style="width: 100px;">
-              <input type="number" step="any" class="form-control fastpay-discount-input" data-group-id="${g.group_id}"
-                     style="padding: 5px 8px; font-size: 12px; height: 32px; text-align: right;"
-                     value="${defaultDiscount}" min="0" oninput="app.onFastPayDiscountInput(${g.group_id})">
-            </td>
-            <td style="text-align: right; width: 95px; font-weight: 700; color: #38bdf8;" id="fastPayNet_${g.group_id}">
-              ${netDue.toLocaleString('fr-FR')} DA
-            </td>
-            <td style="width: 120px;">
-              <input type="number" step="any" class="form-control fastpay-paid-input" data-group-id="${g.group_id}"
-                     style="padding: 5px 8px; font-size: 13px; height: 32px; text-align: right; font-weight: 700; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);"
-                     value="${defaultToPay}" min="0" oninput="app.updateFastPayCalculations()">
-            </td>
-          </tr>
+              <div>${statusBadge}</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12.5px; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px 10px; border-radius: 8px;">
+              <div>
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'التسعيرة الرسمية' : 'Tarif officiel'}</span>
+                <strong style="font-size: 13.5px; color: var(--text-heading);" id="fastPayTBase_${t.num}" data-base="${baseFee}">${baseFee.toLocaleString('fr-FR')} DA</strong>
+              </div>
+              <div style="text-align: right;">
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'المستحق الصافي' : 'Net à payer'}</span>
+                <strong style="font-size: 14px; color: #38bdf8;" id="fastPayTNet_${t.num}">${netDue.toLocaleString('fr-FR')} DA</strong>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 3px;">
+                  ${isAr ? 'تخفيض / خصم (DA)' : 'Remise (DA)'}
+                </label>
+                <input type="number" step="any" min="0" class="form-control fastpay-t-discount" data-trimester="${t.num}"
+                       value="${defaultDiscount}" ${info.isPaid ? 'disabled' : ''}
+                       style="height: 32px; padding: 4px 8px; font-size: 12px; text-align: right;"
+                       oninput="app.onFastPayTrimesterDiscountInput(${t.num})">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #10b981; font-weight: 700; display: block; margin-bottom: 3px;">
+                  ${isAr ? 'المبلغ المسدد (DA)' : 'Montant versé'}
+                </label>
+                <input type="number" step="any" min="0" class="form-control fastpay-t-paid" data-trimester="${t.num}"
+                       value="${defaultToPay}" ${info.isPaid ? 'disabled' : ''}
+                       style="height: 32px; padding: 4px 8px; font-size: 13px; font-weight: 800; color: #10b981; text-align: right; border: 1px solid rgba(16, 185, 129, 0.4);"
+                       oninput="app.updateFastPayCalculations()">
+              </div>
+            </div>
+
+          </div>
         `;
       }).join('');
 
-      coursesHtml = `
-        <div class="table-responsive" style="max-height: 320px; overflow-y: auto; margin-bottom: 14px; border: 1px solid var(--border-color); border-radius: 8px;">
-          <table class="edumind-table" style="margin: 0; font-size: 12.5px;">
-            <thead>
-              <tr style="background: rgba(0,0,0,0.25);">
-                <th style="width: 40px; text-align: center;">
-                  <input type="checkbox" id="chkFastPaySelectAll" checked onchange="app.toggleAllFastPayCourses(this.checked)" title="${isAr ? 'تحديد الكل' : 'Tout sélectionner'}">
-                </th>
-                <th>${isAr ? 'الفوج والمادة والأستاذ' : 'GROUPE / MATIÈRE / ENSEIGNANT'}</th>
-                <th>${isAr ? 'الشهر المعني' : 'MOIS CONCERNÉ'}</th>
-                <th style="text-align: center;">${isAr ? 'حالة السداد' : 'STATUT'}</th>
-                <th style="text-align: right;">${isAr ? 'السعر' : 'TARIF'}</th>
-                <th style="text-align: right;">${isAr ? 'تخفيض (DA)' : 'REMISE'}</th>
-                <th style="text-align: right;">${isAr ? 'الصافي' : 'NET'}</th>
-                <th style="text-align: right;">${isAr ? 'المبلغ المدفوع (DA)' : 'MONTANT PAYÉ'}</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
+      pricingBodyHtml = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; margin-bottom: 14px;">
+          ${cardsHtml}
+        </div>
+      `;
+    } else {
+      // Annual Full Year View
+      const baseFee = parseFloat(activeTariff.annual_fee) || 0;
+      let defaultDiscount = 0;
+      if (!isAnnualPaid && siblingDiscountPct > 0) {
+        defaultDiscount = Math.round(baseFee * (siblingDiscountPct / 100));
+      }
+      const netDue = Math.max(0, baseFee - defaultDiscount);
+      const isChecked = !isAnnualPaid;
+
+      const annualStatusBadge = isAnnualPaid
+        ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:800; font-size:13px;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص (تم تسديد السنة بالكامل)' : 'Année Complète Réglée'}</span>`
+        : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight:800; font-size:13px;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسددة' : 'Non réglée'}</span>`;
+
+      pricingBodyHtml = `
+        <div class="card" id="fastPayAnnualCard"
+             style="background: ${isChecked ? 'rgba(16, 185, 129, 0.06)' : 'rgba(0, 0, 0, 0.25)'}; border: 1px solid ${isChecked ? 'rgba(16, 185, 129, 0.5)' : 'var(--border-color)'}; border-radius: 12px; padding: 18px; margin-bottom: 14px; transition: all 0.2s;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" id="chkFastPayAnnual" ${isChecked ? 'checked' : ''} ${isAnnualPaid ? 'disabled' : ''}
+                     onchange="app.updateFastPayCalculations()"
+                     style="width: 20px; height: 20px; cursor: pointer; accent-color: #10b981;">
+              <div>
+                <strong style="color: var(--text-heading); font-size: 16px;">
+                  ${isAr ? 'تسديد كامل السنة الدراسية (الشطر 1 + الشطر 2 + الشطر 3)' : 'Scolarité Annuelle Complète (T1 + T2 + T3)'}
+                </strong>
+                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                  ${isAr ? 'يشمل كافة المستحقات الدراسية لجميع الفصول دفعة واحدة مع الاستفادة من الخصم السنوي' : 'Règlement global de toute l\'année scolaire avec application des remises'}
+                </div>
+              </div>
+            </div>
+            <div>${annualStatusBadge}</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: rgba(0,0,0,0.25); padding: 12px 16px; border-radius: 10px; margin-bottom: 14px;">
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 11.5px;">${isAr ? 'التسعيرة السنوية الرسمية' : 'Tarif annuel officiel'}</span>
+              <strong style="font-size: 17px; color: var(--text-heading);" id="fastPayAnnualBase" data-base="${baseFee}">${baseFee.toLocaleString('fr-FR')} DA</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 11.5px;">${isAr ? 'تخفيض / خصم (DA)' : 'Remise annuelle (DA)'}</span>
+              <input type="number" step="any" min="0" id="fastPayAnnualDiscount" class="form-control"
+                     value="${defaultDiscount}" ${isAnnualPaid ? 'disabled' : ''}
+                     style="height: 32px; padding: 4px 8px; font-size: 12.5px; text-align: right; width: 140px;"
+                     oninput="app.onFastPayAnnualDiscountInput()">
+            </div>
+            <div style="text-align: right;">
+              <span style="color: var(--text-muted); display: block; font-size: 11.5px;">${isAr ? 'الصافي السنوي المطلوب' : 'Net annuel dû'}</span>
+              <strong style="font-size: 17px; color: #38bdf8;" id="fastPayAnnualNet">${netDue.toLocaleString('fr-FR')} DA</strong>
+            </div>
+            <div style="text-align: right;">
+              <span style="color: #10b981; font-weight: 700; display: block; font-size: 11.5px;">${isAr ? 'المبلغ المسدد الآن (DA)' : 'Montant versé'}</span>
+              <input type="number" step="any" min="0" id="fastPayAnnualPaid" class="form-control"
+                     value="${isAnnualPaid ? 0 : netDue}" ${isAnnualPaid ? 'disabled' : ''}
+                     style="height: 34px; padding: 4px 10px; font-size: 14px; font-weight: 800; color: #10b981; text-align: right; width: 150px; border: 1px solid rgba(16, 185, 129, 0.4); display: inline-block;"
+                     oninput="app.updateFastPayCalculations()">
+            </div>
+          </div>
+
         </div>
       `;
     }
 
+    // Transport Routes options
+    const activeRouteId = student.transport_route_id || (all_routes.length > 0 ? all_routes[0].id : null);
+    const transportOptions = (all_routes || []).map(r => {
+      const isSelected = activeRouteId === r.id;
+      const label = `${r.route_name} (${r.zone_name || ''}) — الشطر 1: ${Number(r.t1_fee || 0).toLocaleString()} | الشطر 2: ${Number(r.t2_fee || 0).toLocaleString()} | الشطر 3: ${Number(r.t3_fee || 0).toLocaleString()} | سنوي: ${Number(r.annual_fee || 0).toLocaleString()} DA`;
+      return `<option value="${r.id}" data-t1="${r.t1_fee || 0}" data-t2="${r.t2_fee || 0}" data-t3="${r.t3_fee || 0}" data-annual="${r.annual_fee || 0}" ${isSelected ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
+    }).join('');
+
+    const hasTransport = student.transport_route_id && (student.transport_type !== 'none');
+
+    // Registration fee option
+    const regFee = activeTariff ? (parseFloat(activeTariff.registration_fee) || 0) : 0;
+
     activeContainer.innerHTML = `
       <!-- Student Profile Hero Header -->
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0, 0, 0, 0.25); border-radius: 10px; margin-bottom: 14px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
           ${avatarHtml}
           <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <strong style="color: var(--text-heading); font-size: 15px;">${this.escapeHtml(student.first_name)} ${this.escapeHtml(student.last_name)}</strong>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <strong style="color: var(--text-heading); font-size: 15.5px;">${this.escapeHtml(student.first_name)} ${this.escapeHtml(student.last_name)}</strong>
               <code style="font-size: 11.5px; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 7px; border-radius: 4px; font-weight: 700;">${this.escapeHtml(student.matricule || '')}</code>
+              <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; font-size: 11px; padding: 2px 8px; border-radius: 4px;">
+                <i class="fa-solid fa-layer-group" style="margin-right: 4px;"></i>${this.escapeHtml(student.level_name || '')}
+              </span>
+              ${siblingDiscountPct > 0 ? `<span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 11px; padding: 2px 8px; border-radius: 4px;"><i class="fa-solid fa-percent"></i> ${isAr ? `خصم الإخوة: -${siblingDiscountPct}%` : `Remise Fratrie: -${siblingDiscountPct}%`}</span>` : ''}
             </div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-              <span><i class="fa-solid fa-layer-group" style="font-size: 10px; margin-right: 4px;"></i>${this.escapeHtml(student.level_name || '')}</span>
-              ${student.phone ? `<span><i class="fa-solid fa-phone" style="font-size: 10px; margin-right: 4px;"></i>${this.escapeHtml(student.phone)}</span>` : ''}
-              ${student.parent_name ? `<span class="badge" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa; font-size: 11px; padding: 2px 7px; border-radius: 4px;"><i class="fa-solid fa-people-roof"></i> ${isAr ? 'الولي' : 'Parent'}: ${this.escapeHtml(student.parent_name)}${student.parent_discount_percent > 0 ? ` (-${student.parent_discount_percent}%)` : ''}</span>` : ''}
-              <span><i class="fa-solid fa-graduation-cap" style="font-size: 10px; margin-right: 4px;"></i>${enrollments.length} ${isAr ? 'أفواج مسجل بها' : 'cours inscrit(s)'}</span>
+            
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-tags" style="color: #10b981; font-size: 12px;"></i>
+                <span style="font-weight: 600; color: var(--text-heading);">${isAr ? 'التسعيرة المطبقة:' : 'Tarif appliqué:'}</span>
+                <select id="fastPayTariffSelect" class="form-control"
+                        style="width: auto; padding: 3px 8px; font-size: 12px; height: 28px; font-weight: 700; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08); border-radius: 6px;"
+                        onchange="app.onFastPayTariffChange(this.value)">
+                  ${tariffOptionsHtml}
+                </select>
+              </div>
+              ${student.parent_name ? `<span><i class="fa-solid fa-people-roof" style="color: #a855f7; margin-right: 4px;"></i>${isAr ? 'الولي' : 'Parent'}: ${this.escapeHtml(student.parent_name)}</span>` : ''}
+              ${student.phone ? `<span><i class="fa-solid fa-phone" style="margin-right: 4px;"></i>${this.escapeHtml(student.phone)}</span>` : ''}
             </div>
           </div>
         </div>
-        <button type="button" class="btn-secondary" style="font-size: 12px; padding: 5px 12px;" onclick="app.clearFastPayStudent()">
+
+        <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 14px;" onclick="app.clearFastPayStudent()">
           <i class="fa-solid fa-user-xmark"></i> ${isAr ? 'تغيير التلميذ' : 'Changer d\'élève'}
         </button>
       </div>
 
-      <!-- Courses List with Checkboxes -->
-      ${coursesHtml}
-
-      <!-- Bottom Checkout Bar -->
-      <div style="background: rgba(0, 0, 0, 0.35); border-radius: 10px; padding: 12px 18px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+      <!-- Mode Toggle: Trimester (فصلي) vs Annual (سنوي) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; background: rgba(0, 0, 0, 0.2); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+        <div style="font-size: 13px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-sliders" style="color: #10b981;"></i>
+          <span>${isAr ? 'طريقة حساب وعرض التسعيرات:' : 'Mode de facturation & Tarifs :'}</span>
+        </div>
         
-        <!-- Left: Payment Options (Method, Date, Notes) -->
+        <div style="display: flex; background: rgba(0, 0, 0, 0.35); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); gap: 4px;">
+          <button type="button" id="btnPeriodTrimester"
+                  onclick="app.setFastPayPeriodType('trimester')"
+                  style="padding: 6px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; background: ${periodType === 'trimester' ? '#10b981' : 'transparent'}; color: ${periodType === 'trimester' ? 'white' : 'var(--text-muted)'}; transition: all 0.2s;">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>${isAr ? 'تسديد فصلي (حسب الفصول الثلاثة)' : 'Paiement Trimestriel (T1, T2, T3)'}</span>
+          </button>
+          <button type="button" id="btnPeriodAnnual"
+                  onclick="app.setFastPayPeriodType('annual')"
+                  style="padding: 6px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; background: ${periodType === 'annual' ? '#10b981' : 'transparent'}; color: ${periodType === 'annual' ? 'white' : 'var(--text-muted)'}; transition: all 0.2s;">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>${isAr ? 'تسديد سنوي كامل (لكامل السنة)' : 'Paiement Annuel (Année complète)'}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pricing Cards / Tranches Container -->
+      ${pricingBodyHtml}
+
+      <!-- Extra Services Strip: Transport (3 Tranches / دفعات) & Inscription -->
+      <div style="background: rgba(0, 0, 0, 0.22); border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border-color); margin-bottom: 14px;">
+        
+        <!-- Transport Header & Route Picker -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <input type="checkbox" id="chkFastPayTransport" ${hasTransport ? 'checked' : ''}
+                   onchange="app.onFastPayTransportToggle()"
+                   style="width: 18px; height: 18px; cursor: pointer; accent-color: #f59e0b;">
+            <label for="chkFastPayTransport" style="font-size: 14px; font-weight: 800; color: var(--text-heading); cursor: pointer; margin: 0; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-bus" style="color: #f59e0b; font-size: 16px;"></i>
+              <span>${isAr ? 'النقل المدرسي (3 أقساط فصلية مع إمكانية تحديد أكثر من شطر والدفع على دفعات)' : 'Transport Scolaire (3 Tranches / Trimestres)'}</span>
+            </label>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">${isAr ? 'اختر خط النقل:' : 'Ligne:'}</span>
+            <select id="fastPayTransportRoute" class="form-control" style="width: auto; min-width: 320px; max-width: 520px; padding: 4px 10px; font-size: 12px; height: 34px;"
+                    onchange="app.onFastPayTransportRouteChange()">
+              <option value="">-- ${isAr ? 'اختر خط النقل' : 'Choisir une ligne'} --</option>
+              ${transportOptions}
+            </select>
+          </div>
+        </div>
+
+        <!-- Transport 3 Trimesters / Annual Cards Container -->
+        <div id="fastPayTransportInstallmentBox" style="display: block; margin-top: 10px;">
+          <!-- Dynamically populated by renderTransportCards() -->
+        </div>
+
+        <!-- Registration Fee (if applicable) -->
+        ${regFee > 0 ? `
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="chkFastPayRegFee"
+                   onchange="app.updateFastPayCalculations()"
+                   style="width: 17px; height: 17px; cursor: pointer; accent-color: #3b82f6;">
+            <label for="chkFastPayRegFee" style="font-size: 13px; font-weight: 700; color: var(--text-heading); cursor: pointer; margin: 0;">
+              <i class="fa-solid fa-id-card" style="color: #3b82f6; margin-right: 4px;"></i>
+              ${isAr ? `حقوق التسجيل والتأمين (${regFee.toLocaleString()} DA)` : `Frais d'inscription (${regFee.toLocaleString()} DA)`}
+            </label>
+          </div>
+        ` : ''}
+
+      </div>
+
+      <!-- Bottom Checkout & Totals Bar -->
+      <div style="background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 14px 20px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        
+        <!-- Left: Payment Details (Method, Date, Notes) -->
         <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
           <div>
             <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">
@@ -10380,6 +11760,7 @@ class EdumindApp {
               <option value="espece">${isAr ? 'نقداً (Espèces)' : 'Espèces (Caisse)'}</option>
               <option value="baridimob">BaridiMob / CCP</option>
               <option value="cheque">${isAr ? 'شيك (Chèque)' : 'Chèque bancaire'}</option>
+              <option value="virement">${isAr ? 'تحويل بنكي' : 'Virement'}</option>
             </select>
           </div>
           <div>
@@ -10392,57 +11773,50 @@ class EdumindApp {
             <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">
               ${isAr ? 'ملاحظات (اختياري)' : 'Notes / Remarques'}
             </label>
-            <input type="text" id="fastPayNotes" class="form-control" placeholder="${isAr ? 'ملاحظة على الوصل...' : 'Ex: Paiement anticipé...'}" style="width: 180px; padding: 6px 10px; font-size: 12px; height: 34px;">
+            <input type="text" id="fastPayNotes" class="form-control" placeholder="${isAr ? 'ملاحظة على الوصل...' : 'Ex: Chèque N°...'}" style="width: 180px; padding: 6px 10px; font-size: 12px; height: 34px;">
           </div>
         </div>
 
         <!-- Right: Calculations & Submit Button -->
-        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
           <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'الأفواج المحددة' : 'Cours sélectionnés'} : <strong id="fastPaySummaryCount" style="color: var(--text-heading); font-size: 13px;">0</strong></div>
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'المستحق الصافي' : 'Total Net dû'} : <strong id="fastPaySummaryDue" style="color: #38bdf8; font-size: 13px;">0 DA</strong></div>
+            <div style="font-size: 11.5px; color: var(--text-muted);">${isAr ? 'المجموع المستحق' : 'Total Net dû'} : <strong id="fastPaySummaryDue" style="color: #38bdf8; font-size: 14px;">0 DA</strong></div>
+            <div style="font-size: 11.5px; color: var(--text-muted);">${isAr ? 'متبقي هذا الوصل' : 'Reste de ce versement'} : <strong id="fastPaySummaryRemaining" style="color: #f59e0b; font-size: 14px;">0 DA</strong></div>
+            <div style="font-size: 12px; color: #ef4444; font-weight: 700; margin-top: 2px;">${isAr ? 'المتبقي الإجمالي العام على التلميذ' : 'Dette totale globale'} : <strong id="fastPaySummaryOverallDebt" style="font-size: 15px; color: #ef4444;">0 DA</strong></div>
           </div>
-          <div style="text-align: right; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 6px 14px;">
+          <div style="text-align: right; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 8px 16px;">
             <span style="font-size: 11px; color: var(--text-muted); display: block;">${isAr ? 'المبلغ الإجمالي المقبوض' : 'Total à Encaisser'}</span>
-            <strong id="fastPaySummaryPaid" style="font-size: 18px; color: #10b981; font-weight: 800;">0 DA</strong>
+            <strong id="fastPaySummaryPaid" style="font-size: 20px; color: #10b981; font-weight: 800;">0 DA</strong>
           </div>
-          <button type="button" class="btn-primary" id="btnSubmitFastPay" onclick="app.submitFastMultiPayment()"
-                  style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 700; padding: 10px 22px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+          <button type="button" class="btn-primary" id="btnSubmitFastPay" onclick="app.submitFastSchoolPayment()"
+                  style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 700; padding: 11px 24px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border-radius: 8px;">
             <i class="fa-solid fa-receipt"></i>
-            <span data-i18n="fast_pay_btn_submit">${isAr ? 'تأكيد الدفع وطباعة الوصل' : 'Encaisser & Imprimer le Reçu'}</span>
+            <span data-i18n="fast_pay_btn_submit">${isAr ? 'تأكيد واستخراج الوصل' : 'Encaisser & Imprimer le Reçu'}</span>
           </button>
         </div>
 
       </div>
     `;
 
+    this.renderTransportCards();
     this.updateFastPayCalculations();
   }
 
-  onFastPayRowCheckChange(groupId) {
-    const row = document.getElementById(`fastPayRow_${groupId}`);
-    const chk = document.querySelector(`.fastpay-row-chk[data-group-id="${groupId}"]`);
-    if (row && chk) {
-      row.style.background = chk.checked ? 'rgba(16, 185, 129, 0.05)' : '';
+  onFastPayTrimesterCheckChange(trimesterNum) {
+    const card = document.getElementById(`fastPayTrimesterCard_${trimesterNum}`);
+    const chk = document.querySelector(`.fastpay-trimester-chk[data-trimester="${trimesterNum}"]`);
+    if (card && chk) {
+      card.style.background = chk.checked ? 'rgba(16, 185, 129, 0.06)' : 'rgba(0, 0, 0, 0.25)';
+      card.style.borderColor = chk.checked ? 'rgba(16, 185, 129, 0.45)' : 'var(--border-color)';
     }
     this.updateFastPayCalculations();
   }
 
-  toggleAllFastPayCourses(checked) {
-    document.querySelectorAll('.fastpay-row-chk').forEach(chk => {
-      chk.checked = checked;
-      const gid = chk.dataset.groupId;
-      const row = document.getElementById(`fastPayRow_${gid}`);
-      if (row) row.style.background = checked ? 'rgba(16, 185, 129, 0.05)' : '';
-    });
-    this.updateFastPayCalculations();
-  }
-
-  onFastPayDiscountInput(groupId) {
-    const baseEl = document.getElementById(`fastPayBase_${groupId}`);
-    const discInput = document.querySelector(`.fastpay-discount-input[data-group-id="${groupId}"]`);
-    const netEl = document.getElementById(`fastPayNet_${groupId}`);
-    const paidInput = document.querySelector(`.fastpay-paid-input[data-group-id="${groupId}"]`);
+  onFastPayTrimesterDiscountInput(trimesterNum) {
+    const baseEl = document.getElementById(`fastPayTBase_${trimesterNum}`);
+    const discInput = document.querySelector(`.fastpay-t-discount[data-trimester="${trimesterNum}"]`);
+    const netEl = document.getElementById(`fastPayTNet_${trimesterNum}`);
+    const paidInput = document.querySelector(`.fastpay-t-paid[data-trimester="${trimesterNum}"]`);
 
     const base = parseFloat(baseEl?.dataset.base) || 0;
     const disc = parseFloat(discInput?.value) || 0;
@@ -10454,81 +11828,325 @@ class EdumindApp {
     this.updateFastPayCalculations();
   }
 
-  onFastPayRowMonthChange(groupId) {
-    if (!this._fastPayData) return;
-    const select = document.querySelector(`.fastpay-month-select[data-group-id="${groupId}"]`);
-    const statusContainer = document.getElementById(`fastPayStatus_${groupId}`);
-    const paidInput = document.querySelector(`.fastpay-paid-input[data-group-id="${groupId}"]`);
-    const baseEl = document.getElementById(`fastPayBase_${groupId}`);
-    const discInput = document.querySelector(`.fastpay-discount-input[data-group-id="${groupId}"]`);
-    const chk = document.querySelector(`.fastpay-row-chk[data-group-id="${groupId}"]`);
+  onFastPayAnnualDiscountInput() {
+    const baseEl = document.getElementById('fastPayAnnualBase');
+    const discInput = document.getElementById('fastPayAnnualDiscount');
+    const netEl = document.getElementById('fastPayAnnualNet');
+    const paidInput = document.getElementById('fastPayAnnualPaid');
 
-    const selMonth = select ? select.value : '';
-    const payments = this._fastPayData.payments || [];
     const base = parseFloat(baseEl?.dataset.base) || 0;
     const disc = parseFloat(discInput?.value) || 0;
     const net = Math.max(0, base - disc);
 
-    const paidRecord = payments.find(p => String(p.group_id) === String(groupId) && p.month_period === selMonth);
-    const isAr = this.lang === 'ar';
+    if (netEl) netEl.textContent = `${net.toLocaleString('fr-FR')} DA`;
+    if (paidInput) paidInput.value = net;
 
-    let isFullyPaid = false;
-    let isPartiallyPaid = false;
-    let rem = net;
+    this.updateFastPayCalculations();
+  }
 
-    if (paidRecord) {
-      const r = parseFloat(paidRecord.remaining_amount) || 0;
-      if (r <= 0) {
-        isFullyPaid = true;
-        rem = 0;
-      } else {
-        isPartiallyPaid = true;
-        rem = r;
+  onFastPayTransportToggle() {
+    const chk = document.getElementById('chkFastPayTransport');
+    const isChecked = chk && chk.checked;
+    
+    // Toggle all transport trimester checkboxes
+    document.querySelectorAll('.fastpay-transport-t-chk').forEach(c => {
+      if (!c.disabled) {
+        c.checked = isChecked;
+        const tNum = c.dataset.trimester;
+        const card = document.getElementById(`fastPayTransportCard_${tNum}`);
+        if (card) {
+          card.style.background = isChecked ? 'rgba(245, 158, 11, 0.08)' : 'rgba(0, 0, 0, 0.25)';
+          card.style.borderColor = isChecked ? 'rgba(245, 158, 11, 0.45)' : 'var(--border-color)';
+        }
       }
+    });
+
+    const chkAnnualTrans = document.getElementById('chkFastPayTransportAnnual');
+    if (chkAnnualTrans && !chkAnnualTrans.disabled) {
+      chkAnnualTrans.checked = isChecked;
     }
 
-    if (statusContainer) {
-      statusContainer.innerHTML = isFullyPaid
-        ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
-        : (isPartiallyPaid
-          ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight:700;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${rem} دج` : `Reste ${rem} DA`}</span>`
-          : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight:700;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
+    this.updateFastPayCalculations();
+  }
+
+  onFastPayTransportRouteChange() {
+    this.renderTransportCards();
+    this.updateFastPayCalculations();
+  }
+
+  getSelectedRoute() {
+    const routeSelect = document.getElementById('fastPayTransportRoute');
+    if (!routeSelect || !this._fastPayData) return null;
+    const routes = this._fastPayData.all_routes || [];
+    if (!routeSelect.value && routes.length > 0) {
+      const defaultRouteId = this._fastPayData.student?.transport_route_id || routes[0].id;
+      routeSelect.value = String(defaultRouteId);
+    }
+    const rId = parseInt(routeSelect.value, 10);
+    return routes.find(r => r.id === rId) || (routes.length > 0 ? routes[0] : null);
+  }
+
+  renderTransportCards() {
+    const box = document.getElementById('fastPayTransportInstallmentBox');
+    if (!box || !this._fastPayData) return;
+
+    const route = this.getSelectedRoute();
+    const isAr = this.lang === 'ar';
+    const periodType = this._fastPayPeriodType || 'trimester';
+    const invoices = this._fastPayData.invoices || [];
+
+    if (!route) {
+      box.innerHTML = `
+        <div style="padding: 12px 14px; text-align: center; color: var(--text-muted); font-size: 12px; background: rgba(0,0,0,0.18); border-radius: 8px;">
+          ${isAr ? 'يرجى اختيار خط النقل من القائمة أعلاه لعرض الأقساط الثلاثة' : 'Veuillez sélectionner une ligne de transport ci-dessus pour afficher les 3 tranches.'}
+        </div>
+      `;
+      return;
     }
 
-    if (paidInput) {
-      paidInput.value = rem;
-    }
-    if (chk) {
-      chk.checked = !isFullyPaid;
-      this.onFastPayRowCheckChange(groupId);
+    if (periodType === 'trimester') {
+      // 3 Trimesters of Transport
+      const transportTrimesters = [
+        { num: 1, name: isAr ? 'الشطر الأول للنقل (T1)' : 'Transport T1', fee: parseFloat(route.t1_fee) || 0 },
+        { num: 2, name: isAr ? 'الشطر الثاني للنقل (T2)' : 'Transport T2', fee: parseFloat(route.t2_fee) || 0 },
+        { num: 3, name: isAr ? 'الشطر الثالث للنقل (T3)' : 'Transport T3', fee: parseFloat(route.t3_fee) || 0 }
+      ];
+
+      const cardsHtml = transportTrimesters.map(t => {
+        // Check previous transport invoices for this trimester
+        const inv = invoices.find(i => i.payment_period_type === 'trimester' && parseInt(i.trimester_number, 10) === t.num && parseFloat(i.transport_fee) > 0);
+        let isPaid = false;
+        let isPartial = false;
+        let paidAmt = 0;
+        let remainingDue = t.fee;
+
+        if (inv) {
+          const invRem = parseFloat(inv.remaining_amount) || 0;
+          const invPaid = parseFloat(inv.paid_amount) || 0;
+          if (invRem <= 0 && invPaid > 0) {
+            isPaid = true;
+            remainingDue = 0;
+            paidAmt = t.fee;
+          } else if (invPaid > 0) {
+            isPartial = true;
+            remainingDue = invRem;
+            paidAmt = invPaid;
+          }
+        }
+
+        const isChecked = !isPaid;
+        const statusBadge = isPaid
+          ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:800; font-size:11.5px;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
+          : (isPartial
+            ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-weight:800; font-size:11.5px;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${remainingDue.toLocaleString()} دج` : `Reste ${remainingDue.toLocaleString()} DA`}</span>`
+            : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight:800; font-size:11.5px;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
+
+        return `
+          <div class="card fastpay-transport-t-card" id="fastPayTransportCard_${t.num}"
+               style="background: ${isChecked ? 'rgba(245, 158, 11, 0.06)' : 'rgba(0, 0, 0, 0.25)'}; border: 1px solid ${isChecked ? 'rgba(245, 158, 11, 0.45)' : 'var(--border-color)'}; border-radius: 10px; padding: 12px; transition: all 0.2s;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" class="fastpay-transport-t-chk" data-trimester="${t.num}"
+                       ${isChecked ? 'checked' : ''} ${isPaid ? 'disabled' : ''}
+                       onchange="app.onFastPayTransportTrimesterCheckChange(${t.num})"
+                       style="width: 17px; height: 17px; cursor: pointer; accent-color: #f59e0b;">
+                <strong style="color: var(--text-heading); font-size: 13.5px;">${t.name}</strong>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 8px; background: rgba(0,0,0,0.22); padding: 7px 10px; border-radius: 6px;">
+              <div>
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'التسعيرة الرسمية' : 'Tarif officiel'}</span>
+                <strong style="font-size: 13.5px; color: var(--text-heading);" id="fastPayTransBase_${t.num}" data-base="${t.fee}">${t.fee.toLocaleString('fr-FR')} DA</strong>
+              </div>
+              <div style="text-align: right;">
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'المتبقي كدين' : 'Reste dû'}</span>
+                <strong style="font-size: 13px; color: #ef4444;" id="fastPayTransRemain_${t.num}">${(isPaid ? 0 : remainingDue).toLocaleString('fr-FR')} DA</strong>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size: 11px; color: #f59e0b; font-weight: 700; display: block; margin-bottom: 2px;">
+                ${isAr ? 'المبلغ المسدد الآن (دفعة نقل)' : 'Montant versé (Acompte)'}
+              </label>
+              <input type="number" step="any" min="0" class="form-control fastpay-transport-t-paid" data-trimester="${t.num}"
+                     value="${isPaid ? 0 : remainingDue}" ${isPaid ? 'disabled' : ''}
+                     style="height: 32px; padding: 4px 8px; font-size: 13px; font-weight: 800; color: #f59e0b; text-align: right; border: 1px solid rgba(245, 158, 11, 0.4);"
+                     oninput="app.updateFastPayCalculations()">
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      box.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+          ${cardsHtml}
+        </div>
+      `;
     } else {
-      this.updateFastPayCalculations();
+      // Annual Transport Card
+      const baseFee = parseFloat(route.annual_fee) || 0;
+      const inv = invoices.find(i => i.payment_period_type === 'annual' && parseFloat(i.transport_fee) > 0);
+      const isPaid = inv && parseFloat(inv.remaining_amount) <= 0;
+
+      box.innerHTML = `
+        <div class="card" style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 10px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="chkFastPayTransportAnnual" ${!isPaid ? 'checked' : ''} ${isPaid ? 'disabled' : ''}
+                     onchange="app.updateFastPayCalculations()"
+                     style="width: 18px; height: 18px; cursor: pointer; accent-color: #f59e0b;">
+              <strong style="color: var(--text-heading); font-size: 14px;">
+                ${isAr ? 'النقل المدرسي لكامل السنة الدراسية (الشطر 1 + 2 + 3)' : 'Transport Annuel Complet (T1 + T2 + T3)'}
+              </strong>
+            </div>
+            <div>
+              ${isPaid
+                ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
+                : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight:800;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`}
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 8px;">
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'التكلفة السنوية الرسمية' : 'Tarif annuel transport'}</span>
+              <strong style="font-size: 15px; color: var(--text-heading);" id="fastPayTransAnnualBase" data-base="${baseFee}">${baseFee.toLocaleString('fr-FR')} DA</strong>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: #f59e0b; font-weight: 700; display: block; margin-bottom: 2px;">
+                ${isAr ? 'المبلغ المسدد الآن (دفعة نقل سنوي)' : 'Montant versé transport'}
+              </label>
+              <input type="number" step="any" min="0" id="fastPayTransportAnnualPaid" class="form-control"
+                     value="${isPaid ? 0 : baseFee}" ${isPaid ? 'disabled' : ''}
+                     style="height: 32px; padding: 4px 8px; font-size: 13px; font-weight: 800; color: #f59e0b; text-align: right; border: 1px solid rgba(245, 158, 11, 0.4);"
+                     oninput="app.updateFastPayCalculations()">
+            </div>
+            <div style="text-align: right;">
+              <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'المتبقي كدين من النقل السنوي' : 'Reste dû transport'}</span>
+              <strong style="font-size: 14px; color: #ef4444;" id="fastPayTransAnnualRemain">0 DA</strong>
+            </div>
+          </div>
+        </div>
+      `;
     }
   }
 
+  onFastPayTransportTrimesterCheckChange(tNum) {
+    const card = document.getElementById(`fastPayTransportCard_${tNum}`);
+    const chk = document.querySelector(`.fastpay-transport-t-chk[data-trimester="${tNum}"]`);
+    if (card && chk) {
+      card.style.background = chk.checked ? 'rgba(245, 158, 11, 0.06)' : 'rgba(0, 0, 0, 0.25)';
+      card.style.borderColor = chk.checked ? 'rgba(245, 158, 11, 0.45)' : 'var(--border-color)';
+    }
+    this.updateFastPayCalculations();
+  }
+
+
   updateFastPayCalculations() {
-    let count = 0;
+    if (!this._fastPayData) return;
+    const periodType = this._fastPayPeriodType || 'trimester';
+    const student = this._fastPayData.student;
+    const previousDebt = parseFloat(student?.total_student_debt || 0);
+
     let totalNet = 0;
     let totalPaid = 0;
+    let itemsCount = 0;
 
-    document.querySelectorAll('.fastpay-row-chk:checked').forEach(chk => {
-      count++;
-      const gid = chk.dataset.groupId;
-      const baseEl = document.getElementById(`fastPayBase_${gid}`);
-      const discInput = document.querySelector(`.fastpay-discount-input[data-group-id="${gid}"]`);
-      const paidInput = document.querySelector(`.fastpay-paid-input[data-group-id="${gid}"]`);
+    // 1. Tuition Calculations
+    if (periodType === 'trimester') {
+      document.querySelectorAll('.fastpay-trimester-chk:checked').forEach(chk => {
+        itemsCount++;
+        const tNum = chk.dataset.trimester;
+        const baseEl = document.getElementById(`fastPayTBase_${tNum}`);
+        const discInput = document.querySelector(`.fastpay-t-discount[data-trimester="${tNum}"]`);
+        const paidInput = document.querySelector(`.fastpay-t-paid[data-trimester="${tNum}"]`);
 
-      const base = parseFloat(baseEl?.dataset.base) || 0;
-      const disc = parseFloat(discInput?.value) || 0;
-      const paid = parseFloat(paidInput?.value) || 0;
-      const net = Math.max(0, base - disc);
+        const base = parseFloat(baseEl?.dataset.base) || 0;
+        const disc = parseFloat(discInput?.value) || 0;
+        const paid = parseFloat(paidInput?.value) || 0;
+        const net = Math.max(0, base - disc);
 
-      totalNet += net;
-      totalPaid += paid;
-    });
+        totalNet += net;
+        totalPaid += paid;
+      });
+    } else {
+      const chk = document.getElementById('chkFastPayAnnual');
+      if (chk && chk.checked) {
+        itemsCount++;
+        const baseEl = document.getElementById('fastPayAnnualBase');
+        const discInput = document.getElementById('fastPayAnnualDiscount');
+        const paidInput = document.getElementById('fastPayAnnualPaid');
 
-    const elCount = document.getElementById('fastPaySummaryCount');
-    if (elCount) elCount.textContent = count;
+        const base = parseFloat(baseEl?.dataset.base) || 0;
+        const disc = parseFloat(discInput?.value) || 0;
+        const paid = parseFloat(paidInput?.value) || 0;
+        const net = Math.max(0, base - disc);
+
+        totalNet += net;
+        totalPaid += paid;
+      }
+    }
+
+    // 2. Transport Calculations (Supporting multiple trimesters or annual)
+    const chkTransport = document.getElementById('chkFastPayTransport');
+    const route = this.getSelectedRoute();
+
+    if (chkTransport && chkTransport.checked && route) {
+      if (periodType === 'trimester') {
+        document.querySelectorAll('.fastpay-transport-t-chk:checked').forEach(chk => {
+          itemsCount++;
+          const tNum = chk.dataset.trimester;
+          const baseEl = document.getElementById(`fastPayTransBase_${tNum}`);
+          const paidInput = document.querySelector(`.fastpay-transport-t-paid[data-trimester="${tNum}"]`);
+          const remDisplay = document.getElementById(`fastPayTransRemain_${tNum}`);
+
+          const base = parseFloat(baseEl?.dataset.base) || 0;
+          const paid = parseFloat(paidInput?.value) || 0;
+          const remaining = Math.max(0, base - paid);
+
+          if (remDisplay) {
+            remDisplay.textContent = `${remaining.toLocaleString('fr-FR')} DA`;
+          }
+
+          totalNet += base;
+          totalPaid += paid;
+        });
+      } else {
+        const chkAnnualTrans = document.getElementById('chkFastPayTransportAnnual');
+        if (chkAnnualTrans && chkAnnualTrans.checked) {
+          itemsCount++;
+          const baseEl = document.getElementById('fastPayTransAnnualBase');
+          const paidInput = document.getElementById('fastPayTransportAnnualPaid');
+          const remDisplay = document.getElementById('fastPayTransAnnualRemain');
+
+          const base = parseFloat(baseEl?.dataset.base) || 0;
+          const paid = parseFloat(paidInput?.value) || 0;
+          const remaining = Math.max(0, base - paid);
+
+          if (remDisplay) {
+            remDisplay.textContent = `${remaining.toLocaleString('fr-FR')} DA`;
+          }
+
+          totalNet += base;
+          totalPaid += paid;
+        }
+      }
+    }
+
+    // 3. Registration Fee
+    const chkReg = document.getElementById('chkFastPayRegFee');
+    const activeTariff = this.getActiveTariff();
+    if (chkReg && chkReg.checked && activeTariff && activeTariff.registration_fee > 0) {
+      const rFee = parseFloat(activeTariff.registration_fee) || 0;
+      totalNet += rFee;
+      totalPaid += rFee;
+    }
+
+    const currentInvoiceRemaining = Math.max(0, totalNet - totalPaid);
+    const overallDebt = previousDebt + currentInvoiceRemaining;
 
     const elDue = document.getElementById('fastPaySummaryDue');
     if (elDue) elDue.textContent = `${totalNet.toLocaleString('fr-FR')} DA`;
@@ -10536,46 +12154,35 @@ class EdumindApp {
     const elPaid = document.getElementById('fastPaySummaryPaid');
     if (elPaid) elPaid.textContent = `${totalPaid.toLocaleString('fr-FR')} DA`;
 
+    const elRem = document.getElementById('fastPaySummaryRemaining');
+    if (elRem) elRem.textContent = `${currentInvoiceRemaining.toLocaleString('fr-FR')} DA`;
+
+    const elOverall = document.getElementById('fastPaySummaryOverallDebt');
+    if (elOverall) elOverall.textContent = `${overallDebt.toLocaleString('fr-FR')} DA`;
+
     const btnSubmit = document.getElementById('btnSubmitFastPay');
     if (btnSubmit) {
-      btnSubmit.disabled = count === 0 || totalPaid <= 0;
-      btnSubmit.style.opacity = (count === 0 || totalPaid <= 0) ? '0.5' : '1';
-      btnSubmit.style.cursor = (count === 0 || totalPaid <= 0) ? 'not-allowed' : 'pointer';
+      const isValid = itemsCount > 0 && totalPaid > 0;
+      btnSubmit.disabled = !isValid;
+      btnSubmit.style.opacity = isValid ? '1' : '0.5';
+      btnSubmit.style.cursor = isValid ? 'pointer' : 'not-allowed';
     }
   }
 
-  async submitFastMultiPayment() {
+  async submitFastSchoolPayment() {
     const isAr = this.lang === 'ar';
     if (!this._fastPayData) return;
 
-    const items = [];
-    document.querySelectorAll('.fastpay-row-chk:checked').forEach(chk => {
-      const gid = chk.dataset.groupId;
-      const baseEl = document.getElementById(`fastPayBase_${gid}`);
-      const discInput = document.querySelector(`.fastpay-discount-input[data-group-id="${gid}"]`);
-      const paidInput = document.querySelector(`.fastpay-paid-input[data-group-id="${gid}"]`);
-      const monthSelect = document.querySelector(`.fastpay-month-select[data-group-id="${gid}"]`);
+    const periodType = this._fastPayPeriodType || 'trimester';
+    const activeTariff = this.getActiveTariff();
+    const student = this._fastPayData.student;
+    const route = this.getSelectedRoute();
+    const chkTransport = document.getElementById('chkFastPayTransport');
+    const hasTransport = chkTransport && chkTransport.checked && route;
+    const routeId = hasTransport ? route.id : null;
 
-      const base = parseFloat(baseEl?.dataset.base) || 0;
-      const disc = parseFloat(discInput?.value) || 0;
-      const paid = parseFloat(paidInput?.value) || 0;
-      const month = monthSelect ? monthSelect.value : 'Septembre 2026';
-
-      if (paid > 0 || (base - disc) > 0) {
-        items.push({
-          group_id: parseInt(gid, 10),
-          month_period: month,
-          base_amount: base,
-          discount: disc,
-          paid_amount: paid
-        });
-      }
-    });
-
-    if (items.length === 0) {
-      this.showToast(isAr ? 'يرجى تحديد فوج واحد على الأقل مع مبلغ صالح للدفع' : 'Veuillez sélectionner au moins un cours avec un montant valide.', 'warning');
-      return;
-    }
+    const chkReg = document.getElementById('chkFastPayRegFee');
+    const registrationFee = (chkReg && chkReg.checked && activeTariff) ? (parseFloat(activeTariff.registration_fee) || 0) : 0;
 
     const payment_method = document.getElementById('fastPayMethod')?.value || 'espece';
     const payment_date = document.getElementById('fastPayDate')?.value || new Date().toISOString().split('T')[0];
@@ -10585,29 +12192,151 @@ class EdumindApp {
     if (btn) btn.disabled = true;
 
     try {
-      const res = await fetch('/api/payments/multi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          student_id: this._fastPayData.student.id,
+      let lastCreatedInvoice = null;
+
+      if (periodType === 'trimester') {
+        // Collect checked tuition trimesters
+        const tuitionTrimesters = new Map();
+        document.querySelectorAll('.fastpay-trimester-chk:checked').forEach(chk => {
+          const tNum = parseInt(chk.dataset.trimester, 10);
+          const baseEl = document.getElementById(`fastPayTBase_${tNum}`);
+          const discInput = document.querySelector(`.fastpay-t-discount[data-trimester="${tNum}"]`);
+          const paidInput = document.querySelector(`.fastpay-t-paid[data-trimester="${tNum}"]`);
+          tuitionTrimesters.set(tNum, {
+            tuitionFee: parseFloat(baseEl?.dataset.base) || 0,
+            discount: parseFloat(discInput?.value) || 0,
+            paid: parseFloat(paidInput?.value) || 0
+          });
+        });
+
+        // Collect checked transport trimesters
+        const transportTrimesters = new Map();
+        if (hasTransport) {
+          document.querySelectorAll('.fastpay-transport-t-chk:checked').forEach(chk => {
+            const tNum = parseInt(chk.dataset.trimester, 10);
+            const baseEl = document.getElementById(`fastPayTransBase_${tNum}`);
+            const paidInput = document.querySelector(`.fastpay-transport-t-paid[data-trimester="${tNum}"]`);
+            transportTrimesters.set(tNum, {
+              transportFee: parseFloat(baseEl?.dataset.base) || 0,
+              paid: parseFloat(paidInput?.value) || 0
+            });
+          });
+        }
+
+        // Union of all selected trimester numbers (e.g. [1, 2, 3])
+        const allTrimesterNums = Array.from(new Set([...tuitionTrimesters.keys(), ...transportTrimesters.keys()])).sort((a,b) => a - b);
+
+        if (allTrimesterNums.length === 0) {
+          this.showToast(isAr ? 'يرجى اختيار شطر دراسي أو شطر نقل واحد على الأقل للدفع' : 'Veuillez sélectionner au moins un trimestre de scolarité ou de transport.', 'warning');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        for (let i = 0; i < allTrimesterNums.length; i++) {
+          const tNum = allTrimesterNums[i];
+          const tData = tuitionTrimesters.get(tNum) || { tuitionFee: 0, discount: 0, paid: 0 };
+          const transData = transportTrimesters.get(tNum) || { transportFee: 0, paid: 0 };
+          const rFeeToApply = (i === 0) ? registrationFee : 0;
+
+          const totalPaidForTrimester = tData.paid + transData.paid + rFeeToApply;
+
+          const payload = {
+            student_id: student.id,
+            school_year: activeTariff?.school_year || '2026-2027',
+            payment_period_type: 'trimester',
+            trimester_number: tNum,
+            tuition_fee: tData.tuitionFee,
+            transport_fee: transData.transportFee,
+            transport_route_id: transData.transportFee > 0 ? routeId : null,
+            transport_type: transData.transportFee > 0 ? 'round_trip' : 'none',
+            registration_fee: rFeeToApply,
+            discount_amount: tData.discount,
+            discount_note: tData.discount > 0 ? (student.sibling_discount_percent > 0 ? 'خصم الإخوة' : 'تخفيض') : '',
+            paid_amount: totalPaidForTrimester,
+            payment_method,
+            notes
+          };
+
+          const res = await fetch('/api/school-invoices', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const resData = await res.json();
+          if (resData.success && resData.invoice) {
+            lastCreatedInvoice = resData.invoice;
+          } else {
+            throw new Error(resData.error || 'Erreur enregistrement facture');
+          }
+        }
+
+      } else {
+        // Annual Mode
+        const chk = document.getElementById('chkFastPayAnnual');
+        const chkAnnualTrans = document.getElementById('chkFastPayTransportAnnual');
+        const isAnnualTuitionChecked = chk && chk.checked;
+        const isAnnualTransportChecked = hasTransport && chkAnnualTrans && chkAnnualTrans.checked;
+
+        if (!isAnnualTuitionChecked && !isAnnualTransportChecked) {
+          this.showToast(isAr ? 'يرجى تحديد الدفع السنوي للتمدرس أو النقل' : 'Veuillez cocher le paiement annuel.', 'warning');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        const baseEl = document.getElementById('fastPayAnnualBase');
+        const discInput = document.getElementById('fastPayAnnualDiscount');
+        const paidInput = document.getElementById('fastPayAnnualPaid');
+
+        const tuitionFee = isAnnualTuitionChecked ? (parseFloat(baseEl?.dataset.base) || 0) : 0;
+        const discount = isAnnualTuitionChecked ? (parseFloat(discInput?.value) || 0) : 0;
+        const tuitionPaid = isAnnualTuitionChecked ? (parseFloat(paidInput?.value) || 0) : 0;
+
+        const transBaseEl = document.getElementById('fastPayTransAnnualBase');
+        const transPaidInput = document.getElementById('fastPayTransportAnnualPaid');
+        const transportFee = isAnnualTransportChecked ? (parseFloat(transBaseEl?.dataset.base) || 0) : 0;
+        const transportPaid = isAnnualTransportChecked ? (parseFloat(transPaidInput?.value) || 0) : 0;
+
+        const totalPaid = tuitionPaid + transportPaid + registrationFee;
+
+        const payload = {
+          student_id: student.id,
+          school_year: activeTariff?.school_year || '2026-2027',
+          payment_period_type: 'annual',
+          trimester_number: null,
+          tuition_fee: tuitionFee,
+          transport_fee: transportFee,
+          transport_route_id: transportFee > 0 ? routeId : null,
+          transport_type: transportFee > 0 ? 'round_trip' : 'none',
+          registration_fee: registrationFee,
+          discount_amount: discount,
+          discount_note: discount > 0 ? 'خصم سنوي / إخوة' : '',
+          paid_amount: totalPaid,
           payment_method,
-          payment_date,
-          notes,
-          items
-        })
-      });
+          notes
+        };
 
-      const data = await res.json();
+        const res = await fetch('/api/school-invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const resData = await res.json();
+        if (resData.success && resData.invoice) {
+          lastCreatedInvoice = resData.invoice;
+        } else {
+          throw new Error(resData.error || 'Erreur enregistrement facture');
+        }
+      }
 
-      if (data.success) {
+      if (lastCreatedInvoice) {
         this.playChime('success');
         const msg = isAr
-          ? `تم استلام الدفع بنجاح! الوصل: ${data.receipt_no} (المجموع: ${Number(data.total_paid).toLocaleString('fr-FR')} دج)`
-          : `Paiement enregistré avec succès ! Reçu N° ${data.receipt_no} (Total: ${Number(data.total_paid).toLocaleString('fr-FR')} DA)`;
+          ? `تم تسجيل الدفع بنجاح! الوصل: ${lastCreatedInvoice.invoice_no} (المجموع: ${Number(lastCreatedInvoice.paid_amount).toLocaleString('fr-FR')} دج)`
+          : `Paiement enregistré avec succès ! Reçu N° ${lastCreatedInvoice.invoice_no}`;
         this.showToast(msg, 'success');
 
-        // Open and render official unified receipt
-        this.renderMultiReceipt(data);
+        // Render official school receipt
+        this.renderReceipt(lastCreatedInvoice);
 
         // Refresh tables in background
         await this.loadPayments();
@@ -10615,15 +12344,12 @@ class EdumindApp {
         if (this.loadCaisse) this.loadCaisse();
 
         // Refresh student panel status
-        await this.selectFastPayStudent(this._fastPayData.student.id);
-      } else {
-        this.playChime('error');
-        this.showToast(data.error || (isAr ? 'حدث خطأ أثناء تسجيل الدفع' : 'Erreur enregistrement paiement'), 'error');
+        await this.selectFastPayStudent(student.id);
       }
     } catch (err) {
-      console.error('Erreur submitFastMultiPayment:', err);
+      console.error('Erreur submitFastSchoolPayment:', err);
       this.playChime('error');
-      this.showToast(isAr ? 'خطأ في الاتصال بالخادم' : 'Erreur de connexion serveur', 'error');
+      this.showToast(err.message || (isAr ? 'حدث خطأ أثناء حفظ الدفع' : 'Erreur enregistrement paiement'), 'error');
     } finally {
       if (btn) btn.disabled = false;
     }
@@ -10719,6 +12445,17 @@ class EdumindApp {
         return;
       }
 
+      if (!data.all_routes || data.all_routes.length === 0) {
+        try {
+          const rRes = await fetch('/api/transport-routes');
+          const rData = await rRes.json();
+          if (rData && rData.success) {
+            data.all_routes = rData.routes || [];
+          }
+        } catch (e) {
+          console.warn('Failed to load transport routes fallback:', e);
+        }
+      }
       this._fastPayParentData = data;
 
       const searchInput = document.getElementById('fastPayParentSearch');
@@ -10750,6 +12487,11 @@ class EdumindApp {
     if (emptyPlaceholder) emptyPlaceholder.style.display = 'block';
   }
 
+  onFastPayParentGlobalPeriodChange(period) {
+    this._fastPayParentPeriod = period;
+    this.renderFastPayParentPanel();
+  }
+
   renderFastPayParentPanel() {
     const activeContainer = document.getElementById('fastPayParentActiveContainer');
     const emptyPlaceholder = document.getElementById('fastPayParentEmptyPlaceholder');
@@ -10758,24 +12500,28 @@ class EdumindApp {
     if (emptyPlaceholder) emptyPlaceholder.style.display = 'none';
     activeContainer.style.display = 'block';
 
-    const { parent, children } = this._fastPayParentData;
+    const { parent, children = [], all_routes = [] } = this._fastPayParentData;
     const isAr = this.lang === 'ar';
     const parentInitials = (parent.full_name || 'P').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'P';
+    const familyDiscountPct = parseFloat(parent.discount_percent) || 0;
 
-    const months = this.getFastPayMonthsList();
-    const defaultMonth = months[0];
+    if (!this._fastPayParentPeriod) this._fastPayParentPeriod = 'T1';
+    const activePeriod = this._fastPayParentPeriod; // 'T1', 'T2', 'T3', 'annual'
 
     const activeChildren = (children || []).filter(c => c.active !== 0);
 
     let childrenHtml = '';
     if (activeChildren.length === 0) {
       childrenHtml = `
-        <div style="padding: 24px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.15); border-radius: 8px;">
-          <i class="fa-solid fa-user-slash" style="font-size: 24px; opacity: 0.6; margin-bottom: 6px; display: block; color: #a855f7;"></i>
-          <span>${isAr ? 'لا يوجد أي تلميذ مرتبط بهذا الولي حالياً.' : 'Aucun enfant associé à ce parent.'}</span>
-          <div style="margin-top: 10px;">
-            <button class="btn-secondary" style="font-size: 12px; padding: 6px 14px;" onclick="app.switchView('eleves')">
-              <i class="fa-solid fa-user-plus"></i> ${isAr ? 'إدارة التلاميذ' : 'Gérer les élèves'}
+        <div style="padding: 28px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.18); border-radius: 10px; border: 1px dashed var(--border-color);">
+          <i class="fa-solid fa-user-slash" style="font-size: 28px; opacity: 0.6; margin-bottom: 8px; display: block; color: #a855f7;"></i>
+          <span style="font-size: 14px;">${isAr ? 'لا يوجد أي تلميذ مسجل تحت اسم هذا الولي حالياً.' : 'Aucun enfant associé à ce parent.'}</span>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            ${isAr ? 'يمكنك ربط التلاميذ بهذا الولي من خلال صفحة التلاميذ (اختيار الولي في بطاقة التلميذ).' : 'Vous pouvez rattacher des élèves à ce parent depuis la vue Élèves.'}
+          </div>
+          <div style="margin-top: 12px;">
+            <button class="btn-primary" style="font-size: 12px; padding: 6px 14px; background: linear-gradient(135deg, #7c3aed, #a855f7);" onclick="app.switchView('eleves')">
+              <i class="fa-solid fa-users"></i> ${isAr ? 'إدارة التلاميذ لربطهم بالولي' : 'Gérer les élèves'}
             </button>
           </div>
         </div>
@@ -10783,159 +12529,178 @@ class EdumindApp {
     } else {
       childrenHtml = activeChildren.map(child => {
         const cInitials = `${(child.first_name || '')[0] || ''}${(child.last_name || '')[0] || ''}`.toUpperCase() || 'E';
-        const enrollments = child.enrollments || [];
-        const payments = child.payments || [];
+        const tariff = child.tariff;
+        const invoices = child.invoices || [];
 
-        let coursesListHtml = '';
-        if (enrollments.length === 0) {
-          coursesListHtml = `
-            <div style="padding: 12px 16px; color: var(--text-muted); font-size: 12px; text-align: center; background: rgba(0,0,0,0.1); border-radius: 6px;">
-              <i class="fa-solid fa-circle-info" style="margin-right: 4px;"></i>
-              ${isAr ? 'غير مسجل في أي فوج نشط حالياً.' : 'Inscrit dans aucun groupe actif.'}
-            </div>
-          `;
-        } else {
-          const rows = enrollments.map(g => {
-            const basePrice = parseFloat(g.price_monthly) || 0;
-            let defaultDiscount = parseFloat(g.discount_amount) || 0;
-            if (defaultDiscount === 0 && parent.discount_percent > 0) {
-              defaultDiscount = Math.round(basePrice * (parent.discount_percent / 100));
+        // Determine tuition price for active period
+        let tuitionFee = 0;
+        let isTuitionPaid = false;
+        let isTuitionPartial = false;
+        let tuitionRemaining = 0;
+
+        if (tariff) {
+          if (activePeriod === 'annual') {
+            tuitionFee = parseFloat(tariff.annual_fee) || 0;
+            const inv = invoices.find(i => i.payment_period_type === 'annual' && parseFloat(i.tuition_fee) > 0);
+            if (inv && parseFloat(inv.remaining_amount) <= 0) {
+              isTuitionPaid = true;
+              tuitionRemaining = 0;
+            } else if (inv) {
+              isTuitionPartial = true;
+              tuitionRemaining = parseFloat(inv.remaining_amount) || 0;
+            } else {
+              tuitionRemaining = tuitionFee;
             }
-            const netDue = Math.max(0, basePrice - defaultDiscount);
-
-            const paidRecord = payments.find(p => String(p.group_id) === String(g.group_id) && p.month_period === defaultMonth);
-            let isFullyPaid = false;
-            let isPartiallyPaid = false;
-            let remainingDue = netDue;
-            let defaultToPay = netDue;
-
-            if (paidRecord) {
-              const r = parseFloat(paidRecord.remaining_amount) || 0;
-              if (r <= 0) {
-                isFullyPaid = true;
-                defaultToPay = 0;
-                remainingDue = 0;
-              } else {
-                isPartiallyPaid = true;
-                remainingDue = r;
-                defaultToPay = r;
-              }
+          } else {
+            const tNum = parseInt(activePeriod.replace('T', ''), 10) || 1;
+            tuitionFee = parseFloat(tariff['t' + tNum + '_fee']) || 0;
+            const inv = invoices.find(i => i.payment_period_type === 'trimester' && parseInt(i.trimester_number, 10) === tNum && parseFloat(i.tuition_fee) > 0);
+            if (inv && parseFloat(inv.remaining_amount) <= 0) {
+              isTuitionPaid = true;
+              tuitionRemaining = 0;
+            } else if (inv) {
+              isTuitionPartial = true;
+              tuitionRemaining = parseFloat(inv.remaining_amount) || 0;
+            } else {
+              tuitionRemaining = tuitionFee;
             }
-
-            const isChecked = !isFullyPaid;
-            const statusTag = isFullyPaid
-              ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
-              : (isPartiallyPaid
-                ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight:700;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${remainingDue} دج` : `Reste ${remainingDue} DA`}</span>`
-                : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight:700;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
-
-            const monthOptions = months.map(m => `<option value="${m}" ${m === defaultMonth ? 'selected' : ''}>${m}</option>`).join('');
-
-            return `
-              <tr id="fastPayParentRow_${child.id}_${g.group_id}" style="transition: background 0.15s; background: ${isChecked ? 'rgba(168, 85, 247, 0.05)' : ''};">
-                <td style="text-align: center; width: 36px;">
-                  <input type="checkbox" class="fastpay-parent-chk"
-                         data-student-id="${child.id}" data-student-name="${this.escapeHtml(child.first_name + ' ' + child.last_name)}"
-                         data-group-id="${g.group_id}" data-group-name="${this.escapeHtml(g.group_name)}"
-                         ${isChecked ? 'checked' : ''} onchange="app.onFastPayParentRowCheckChange(${child.id}, ${g.group_id})">
-                </td>
-                <td>
-                  <div style="font-weight: 700; color: var(--text-heading); font-size: 13px;">${this.escapeHtml(g.group_name)}</div>
-                  <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                    <span style="color: ${g.subject_color || '#3b82f6'}; font-weight: 600;">${this.escapeHtml(g.subject_name || '')}</span>
-                    <span>&bull;</span>
-                    <span>${this.escapeHtml(g.teacher_name || '')}</span>
-                  </div>
-                </td>
-                <td style="width: 140px;">
-                  <select class="form-control fastpay-parent-month-select"
-                          data-student-id="${child.id}" data-group-id="${g.group_id}"
-                          style="padding: 4px 6px; font-size: 11.5px; height: 30px;"
-                          onchange="app.onFastPayParentRowMonthChange(${child.id}, ${g.group_id})">
-                    ${monthOptions}
-                  </select>
-                </td>
-                <td style="text-align: center; width: 100px;" id="fastPayParentStatus_${child.id}_${g.group_id}">
-                  ${statusTag}
-                </td>
-                <td style="text-align: right; width: 85px; font-weight: 600;" id="fastPayParentBase_${child.id}_${g.group_id}" data-base="${basePrice}">
-                  ${basePrice.toLocaleString('fr-FR')} DA
-                </td>
-                <td style="width: 90px;">
-                  <input type="number" step="any" class="form-control fastpay-parent-discount-input"
-                         data-student-id="${child.id}" data-group-id="${g.group_id}"
-                         style="padding: 4px 6px; font-size: 11.5px; height: 30px; text-align: right;"
-                         value="${defaultDiscount}" min="0" oninput="app.onFastPayParentDiscountInput(${child.id}, ${g.group_id})">
-                </td>
-                <td style="text-align: right; width: 90px; font-weight: 700; color: #38bdf8;" id="fastPayParentNet_${child.id}_${g.group_id}">
-                  ${netDue.toLocaleString('fr-FR')} DA
-                </td>
-                <td style="width: 115px;">
-                  <input type="number" step="any" class="form-control fastpay-parent-paid-input"
-                         data-student-id="${child.id}" data-group-id="${g.group_id}"
-                         style="padding: 4px 6px; font-size: 12.5px; height: 30px; text-align: right; font-weight: 700; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);"
-                         value="${defaultToPay}" min="0" oninput="app.updateFastPayParentCalculations(false)">
-                </td>
-                <td style="text-align: right; width: 85px; font-size: 11.5px; font-weight: 700; color: ${remainingDue > 0 ? '#ef4444' : 'var(--text-muted)'};" id="fastPayParentRemaining_${child.id}_${g.group_id}">
-                  ${remainingDue > 0 ? `${remainingDue.toLocaleString('fr-FR')} DA` : '0 DA'}
-                </td>
-              </tr>
-            `;
-          }).join('');
-
-          coursesListHtml = `
-            <div class="table-responsive" style="margin: 0; border: 1px solid var(--border-color); border-radius: 8px;">
-              <table class="edumind-table" style="margin: 0; font-size: 12px;">
-                <thead>
-                  <tr style="background: rgba(0,0,0,0.2);">
-                    <th style="width: 36px; text-align: center;">#</th>
-                    <th>${isAr ? 'الفوج والمادة' : 'GROUPE / MATIÈRE'}</th>
-                    <th>${isAr ? 'الشهر المعني' : 'MOIS'}</th>
-                    <th style="text-align: center;">${isAr ? 'الحالة' : 'STATUT'}</th>
-                    <th style="text-align: right;">${isAr ? 'السعر' : 'TARIF'}</th>
-                    <th style="text-align: right;">${isAr ? 'تخفيض' : 'REMISE'}</th>
-                    <th style="text-align: right;">${isAr ? 'الصافي' : 'NET'}</th>
-                    <th style="text-align: right;">${isAr ? 'المبلغ المدفوع' : 'MONTANT PAYÉ'}</th>
-                    <th style="text-align: right;">${isAr ? 'المتبقي (دين)' : 'RESTE'}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rows}
-                </tbody>
-              </table>
-            </div>
-          `;
+          }
         }
 
+        let defaultDiscount = 0;
+        if (!isTuitionPaid && familyDiscountPct > 0) {
+          defaultDiscount = Math.round(tuitionFee * (familyDiscountPct / 100));
+        }
+        const netTuition = Math.max(0, (isTuitionPartial ? tuitionRemaining : tuitionFee) - defaultDiscount);
+        const defaultTuitionToPay = isTuitionPaid ? 0 : netTuition;
+
+        // Transport for this child
+        const hasTransport = child.transport_route_id && child.transport_type !== 'none';
+        const childRoute = child.transport_route || (all_routes || []).find(r => r.id === child.transport_route_id) || (all_routes.length > 0 ? all_routes[0] : null);
+        let transportFee = 0;
+        if (childRoute) {
+          if (activePeriod === 'annual') {
+            transportFee = parseFloat(childRoute.annual_fee) || 0;
+          } else {
+            const tNum = parseInt(activePeriod.replace('T', ''), 10) || 1;
+            transportFee = parseFloat(childRoute['t' + tNum + '_fee']) || 0;
+          }
+        }
+
+        const defaultRoute = (all_routes || []).find(r => r.id === child.transport_route_id) || (all_routes.length > 0 ? all_routes[0] : null);
+        const transportRouteOptions = (all_routes || []).map((r, idx) => {
+          const isSel = (child.transport_route_id === r.id) || (!child.transport_route_id && idx === 0);
+          const tFee = activePeriod === 'annual' ? (r.annual_fee || 0) : (r['t' + (activePeriod.replace('T','') || '1') + '_fee'] || r.t1_fee || 0);
+          return `<option value="${r.id}" data-t1="${r.t1_fee || 0}" data-t2="${r.t2_fee || 0}" data-t3="${r.t3_fee || 0}" data-annual="${r.annual_fee || 0}" ${isSel ? 'selected' : ''}>${this.escapeHtml(r.route_name)} (${Number(tFee).toLocaleString()} DA)</option>`;
+        }).join('');
+
         const childAvatar = child.photo_url
-          ? `<img src="${child.photo_url}" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #a855f7;">`
-          : `<div style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, #7c3aed, #a855f7); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; border:2px solid #a855f7;">${cInitials}</div>`;
+          ? `<img src="${child.photo_url}" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #a855f7;">`
+          : `<div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #7c3aed, #a855f7); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:13px; border:2px solid #a855f7;">${cInitials}</div>`;
+
+        const isChildChecked = !isTuitionPaid;
 
         return `
-          <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <div class="card fastpay-parent-child-card" id="fastPayParentChild_${child.id}"
+               style="background: ${isChildChecked ? 'rgba(168, 85, 247, 0.06)' : 'rgba(0, 0, 0, 0.25)'}; border: 1px solid ${isChildChecked ? 'rgba(168, 85, 247, 0.45)' : 'var(--border-color)'}; border-radius: 12px; padding: 14px; margin-bottom: 12px; transition: all 0.2s;">
+            
+            <!-- Child Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
               <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" class="fastpay-parent-child-chk" data-student-id="${child.id}"
+                       ${isChildChecked ? 'checked' : ''} onchange="app.onFastPayParentChildCheckChange(${child.id})"
+                       style="width: 18px; height: 18px; cursor: pointer; accent-color: #a855f7;">
                 ${childAvatar}
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px;">
-                    <strong style="font-size: 14px; color: var(--text-heading);">${this.escapeHtml(child.first_name)} ${this.escapeHtml(child.last_name)}</strong>
-                    <code style="font-size: 11px; background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 1px 6px; border-radius: 4px;">${this.escapeHtml(child.matricule || '')}</code>
+                    <strong style="font-size: 15px; color: var(--text-heading);">${this.escapeHtml(child.first_name)} ${this.escapeHtml(child.last_name)}</strong>
+                    <code style="font-size: 11px; background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 7px; border-radius: 4px;">${this.escapeHtml(child.matricule || '')}</code>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; font-size: 11px; padding: 2px 7px; border-radius: 4px;">
+                      ${this.escapeHtml(child.level_name || '')}
+                    </span>
                   </div>
-                  <div style="font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 10px; margin-top: 1px;">
-                    <span><i class="fa-solid fa-layer-group" style="font-size: 10px;"></i> ${this.escapeHtml(child.level_name || '')}</span>
-                    <span>&bull;</span>
-                    <span><i class="fa-solid fa-graduation-cap" style="font-size: 10px;"></i> ${enrollments.length} ${isAr ? 'أفواج مسجل بها' : 'cours'}</span>
+                  <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    <span>${tariff ? `التسعيرة المطبقة: ${tariff.level_name}` : 'بدون تسعيرة'}</span>
+                    ${child.total_student_debt > 0 ? `<span style="color: #ef4444; font-weight: 700; margin-right: 8px;">&bull; ديون سابقة: ${Number(child.total_student_debt).toLocaleString()} DA</span>` : ''}
                   </div>
                 </div>
               </div>
+
+              <div>
+                ${isTuitionPaid
+                  ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
+                  : (isTuitionPartial
+                    ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-weight:800;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${tuitionRemaining.toLocaleString()} دج` : `Reste ${tuitionRemaining.toLocaleString()} DA`}</span>`
+                    : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight:800;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`)}
+              </div>
             </div>
-            ${coursesListHtml}
+
+            <!-- Tuition Details Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; background: rgba(0,0,0,0.22); padding: 10px 14px; border-radius: 8px; margin-bottom: 10px; font-size: 12px;">
+              <div>
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'تكلفة التمدرس' : 'Frais scolarité'}</span>
+                <strong style="font-size: 13.5px; color: var(--text-heading);" id="parentChildBase_${child.id}" data-base="${tuitionFee}">${tuitionFee.toLocaleString('fr-FR')} DA</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'خصم عائلي' : 'Remise famille'}</span>
+                <input type="number" step="any" min="0" class="form-control parent-child-discount" data-student-id="${child.id}"
+                       value="${defaultDiscount}" style="height: 30px; padding: 2px 6px; font-size: 12px; text-align: right;"
+                       oninput="app.onFastPayParentChildDiscountInput(${child.id})">
+              </div>
+              <div>
+                <span style="color: var(--text-muted); display: block; font-size: 11px;">${isAr ? 'الصافي للدفع' : 'Net scolarité'}</span>
+                <strong style="font-size: 13.5px; color: #38bdf8;" id="parentChildNet_${child.id}">${netTuition.toLocaleString('fr-FR')} DA</strong>
+              </div>
+              <div>
+                <span style="color: #10b981; font-weight: 700; display: block; font-size: 11px;">${isAr ? 'المسدد للتمدرس' : 'Payé scolarité'}</span>
+                <input type="number" step="any" min="0" class="form-control parent-child-paid" data-student-id="${child.id}"
+                       value="${defaultTuitionToPay}" style="height: 30px; padding: 2px 6px; font-size: 12.5px; font-weight: 800; color: #10b981; text-align: right; border: 1px solid rgba(16, 185, 129, 0.4);"
+                       oninput="app.updateFastPayParentCalculations(false)">
+              </div>
+            </div>
+
+            <!-- Transport Row for this child -->
+            <div style="background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 8px; border: 1px dashed rgba(245, 158, 11, 0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" class="parent-child-transport-chk" data-student-id="${child.id}"
+                       ${hasTransport ? 'checked' : ''} onchange="app.onFastPayParentChildTransportToggle(${child.id})"
+                       style="width: 16px; height: 16px; cursor: pointer; accent-color: #f59e0b;">
+                <label style="font-size: 12px; font-weight: 700; color: var(--text-heading); cursor: pointer; margin: 0;">
+                  <i class="fa-solid fa-bus" style="color: #f59e0b; margin-right: 4px;"></i> ${isAr ? 'نقل مدرسي' : 'Transport'}
+                </label>
+                <select class="form-control parent-child-route-select" data-student-id="${child.id}"
+                        style="width: auto; min-width: 180px; padding: 2px 8px; font-size: 11.5px; height: 28px;"
+                        onchange="app.onFastPayParentChildRouteChange(${child.id})">
+                  <option value="">-- ${isAr ? 'اختر خط النقل' : 'Ligne'} --</option>
+                  ${transportRouteOptions}
+                </select>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div>
+                  <span style="font-size: 10.5px; color: var(--text-muted); display: block;">${isAr ? 'التكلفة' : 'Tarif'}</span>
+                  <strong style="font-size: 12.5px; color: var(--text-heading);" id="parentChildTransBase_${child.id}" data-base="${transportFee}">${transportFee.toLocaleString('fr-FR')} DA</strong>
+                </div>
+                <div>
+                  <span style="font-size: 10.5px; color: #f59e0b; font-weight: 700; display: block;">${isAr ? 'المسدد للنقل' : 'Payé transport'}</span>
+                  <input type="number" step="any" min="0" class="form-control parent-child-trans-paid" data-student-id="${child.id}"
+                         value="${hasTransport ? transportFee : 0}" style="width: 100px; height: 28px; padding: 2px 6px; font-size: 12px; font-weight: 800; color: #f59e0b; text-align: right; border: 1px solid rgba(245, 158, 11, 0.4);"
+                         oninput="app.updateFastPayParentCalculations(false)">
+                </div>
+              </div>
+            </div>
+
           </div>
         `;
       }).join('');
     }
 
-    const monthOptions = months.map(m => `<option value="${m}" ${m === defaultMonth ? 'selected' : ''}>${m}</option>`).join('');
+    const periodOptions = [
+      { id: 'T1', label: isAr ? 'الفصل الأول (الشطر 1 - T1)' : 'Trimestre 1 (T1)' },
+      { id: 'T2', label: isAr ? 'الفصل الثاني (الشطر 2 - T2)' : 'Trimestre 2 (T2)' },
+      { id: 'T3', label: isAr ? 'الفصل الثالث (الشطر 3 - T3)' : 'Trimestre 3 (T3)' },
+      { id: 'annual', label: isAr ? 'كامل السنة الدراسية (Annuel)' : 'Année Complète (Annuel)' }
+    ].map(p => `<option value="${p.id}" ${p.id === activePeriod ? 'selected' : ''}>${p.label}</option>`).join('');
 
     activeContainer.innerHTML = `
       <!-- Parent Hero Header Banner -->
@@ -10947,11 +12712,10 @@ class EdumindApp {
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <strong style="color: var(--text-heading); font-size: 16px;">${this.escapeHtml(parent.full_name)}</strong>
-              ${parent.discount_percent > 0 ? `<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700;"><i class="fa-solid fa-percent"></i> ${isAr ? `تخفيض عائلي ${parent.discount_percent}%` : `Remise famille ${parent.discount_percent}%`}</span>` : ''}
+              ${familyDiscountPct > 0 ? `<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700;"><i class="fa-solid fa-percent"></i> ${isAr ? `تخفيض عائلي ${familyDiscountPct}%` : `Remise famille ${familyDiscountPct}%`}</span>` : ''}
             </div>
             <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
               ${parent.phone ? `<span><i class="fa-solid fa-phone" style="font-size: 10px; color: #c084fc;"></i> ${this.escapeHtml(parent.phone)}</span>` : ''}
-              ${parent.phone_secondary ? `<span><i class="fa-solid fa-phone" style="font-size: 10px;"></i> ${this.escapeHtml(parent.phone_secondary)}</span>` : ''}
               <span><i class="fa-solid fa-people-roof" style="font-size: 10px; color: #c084fc;"></i> <strong style="color: #c084fc;">${activeChildren.length}</strong> ${isAr ? 'أبناء مسجلين' : 'enfant(s) inscrit(s)'}</span>
               ${parent.total_debt > 0 ? `<span style="color: #ef4444; font-weight: 700;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `ديون سابقة: ${Number(parent.total_debt).toLocaleString('fr-FR')} DA` : `Dette antérieure: ${Number(parent.total_debt).toLocaleString('fr-FR')} DA`}</span>` : ''}
             </div>
@@ -10962,80 +12726,60 @@ class EdumindApp {
         </button>
       </div>
 
-      <!-- Global Controls & Partial Payment Toolbar (شريط التحكم المالي والدفع الجزئي) -->
+      <!-- Unified Period & Distribution Toolbar -->
       <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         
-        <!-- Left: Global Month & Select All -->
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); white-space: nowrap;">
-              <i class="fa-regular fa-calendar" style="color: #c084fc;"></i> ${isAr ? 'الشهر الموحد لجميع الأبناء:' : 'Mois pour tous les enfants :'}
-            </label>
-            <select id="fastPayParentGlobalMonth" class="form-control" style="width: 155px; padding: 5px 8px; font-size: 12px; height: 32px;"
-                    onchange="app.onFastPayParentGlobalMonthChange(this.value)">
-              ${monthOptions}
-            </select>
-          </div>
-          <button type="button" class="btn-secondary" style="font-size: 11.5px; padding: 4px 10px;" onclick="app.toggleAllFastPayParentCourses(true)">
-            <i class="fa-solid fa-check-double"></i> ${isAr ? 'تحديد كل الأفواج' : 'Tout cocher'}
+        <!-- Period Selector -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <label style="font-size: 12.5px; font-weight: 700; color: var(--text-heading); white-space: nowrap; margin: 0;">
+            <i class="fa-solid fa-sliders" style="color: #c084fc;"></i> ${isAr ? 'الفترة الموحدة لكافة الأبناء:' : 'Période unifiée :'}
+          </label>
+          <select id="fastPayParentGlobalPeriod" class="form-control" style="width: auto; min-width: 220px; padding: 5px 10px; font-size: 12.5px; height: 32px;"
+                  onchange="app.onFastPayParentGlobalPeriodChange(this.value)">
+            ${periodOptions}
+          </select>
+          <button type="button" class="btn-secondary" style="font-size: 11.5px; padding: 4px 10px;" onclick="app.toggleAllFastPayParentChildren(true)">
+            <i class="fa-solid fa-check-double"></i> ${isAr ? 'تحديد الكل' : 'Tout cocher'}
           </button>
         </div>
 
-        <!-- Center & Right: Partial Payment Controller -->
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+        <!-- Quick Payment Distribution Tools -->
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'المستحق الصافي الإجمالي' : 'Total Net Dû'}</div>
-            <strong id="fastPayParentSummaryDue" style="font-size: 15px; color: #38bdf8;">0 DA</strong>
+            <span style="font-size: 11px; color: var(--text-muted); display: block;">${isAr ? 'المستحق الصافي لكافة الأبناء' : 'Total Net Dû'}</span>
+            <strong id="fastPayParentNetTotal" style="font-size: 16px; color: #38bdf8;">0 DA</strong>
           </div>
 
-          <!-- The Core Feature: Custom partial/full amount given by parent -->
-          <div style="display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 6px 12px;">
-            <div>
-              <label for="fastPayParentTotalPaidInput" style="font-size: 11px; font-weight: 700; color: #10b981; display: block; margin-bottom: 2px;">
-                ${isAr ? 'المبلغ المقبوض من الولي (دفع كلي أو جزئي):' : 'Montant versé par le parent :'}
-              </label>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="number" id="fastPayParentTotalPaidInput" class="form-control" min="0" step="50"
-                       style="width: 130px; font-size: 14px; font-weight: 800; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.6); text-align: right; height: 32px; padding: 4px 8px;"
-                       placeholder="0" oninput="app.onFastPayParentGlobalPaidInput(this.value)">
-                <span style="font-weight: 700; font-size: 12px; color: #10b981;">DA</span>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 3px;">
-              <button type="button" class="btn-secondary" style="font-size: 10.5px; padding: 2px 8px; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #10b981;"
-                      onclick="app.fillFullFastPayParentAmount()" title="${isAr ? 'دفع كامل المبلغ المستحق' : 'Régler la totalité'}">
-                <i class="fa-solid fa-bolt"></i> ${isAr ? 'سداد كامل' : 'Tout payer'}
-              </button>
-              <button type="button" class="btn-secondary" style="font-size: 10.5px; padding: 2px 8px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #c084fc;"
-                      onclick="app.distributeFastPayParentAmount()" title="${isAr ? 'توزيع المبلغ المدخل على الأبناء' : 'Répartir le montant'}">
-                <i class="fa-solid fa-arrows-split-up-and-left"></i> ${isAr ? 'توزيع تلقائي' : 'Répartir'}
-              </button>
-            </div>
+          <div style="display: flex; align-items: center; gap: 6px; background: rgba(168, 85, 247, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.35);">
+            <label style="font-size: 11.5px; font-weight: 700; color: #c084fc; margin: 0; white-space: nowrap;">
+              ${isAr ? 'المبلغ المدفوع من الولي:' : 'Montant versé par le parent :'}
+            </label>
+            <input type="number" step="any" min="0" id="fastPayParentTotalVersed" class="form-control"
+                   style="width: 140px; height: 30px; padding: 4px 8px; font-size: 13.5px; font-weight: 800; color: #10b981; text-align: right;"
+                   placeholder="0" oninput="app.onFastPayParentVersedInput(this.value)">
+            <button type="button" class="btn-primary" style="font-size: 11px; padding: 4px 8px; background: #10b981;" onclick="app.payAllFastPayParent()">
+              <i class="fa-solid fa-bolt"></i> ${isAr ? 'دفع الكل' : 'Tout payer'}
+            </button>
+            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 4px 8px;" onclick="app.distributeFastPayParentAmount()">
+              <i class="fa-solid fa-arrows-split-up-and-left"></i> ${isAr ? 'توزيع' : 'Répartir'}
+            </button>
           </div>
 
-          <!-- Remaining Debt Alert / Counter -->
-          <div id="fastPayParentRemainingBox" style="text-align: right; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px;">
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'المتبقي (دين)' : 'Reste dû (Dette)'}</div>
-            <strong id="fastPayParentSummaryRemaining" style="font-size: 15px; color: #ef4444;">0 DA</strong>
+          <div style="text-align: right;">
+            <span style="font-size: 11px; color: var(--text-muted); display: block;">${isAr ? 'المتبقي كدين' : 'Reste dû (Dette)'}</span>
+            <strong id="fastPayParentRemainingTotal" style="font-size: 16px; color: #ef4444;">0 DA</strong>
           </div>
-
         </div>
 
       </div>
 
-      <!-- Partial Payment Info Banner (Shows dynamically when debt exists) -->
-      <div id="fastPayParentPartialNotice" style="display: none; align-items: center; gap: 8px; padding: 8px 14px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; margin-bottom: 12px; font-size: 12px; color: #f59e0b;">
-        <i class="fa-solid fa-circle-exclamation" style="font-size: 14px;"></i>
-        <span>${isAr ? 'تنبيه: المبلغ المدفوع جزئي. سيتم تسجيل المتبقي كدين رسمي في حساب التلاميذ والأفواج المعنية، وسيظهر في الوصل العائلي.' : 'Note : Versement partiel. Le reliquat sera enregistré comme dette dans le compte des enfants et apparaîtra sur le reçu familial.'}</span>
-      </div>
-
-      <!-- Children Breakdown List -->
+      <!-- Children Cards Container -->
       ${childrenHtml}
 
       <!-- Bottom Checkout Bar -->
-      <div style="background: rgba(0, 0, 0, 0.4); border-radius: 10px; padding: 14px 18px; border: 1px solid rgba(168, 85, 247, 0.35); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 14px;">
+      <div style="background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 14px 20px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         
-        <!-- Left: Payment Options (Method, Date, Notes) -->
+        <!-- Left: Payment Options -->
         <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
           <div>
             <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">
@@ -11045,6 +12789,7 @@ class EdumindApp {
               <option value="espece">${isAr ? 'نقداً (Espèces)' : 'Espèces (Caisse)'}</option>
               <option value="baridimob">BaridiMob / CCP</option>
               <option value="cheque">${isAr ? 'شيك (Chèque)' : 'Chèque bancaire'}</option>
+              <option value="virement">${isAr ? 'تحويل بنكي' : 'Virement'}</option>
             </select>
           </div>
           <div>
@@ -11057,26 +12802,24 @@ class EdumindApp {
             <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">
               ${isAr ? 'ملاحظات (اختياري)' : 'Notes / Remarques'}
             </label>
-            <input type="text" id="fastPayParentNotes" class="form-control" placeholder="${isAr ? 'ملاحظة على الوصل العائلي...' : 'Ex: Paiement familial partiel...'}" style="width: 190px; padding: 6px 10px; font-size: 12px; height: 34px;">
+            <input type="text" id="fastPayParentNotes" class="form-control" placeholder="${isAr ? 'ملاحظة على الوصل العائلي...' : 'Ex: Paiement familial partiel...'}" style="width: 180px; padding: 6px 10px; font-size: 12px; height: 34px;">
           </div>
         </div>
 
-        <!-- Right: Counters & Submit Button -->
+        <!-- Right: Calculations & Submit Button -->
         <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
           <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'الأفواج المحددة' : 'Cours sélectionnés'} : <strong id="fastPayParentSummaryCount" style="color: var(--text-heading); font-size: 13px;">0</strong></div>
-            <div style="font-size: 11px; color: var(--text-muted);">${isAr ? 'المجموع المستحق' : 'Net dû'} : <strong id="fastPayParentSummaryNetTotal" style="color: #38bdf8; font-size: 13px;">0 DA</strong></div>
+            <div style="font-size: 11.5px; color: var(--text-muted);">${isAr ? 'الأبناء المحددون' : 'Enfants sélectionnés'} : <strong id="fastPayParentSummaryCount" style="color: var(--text-heading); font-size: 13px;">0</strong></div>
+            <div style="font-size: 11.5px; color: var(--text-muted);">${isAr ? 'الصافي المستحق' : 'Net dû'} : <strong id="fastPayParentSummaryDue" style="color: #38bdf8; font-size: 14px;">0 DA</strong></div>
           </div>
-
-          <div style="text-align: right; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(124, 58, 237, 0.15)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 6px 14px;">
+          <div style="text-align: right; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 10px; padding: 8px 16px;">
             <span style="font-size: 11px; color: var(--text-muted); display: block;">${isAr ? 'المبلغ الإجمالي المقبوض' : 'Total à Encaisser'}</span>
-            <strong id="fastPayParentSummaryPaid" style="font-size: 18px; color: #10b981; font-weight: 800;">0 DA</strong>
+            <strong id="fastPayParentSummaryPaid" style="font-size: 20px; color: #c084fc; font-weight: 800;">0 DA</strong>
           </div>
-
-          <button type="button" class="btn-primary" id="btnSubmitFastPayParent" onclick="app.submitFastFamilyPayment()"
-                  style="background: linear-gradient(135deg, #7c3aed, #10b981); font-weight: 700; padding: 10px 22px; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35); display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+          <button type="button" class="btn-primary" id="btnSubmitFastPayParent" onclick="app.submitFastParentPayment()"
+                  style="background: linear-gradient(135deg, #7c3aed, #a855f7); font-weight: 700; padding: 11px 24px; box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35); display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border-radius: 8px;">
             <i class="fa-solid fa-receipt"></i>
-            <span>${isAr ? 'تأكيد الدفع وطباعة الوصل العائلي' : 'Encaisser & Imprimer le Reçu Familial'}</span>
+            <span data-i18n="fast_pay_parent_btn_submit">${isAr ? 'تأكيد واستخراج الوصل العائلي' : 'Encaisser & Imprimer le Reçu Familial'}</span>
           </button>
         </div>
 
@@ -11086,215 +12829,34 @@ class EdumindApp {
     this.updateFastPayParentCalculations(true);
   }
 
-  updateFastPayParentCalculations(syncGlobalInput = true) {
-    let count = 0;
-    let totalNet = 0;
-    let totalPaid = 0;
-
-    document.querySelectorAll('.fastpay-parent-chk').forEach(chk => {
-      const isChecked = chk.checked;
-      const sId = chk.dataset.studentId;
-      const gId = chk.dataset.groupId;
-
-      const row = document.getElementById(`fastPayParentRow_${sId}_${gId}`);
-      if (row) {
-        row.style.background = isChecked ? 'rgba(168, 85, 247, 0.05)' : '';
-      }
-
-      const baseEl = document.getElementById(`fastPayParentBase_${sId}_${gId}`);
-      const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const netEl = document.getElementById(`fastPayParentNet_${sId}_${gId}`);
-      const remEl = document.getElementById(`fastPayParentRemaining_${sId}_${gId}`);
-
-      const base = parseFloat(baseEl?.dataset.base) || 0;
-      const disc = parseFloat(discInput?.value) || 0;
-      const net = Math.max(0, base - disc);
-      const paid = isChecked ? (parseFloat(paidInput?.value) || 0) : 0;
-      const rem = isChecked ? Math.max(0, net - paid) : 0;
-
-      if (netEl) netEl.textContent = `${net.toLocaleString('fr-FR')} DA`;
-      if (remEl) {
-        remEl.textContent = `${rem.toLocaleString('fr-FR')} DA`;
-        remEl.style.color = rem > 0 ? '#ef4444' : 'var(--text-muted)';
-      }
-
-      if (isChecked) {
-        count++;
-        totalNet += net;
-        totalPaid += paid;
-      }
-    });
-
-    const totalRemaining = Math.max(0, totalNet - totalPaid);
-
-    const elCount = document.getElementById('fastPayParentSummaryCount');
-    if (elCount) elCount.textContent = count;
-
-    const elDue = document.getElementById('fastPayParentSummaryDue');
-    if (elDue) elDue.textContent = `${totalNet.toLocaleString('fr-FR')} DA`;
-
-    const elNetTotal = document.getElementById('fastPayParentSummaryNetTotal');
-    if (elNetTotal) elNetTotal.textContent = `${totalNet.toLocaleString('fr-FR')} DA`;
-
-    const elPaid = document.getElementById('fastPayParentSummaryPaid');
-    if (elPaid) elPaid.textContent = `${totalPaid.toLocaleString('fr-FR')} DA`;
-
-    const elRem = document.getElementById('fastPayParentSummaryRemaining');
-    if (elRem) {
-      elRem.textContent = `${totalRemaining.toLocaleString('fr-FR')} DA`;
-      elRem.style.color = totalRemaining > 0 ? '#ef4444' : '#10b981';
+  onFastPayParentChildCheckChange(studentId) {
+    const card = document.getElementById(`fastPayParentChild_${studentId}`);
+    const chk = document.querySelector(`.fastpay-parent-child-chk[data-student-id="${studentId}"]`);
+    if (card && chk) {
+      card.style.background = chk.checked ? 'rgba(168, 85, 247, 0.06)' : 'rgba(0, 0, 0, 0.25)';
+      card.style.borderColor = chk.checked ? 'rgba(168, 85, 247, 0.45)' : 'var(--border-color)';
     }
-
-    const partialNotice = document.getElementById('fastPayParentPartialNotice');
-    if (partialNotice) {
-      partialNotice.style.display = (totalRemaining > 0 && totalPaid > 0) ? 'flex' : 'none';
-    }
-
-    if (syncGlobalInput) {
-      const globalInput = document.getElementById('fastPayParentTotalPaidInput');
-      if (globalInput && document.activeElement !== globalInput) {
-        globalInput.value = totalPaid;
-      }
-    }
-
-    const btnSubmit = document.getElementById('btnSubmitFastPayParent');
-    if (btnSubmit) {
-      const canSubmit = count > 0 && (totalPaid > 0 || totalNet > 0);
-      btnSubmit.disabled = !canSubmit;
-      btnSubmit.style.opacity = canSubmit ? '1' : '0.5';
-      btnSubmit.style.cursor = canSubmit ? 'pointer' : 'not-allowed';
-    }
-  }
-
-  onFastPayParentGlobalPaidInput(val) {
-    const amount = parseFloat(val);
-    if (isNaN(amount) || amount < 0) return;
-    this.distributeFastPayParentAmount(amount);
-  }
-
-  distributeFastPayParentAmount(customAmount = null) {
-    let amountLeft = customAmount !== null ? customAmount : (parseFloat(document.getElementById('fastPayParentTotalPaidInput')?.value) || 0);
-    amountLeft = Math.max(0, amountLeft);
-
-    const checkedRows = Array.from(document.querySelectorAll('.fastpay-parent-chk:checked'));
-    if (checkedRows.length === 0) return;
-
-    checkedRows.forEach(chk => {
-      const sId = chk.dataset.studentId;
-      const gId = chk.dataset.groupId;
-      const baseEl = document.getElementById(`fastPayParentBase_${sId}_${gId}`);
-      const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-
-      const base = parseFloat(baseEl?.dataset.base) || 0;
-      const disc = parseFloat(discInput?.value) || 0;
-      const net = Math.max(0, base - disc);
-
-      const allocated = Math.min(net, amountLeft);
-      if (paidInput) {
-        paidInput.value = allocated;
-      }
-      amountLeft -= allocated;
-    });
-
     this.updateFastPayParentCalculations(false);
   }
 
-  fillFullFastPayParentAmount() {
-    document.querySelectorAll('.fastpay-parent-chk:checked').forEach(chk => {
+  toggleAllFastPayParentChildren(checked) {
+    document.querySelectorAll('.fastpay-parent-child-chk').forEach(chk => {
+      chk.checked = checked;
       const sId = chk.dataset.studentId;
-      const gId = chk.dataset.groupId;
-      const baseEl = document.getElementById(`fastPayParentBase_${sId}_${gId}`);
-      const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-
-      const base = parseFloat(baseEl?.dataset.base) || 0;
-      const disc = parseFloat(discInput?.value) || 0;
-      const net = Math.max(0, base - disc);
-
-      if (paidInput) {
-        paidInput.value = net;
+      const card = document.getElementById(`fastPayParentChild_${sId}`);
+      if (card) {
+        card.style.background = checked ? 'rgba(168, 85, 247, 0.06)' : 'rgba(0, 0, 0, 0.25)';
+        card.style.borderColor = checked ? 'rgba(168, 85, 247, 0.45)' : 'var(--border-color)';
       }
     });
-
-    this.updateFastPayParentCalculations(true);
+    this.updateFastPayParentCalculations(false);
   }
 
-  onFastPayParentGlobalMonthChange(newMonth) {
-    if (!this._fastPayParentData) return;
-
-    document.querySelectorAll('.fastpay-parent-month-select').forEach(sel => {
-      sel.value = newMonth;
-      const sId = sel.dataset.studentId;
-      const gId = sel.dataset.groupId;
-      this.onFastPayParentRowMonthChange(sId, gId, false);
-    });
-
-    this.updateFastPayParentCalculations(true);
-  }
-
-  onFastPayParentRowMonthChange(studentId, groupId, updateCalc = true) {
-    if (!this._fastPayParentData) return;
-    const child = (this._fastPayParentData.children || []).find(c => String(c.id) === String(studentId));
-    if (!child) return;
-
-    const select = document.querySelector(`.fastpay-parent-month-select[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
-    const statusContainer = document.getElementById(`fastPayParentStatus_${studentId}_${groupId}`);
-    const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
-    const baseEl = document.getElementById(`fastPayParentBase_${studentId}_${groupId}`);
-    const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
-    const chk = document.querySelector(`.fastpay-parent-chk[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
-
-    const selMonth = select ? select.value : '';
-    const payments = child.payments || [];
-    const base = parseFloat(baseEl?.dataset.base) || 0;
-    const disc = parseFloat(discInput?.value) || 0;
-    const net = Math.max(0, base - disc);
-
-    const paidRecord = payments.find(p => String(p.group_id) === String(groupId) && p.month_period === selMonth);
-    const isAr = this.lang === 'ar';
-
-    let isFullyPaid = false;
-    let isPartiallyPaid = false;
-    let rem = net;
-
-    if (paidRecord) {
-      const r = parseFloat(paidRecord.remaining_amount) || 0;
-      if (r <= 0) {
-        isFullyPaid = true;
-        rem = 0;
-      } else {
-        isPartiallyPaid = true;
-        rem = r;
-      }
-    }
-
-    if (statusContainer) {
-      statusContainer.innerHTML = isFullyPaid
-        ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${isAr ? 'خالص' : 'Réglé'}</span>`
-        : (isPartiallyPaid
-          ? `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight:700;"><i class="fa-solid fa-circle-exclamation"></i> ${isAr ? `باقي ${rem} دج` : `Reste ${rem} DA`}</span>`
-          : `<span class="badge-pill" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight:700;"><i class="fa-solid fa-clock"></i> ${isAr ? 'غير مسدد' : 'Non réglé'}</span>`);
-    }
-
-    if (paidInput) {
-      paidInput.value = rem;
-    }
-    if (chk) {
-      chk.checked = !isFullyPaid;
-    }
-
-    if (updateCalc) {
-      this.updateFastPayParentCalculations(true);
-    }
-  }
-
-  onFastPayParentDiscountInput(studentId, groupId) {
-    const baseEl = document.getElementById(`fastPayParentBase_${studentId}_${groupId}`);
-    const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
-    const netEl = document.getElementById(`fastPayParentNet_${studentId}_${groupId}`);
-    const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${studentId}"][data-group-id="${groupId}"]`);
+  onFastPayParentChildDiscountInput(studentId) {
+    const baseEl = document.getElementById(`parentChildBase_${studentId}`);
+    const discInput = document.querySelector(`.parent-child-discount[data-student-id="${studentId}"]`);
+    const netEl = document.getElementById(`parentChildNet_${studentId}`);
+    const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${studentId}"]`);
 
     const base = parseFloat(baseEl?.dataset.base) || 0;
     const disc = parseFloat(discInput?.value) || 0;
@@ -11303,57 +12865,270 @@ class EdumindApp {
     if (netEl) netEl.textContent = `${net.toLocaleString('fr-FR')} DA`;
     if (paidInput) paidInput.value = net;
 
-    this.updateFastPayParentCalculations(true);
+    this.updateFastPayParentCalculations(false);
   }
 
-  onFastPayParentRowCheckChange(studentId, groupId) {
-    this.updateFastPayParentCalculations(true);
+  onFastPayParentChildTransportToggle(studentId) {
+    const chk = document.querySelector(`.parent-child-transport-chk[data-student-id="${studentId}"]`);
+    const routeSelect = document.querySelector(`.parent-child-route-select[data-student-id="${studentId}"]`);
+    const transBaseEl = document.getElementById(`parentChildTransBase_${studentId}`);
+    const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${studentId}"]`);
+
+    if (chk && chk.checked) {
+      if (routeSelect && (!routeSelect.value || routeSelect.value === '')) {
+        if (routeSelect.options.length > 1) {
+          routeSelect.selectedIndex = 1;
+        } else if (this._fastPayParentData?.all_routes?.length > 0) {
+          routeSelect.value = String(this._fastPayParentData.all_routes[0].id);
+        }
+      }
+      this.onFastPayParentChildRouteChange(studentId);
+      if (transPaidInput && transBaseEl) {
+        const fee = parseFloat(transBaseEl.dataset.base) || 0;
+        transPaidInput.value = fee;
+      }
+    } else {
+      if (transPaidInput) transPaidInput.value = 0;
+    }
+    this.updateFastPayParentCalculations(false);
   }
 
-  toggleAllFastPayParentCourses(checked) {
-    document.querySelectorAll('.fastpay-parent-chk').forEach(chk => {
-      chk.checked = checked;
-    });
-    this.updateFastPayParentCalculations(true);
+  onFastPayParentChildRouteChange(studentId) {
+    const routeSelect = document.querySelector(`.parent-child-route-select[data-student-id="${studentId}"]`);
+    const baseEl = document.getElementById(`parentChildTransBase_${studentId}`);
+    const paidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${studentId}"]`);
+    const activePeriod = this._fastPayParentPeriod || 'T1';
+
+    if (!routeSelect || !routeSelect.value) {
+      if (baseEl) { baseEl.textContent = '0 DA'; baseEl.dataset.base = '0'; }
+      if (paidInput) paidInput.value = '0';
+      this.updateFastPayParentCalculations(false);
+      return;
+    }
+
+    const opt = routeSelect.selectedOptions[0];
+    const tNum = activePeriod === 'annual' ? null : (activePeriod.replace('T', '') || '1');
+    const tFee = activePeriod === 'annual'
+      ? (parseFloat(opt?.dataset.annual) || 0)
+      : (parseFloat(opt?.dataset['t' + tNum]) || parseFloat(opt?.dataset.t1) || 0);
+
+    if (baseEl) {
+      baseEl.textContent = `${tFee.toLocaleString('fr-FR')} DA`;
+      baseEl.dataset.base = String(tFee);
+    }
+    if (paidInput) paidInput.value = tFee;
+
+    this.updateFastPayParentCalculations(false);
   }
 
-  async submitFastFamilyPayment() {
-    const isAr = this.lang === 'ar';
+  updateFastPayParentCalculations(syncVersedInput = false) {
     if (!this._fastPayParentData) return;
 
-    const items = [];
-    document.querySelectorAll('.fastpay-parent-chk:checked').forEach(chk => {
-      const sId = chk.dataset.studentId;
-      const sName = chk.dataset.studentName;
-      const gId = chk.dataset.groupId;
-      const gName = chk.dataset.groupName;
+    let totalNet = 0;
+    let totalPaid = 0;
+    let count = 0;
 
-      const baseEl = document.getElementById(`fastPayParentBase_${sId}_${gId}`);
-      const discInput = document.querySelector(`.fastpay-parent-discount-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const paidInput = document.querySelector(`.fastpay-parent-paid-input[data-student-id="${sId}"][data-group-id="${gId}"]`);
-      const monthSelect = document.querySelector(`.fastpay-parent-month-select[data-student-id="${sId}"][data-group-id="${gId}"]`);
+    document.querySelectorAll('.fastpay-parent-child-chk:checked').forEach(chk => {
+      count++;
+      const sId = chk.dataset.studentId;
+      const baseEl = document.getElementById(`parentChildBase_${sId}`);
+      const discInput = document.querySelector(`.parent-child-discount[data-student-id="${sId}"]`);
+      const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${sId}"]`);
 
       const base = parseFloat(baseEl?.dataset.base) || 0;
       const disc = parseFloat(discInput?.value) || 0;
       const paid = parseFloat(paidInput?.value) || 0;
-      const month = monthSelect ? monthSelect.value : 'Septembre 2026';
+      const net = Math.max(0, base - disc);
 
-      if (paid > 0 || (base - disc) > 0) {
+      totalNet += net;
+      totalPaid += paid;
+
+      // Transport for this child
+      const transChk = document.querySelector(`.parent-child-transport-chk[data-student-id="${sId}"]`);
+      const transBaseEl = document.getElementById(`parentChildTransBase_${sId}`);
+      const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${sId}"]`);
+
+      if (transChk && transChk.checked) {
+        const tBase = parseFloat(transBaseEl?.dataset.base) || 0;
+        const tPaid = parseFloat(transPaidInput?.value) || 0;
+        totalNet += tBase;
+        totalPaid += tPaid;
+      }
+    });
+
+    const totalRemaining = Math.max(0, totalNet - totalPaid);
+
+    const elNet = document.getElementById('fastPayParentNetTotal');
+    if (elNet) elNet.textContent = `${totalNet.toLocaleString('fr-FR')} DA`;
+
+    const elDue = document.getElementById('fastPayParentSummaryDue');
+    if (elDue) elDue.textContent = `${totalNet.toLocaleString('fr-FR')} DA`;
+
+    const elPaid = document.getElementById('fastPayParentSummaryPaid');
+    if (elPaid) elPaid.textContent = `${totalPaid.toLocaleString('fr-FR')} DA`;
+
+    const elRem = document.getElementById('fastPayParentRemainingTotal');
+    if (elRem) elRem.textContent = `${totalRemaining.toLocaleString('fr-FR')} DA`;
+
+    const elCount = document.getElementById('fastPayParentSummaryCount');
+    if (elCount) elCount.textContent = count;
+
+    if (syncVersedInput) {
+      const versedInput = document.getElementById('fastPayParentTotalVersed');
+      if (versedInput) versedInput.value = totalPaid;
+    }
+
+    const btnSubmit = document.getElementById('btnSubmitFastPayParent');
+    if (btnSubmit) {
+      const isValid = count > 0 && totalPaid > 0;
+      btnSubmit.disabled = !isValid;
+      btnSubmit.style.opacity = isValid ? '1' : '0.5';
+      btnSubmit.style.cursor = isValid ? 'pointer' : 'not-allowed';
+    }
+  }
+
+  payAllFastPayParent() {
+    document.querySelectorAll('.fastpay-parent-child-chk:checked').forEach(chk => {
+      const sId = chk.dataset.studentId;
+      const baseEl = document.getElementById(`parentChildBase_${sId}`);
+      const discInput = document.querySelector(`.parent-child-discount[data-student-id="${sId}"]`);
+      const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${sId}"]`);
+
+      const base = parseFloat(baseEl?.dataset.base) || 0;
+      const disc = parseFloat(discInput?.value) || 0;
+      const net = Math.max(0, base - disc);
+      if (paidInput) paidInput.value = net;
+
+      const transChk = document.querySelector(`.parent-child-transport-chk[data-student-id="${sId}"]`);
+      const transBaseEl = document.getElementById(`parentChildTransBase_${sId}`);
+      const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${sId}"]`);
+      if (transChk && transChk.checked && transPaidInput && transBaseEl) {
+        transPaidInput.value = parseFloat(transBaseEl.dataset.base) || 0;
+      }
+    });
+
+    this.updateFastPayParentCalculations(true);
+  }
+
+  onFastPayParentVersedInput(val) {
+    const versed = parseFloat(val) || 0;
+    this.distributeFastPayParentAmount(versed);
+  }
+
+  distributeFastPayParentAmount(customAmount = null) {
+    const versedInput = document.getElementById('fastPayParentTotalVersed');
+    let remainingToDistribute = customAmount !== null ? customAmount : (parseFloat(versedInput?.value) || 0);
+
+    const checkedChildren = Array.from(document.querySelectorAll('.fastpay-parent-child-chk:checked'));
+    if (checkedChildren.length === 0) return;
+
+    // Reset all paid inputs
+    checkedChildren.forEach(chk => {
+      const sId = chk.dataset.studentId;
+      const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${sId}"]`);
+      const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${sId}"]`);
+      if (paidInput) paidInput.value = 0;
+      if (transPaidInput) transPaidInput.value = 0;
+    });
+
+    // Distribute towards tuition first, then transport
+    for (const chk of checkedChildren) {
+      if (remainingToDistribute <= 0) break;
+      const sId = chk.dataset.studentId;
+      const baseEl = document.getElementById(`parentChildBase_${sId}`);
+      const discInput = document.querySelector(`.parent-child-discount[data-student-id="${sId}"]`);
+      const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${sId}"]`);
+
+      const base = parseFloat(baseEl?.dataset.base) || 0;
+      const disc = parseFloat(discInput?.value) || 0;
+      const net = Math.max(0, base - disc);
+
+      const allocation = Math.min(net, remainingToDistribute);
+      if (paidInput) paidInput.value = allocation;
+      remainingToDistribute -= allocation;
+    }
+
+    // Distribute remaining towards transport
+    for (const chk of checkedChildren) {
+      if (remainingToDistribute <= 0) break;
+      const sId = chk.dataset.studentId;
+      const transChk = document.querySelector(`.parent-child-transport-chk[data-student-id="${sId}"]`);
+      const transBaseEl = document.getElementById(`parentChildTransBase_${sId}`);
+      const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${sId}"]`);
+
+      if (transChk && transChk.checked && transBaseEl) {
+        const tBase = parseFloat(transBaseEl.dataset.base) || 0;
+        const allocation = Math.min(tBase, remainingToDistribute);
+        if (transPaidInput) transPaidInput.value = allocation;
+        remainingToDistribute -= allocation;
+      }
+    }
+
+    this.updateFastPayParentCalculations(false);
+  }
+
+  async submitFastParentPayment() {
+    const isAr = this.lang === 'ar';
+    if (!this._fastPayParentData) return;
+
+    const activePeriod = this._fastPayParentPeriod || 'T1';
+    const periodType = activePeriod === 'annual' ? 'annual' : 'trimester';
+    const trimesterNum = activePeriod === 'annual' ? null : (parseInt(activePeriod.replace('T', ''), 10) || 1);
+
+    const parent = this._fastPayParentData.parent;
+    const items = [];
+
+    document.querySelectorAll('.fastpay-parent-child-chk:checked').forEach(chk => {
+      const sId = parseInt(chk.dataset.studentId, 10);
+      const baseEl = document.getElementById(`parentChildBase_${sId}`);
+      const discInput = document.querySelector(`.parent-child-discount[data-student-id="${sId}"]`);
+      const paidInput = document.querySelector(`.parent-child-paid[data-student-id="${sId}"]`);
+
+      const tuitionFee = parseFloat(baseEl?.dataset.base) || 0;
+      const discount = parseFloat(discInput?.value) || 0;
+      const tuitionPaid = parseFloat(paidInput?.value) || 0;
+
+      const transChk = document.querySelector(`.parent-child-transport-chk[data-student-id="${sId}"]`);
+      const routeSelect = document.querySelector(`.parent-child-route-select[data-student-id="${sId}"]`);
+      const transBaseEl = document.getElementById(`parentChildTransBase_${sId}`);
+      const transPaidInput = document.querySelector(`.parent-child-trans-paid[data-student-id="${sId}"]`);
+
+      let transportFee = 0;
+      let transportPaid = 0;
+      let routeId = null;
+
+      if (transChk && transChk.checked) {
+        if (routeSelect && routeSelect.value) {
+          routeId = parseInt(routeSelect.value, 10);
+        } else if (this._fastPayParentData?.all_routes?.length > 0) {
+          routeId = this._fastPayParentData.all_routes[0].id;
+        }
+        transportFee = parseFloat(transBaseEl?.dataset.base) || 0;
+        transportPaid = parseFloat(transPaidInput?.value) || 0;
+        if (transportPaid <= 0 && transportFee > 0) {
+          transportPaid = transportFee;
+        }
+      }
+
+      const totalPaidForChild = tuitionPaid + transportPaid;
+
+      if (totalPaidForChild > 0 || (tuitionFee + transportFee - discount) > 0) {
         items.push({
-          student_id: parseInt(sId, 10),
-          student_name: sName,
-          group_id: parseInt(gId, 10),
-          group_name: gName,
-          month_period: month,
-          base_amount: base,
-          discount: disc,
-          paid_amount: paid
+          student_id: sId,
+          school_year: '2026-2027',
+          payment_period_type: periodType,
+          trimester_number: trimesterNum,
+          tuition_fee: tuitionFee,
+          transport_fee: transportFee,
+          transport_route_id: routeId,
+          discount_amount: discount,
+          paid_amount: totalPaidForChild
         });
       }
     });
 
     if (items.length === 0) {
-      this.showToast(isAr ? 'يرجى تحديد فوج واحد على الأقل مع مبلغ صالح للدفع' : 'Veuillez sélectionner au moins un cours avec un montant valide.', 'warning');
+      this.showToast(isAr ? 'يرجى اختيار تلميذ واحد على الأقل مع مبلغ صالح للدفع' : 'Veuillez sélectionner au moins un élève avec un montant valide.', 'warning');
       return;
     }
 
@@ -11369,9 +13144,8 @@ class EdumindApp {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          parent_id: this._fastPayParentData.parent.id,
-          parent_name: this._fastPayParentData.parent.full_name,
-          parent_phone: this._fastPayParentData.parent.phone,
+          parent_id: parent.id,
+          parent_name: parent.full_name,
           payment_method,
           payment_date,
           notes,
@@ -11383,121 +13157,32 @@ class EdumindApp {
 
       if (data.success) {
         this.playChime('success');
-        const remMsg = data.total_remaining > 0
-          ? (isAr ? ` (المتبقي كدين: ${Number(data.total_remaining).toLocaleString('fr-FR')} دج)` : ` (Reste dû: ${Number(data.total_remaining).toLocaleString('fr-FR')} DA)`)
-          : '';
         const msg = isAr
-          ? `تم استلام الدفع العائلي بنجاح! الوصل: ${data.receipt_no} (المجموع المدفوع: ${Number(data.total_paid).toLocaleString('fr-FR')} دج)${remMsg}`
-          : `Paiement familial enregistré avec succès ! Reçu N° ${data.receipt_no} (Total versé: ${Number(data.total_paid).toLocaleString('fr-FR')} DA)${remMsg}`;
+          ? `تم تسجيل الدفع العائلي بنجاح! الوصل: ${data.receipt_no} (المجموع: ${Number(data.total_paid).toLocaleString('fr-FR')} دج)`
+          : `Paiement familial enregistré ! Reçu N° ${data.receipt_no}`;
         this.showToast(msg, 'success');
 
-        // Open and render official unified family receipt
+        // Render official Family Receipt
         this.renderFamilyReceipt(data);
 
         // Refresh tables in background
         await this.loadPayments();
         if (this.loadDashboardData) this.loadDashboardData();
         if (this.loadCaisse) this.loadCaisse();
-        if (this.loadParents) this.loadParents();
 
-        // Refresh parent panel status
-        await this.selectFastPayParent(this._fastPayParentData.parent.id);
+        // Refresh parent panel
+        await this.selectFastPayParent(parent.id);
       } else {
         this.playChime('error');
-        this.showToast(data.error || (isAr ? 'حدث خطأ أثناء تسجيل الدفع العائلي' : 'Erreur enregistrement paiement familial'), 'error');
+        this.showToast(data.error || (isAr ? 'حدث خطأ أثناء حفظ الدفع العائلي' : 'Erreur enregistrement paiement familial'), 'error');
       }
     } catch (err) {
-      console.error('Erreur submitFastFamilyPayment:', err);
+      console.error('Erreur submitFastParentPayment:', err);
       this.playChime('error');
-      this.showToast(isAr ? 'خطأ في الاتصال بالخادم' : 'Erreur de connexion serveur', 'error');
+      this.showToast(isAr ? 'خطأ في الاتصال بالخادم' : 'Erreur de connexion', 'error');
     } finally {
       if (btn) btn.disabled = false;
     }
-  }
-
-  renderMultiReceipt(res) {
-    const isAr = this.lang === 'ar';
-    const st = res.student || {};
-    const payments = res.payments || [];
-
-    document.getElementById('rcptSchoolName').textContent = this.settings?.school_name || 'EDUMIND ACADEMY';
-    document.getElementById('rcptSchoolContact').textContent = `${this.settings?.school_address || 'Alger, Algérie'} | Tél: ${this.settings?.school_phone || '0550 00 00 00'}`;
-    document.getElementById('rcptNumber').textContent = res.receipt_no;
-
-    const pDate = res.payment_date ? new Date(res.payment_date) : new Date();
-    document.getElementById('rcptDate').textContent = pDate.toLocaleDateString(isAr ? 'ar-DZ' : 'fr-FR');
-
-    const lblStudent = document.getElementById('rcptStudentLabel');
-    const lblMatricule = document.getElementById('rcptMatriculeLabel');
-    if (lblStudent) lblStudent.textContent = isAr ? 'التلميذ:' : 'Élève:';
-    if (lblMatricule) lblMatricule.textContent = isAr ? 'رقم القيد:' : 'Matricule:';
-
-    document.getElementById('rcptStudent').textContent = `${st.first_name || ''} ${st.last_name || ''}`;
-    document.getElementById('rcptMatricule').textContent = st.matricule || '';
-
-    const singleTable = document.getElementById('rcptSingleTable');
-    const multiTable = document.getElementById('rcptMultiTable');
-    const multiBody = document.getElementById('rcptMultiTableBody');
-    const familyTable = document.getElementById('rcptFamilyTable');
-    const familyRemBox = document.getElementById('rcptFamilyRemainingBox');
-
-    if (familyTable) familyTable.style.display = 'none';
-    if (familyRemBox) familyRemBox.style.display = 'none';
-
-    const methodLabels = {
-      espece: isAr ? 'نقداً (Espèces)' : 'Espèces (Caisse)',
-      baridimob: 'BaridiMob / CCP',
-      cheque: isAr ? 'شيك (Chèque)' : 'Chèque bancaire'
-    };
-    document.getElementById('rcptMethod').textContent = methodLabels[res.payment_method] || res.payment_method;
-
-    if (payments.length > 1) {
-      document.getElementById('rcptGroup').textContent = isAr ? `دفع موحد (${payments.length} أفواج)` : `Paiement groupé (${payments.length} cours)`;
-      document.getElementById('rcptTeacher').textContent = '-';
-      document.getElementById('rcptMonth').textContent = isAr ? 'متعدد' : 'Multi-périodes';
-
-      if (singleTable) singleTable.style.display = 'none';
-      if (multiTable) {
-        multiTable.style.display = 'table';
-        if (multiBody) {
-          multiBody.innerHTML = payments.map((p, idx) => {
-            const net = Math.max(0, (parseFloat(p.base_amount) || 0) - (parseFloat(p.discount) || 0));
-            const paid = parseFloat(p.paid_amount) || 0;
-            const rem = parseFloat(p.remaining_amount) || 0;
-            return `
-              <tr>
-                <td style="text-align: center;">${idx + 1}</td>
-                <td>
-                  <strong>${this.escapeHtml(p.group_name)}</strong>
-                  <span style="font-size: 10px; color: var(--text-muted); display: block;">${this.escapeHtml(p.subject_name || '')} &bull; ${this.escapeHtml(p.teacher_name || '')}</span>
-                </td>
-                <td>${this.escapeHtml(p.month_period)}</td>
-                <td style="text-align: right;">${net.toLocaleString('fr-FR')} DA</td>
-                <td style="text-align: right;">${Number(p.discount || 0).toLocaleString('fr-FR')} DA</td>
-                <td style="text-align: right; font-weight: 700; color: #10b981;">${paid.toLocaleString('fr-FR')} DA</td>
-                <td style="text-align: right; color: ${rem > 0 ? '#ef4444' : 'var(--text-muted)'};">${rem.toLocaleString('fr-FR')} DA</td>
-              </tr>
-            `;
-          }).join('');
-        }
-      }
-    } else if (payments.length === 1) {
-      const p = payments[0];
-      document.getElementById('rcptGroup').textContent = `${p.group_name} (${p.subject_name || ''})`;
-      document.getElementById('rcptTeacher').textContent = p.teacher_name || 'Équipe pédagogique';
-      document.getElementById('rcptMonth').textContent = p.month_period;
-
-      if (multiTable) multiTable.style.display = 'none';
-      if (singleTable) {
-        singleTable.style.display = 'table';
-        document.getElementById('rcptBasePrice').textContent = `${Number(p.base_amount).toLocaleString('fr-FR')} DA`;
-        document.getElementById('rcptDiscount').textContent = `${Number(p.discount || 0).toLocaleString('fr-FR')} DA`;
-        document.getElementById('rcptRemaining').textContent = `${Number(p.remaining_amount || 0).toLocaleString('fr-FR')} DA`;
-      }
-    }
-
-    document.getElementById('rcptTotalPaid').textContent = `${Number(res.total_paid).toLocaleString('fr-FR')} DA`;
-    document.getElementById('modalReceipt').classList.add('active');
   }
 
   renderFamilyReceipt(res) {
@@ -11505,8 +13190,8 @@ class EdumindApp {
     const parent = res.parent || {};
     const payments = res.payments || [];
 
-    document.getElementById('rcptSchoolName').textContent = this.settings?.school_name || 'EDUMIND ACADEMY';
-    document.getElementById('rcptSchoolContact').textContent = `${this.settings?.school_address || 'Alger, Algérie'} | Tél: ${this.settings?.school_phone || '0550 00 00 00'}`;
+    document.getElementById('rcptSchoolName').textContent = this.settings?.school_name || 'جواهر المعرفة الخاصة';
+    document.getElementById('rcptSchoolContact').textContent = `${this.settings?.school_address || 'ذراع القهوة برج منايل - بومرداس'} | Tél: ${this.settings?.school_phone || '0699879822'}`;
     document.getElementById('rcptNumber').textContent = res.receipt_no;
 
     const pDate = res.payment_date ? new Date(res.payment_date) : new Date();
@@ -11520,18 +13205,18 @@ class EdumindApp {
     document.getElementById('rcptStudent').textContent = parent.full_name || (isAr ? 'ولي تلميذ' : 'Parent');
     document.getElementById('rcptMatricule').textContent = parent.phone || '-';
 
-    document.getElementById('rcptGroup').textContent = isAr
-      ? `دفع عائلي (${res.children_count || 1} أبناء / ${payments.length} أفواج)`
-      : `Paiement familial (${res.children_count || 1} enfants / ${payments.length} cours)`;
-    document.getElementById('rcptTeacher').textContent = '-';
-    document.getElementById('rcptMonth').textContent = isAr ? 'أشهر متعددة' : 'Multi-périodes';
+    const classEl = document.getElementById('rcptClass');
+    if (classEl) classEl.textContent = isAr ? `عائلي (${res.children_count || payments.length || 1} أبناء)` : `Famille (${res.children_count || payments.length || 1} enfants)`;
+    const trimEl = document.getElementById('rcptTrimestre');
+    if (trimEl) trimEl.textContent = payments[0]?.month_period || `الفصل 1`;
+
+    const transRouteBox = document.getElementById('rcptTransportRouteBox');
+    if (transRouteBox) transRouteBox.style.display = 'none';
 
     const singleTable = document.getElementById('rcptSingleTable');
     const multiTable = document.getElementById('rcptMultiTable');
     const familyTable = document.getElementById('rcptFamilyTable');
     const familyBody = document.getElementById('rcptFamilyTableBody');
-    const familyRemBox = document.getElementById('rcptFamilyRemainingBox');
-    const familyRemVal = document.getElementById('rcptFamilyTotalRemaining');
 
     if (singleTable) singleTable.style.display = 'none';
     if (multiTable) multiTable.style.display = 'none';
@@ -11543,21 +13228,21 @@ class EdumindApp {
           const paid = parseFloat(p.paid_amount) || 0;
           const rem = parseFloat(p.remaining_amount) || 0;
           return `
-            <tr>
-              <td style="text-align: center;">${idx + 1}</td>
-              <td>
-                <strong>${this.escapeHtml(p.first_name || '')} ${this.escapeHtml(p.last_name || '')}</strong>
-                <span style="font-size: 10px; color: var(--text-muted); display: block;">${this.escapeHtml(p.matricule || '')}</span>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="text-align: center; padding: 8px;">${idx + 1}</td>
+              <td style="padding: 8px 10px;">
+                <strong style="color: #0f172a; font-size: 13px;">${this.escapeHtml(p.first_name || '')} ${this.escapeHtml(p.last_name || '')}</strong>
+                <span style="font-size: 10.5px; color: #64748b; display: block; font-family: monospace;">${this.escapeHtml(p.matricule || '')}</span>
               </td>
-              <td>
-                <strong>${this.escapeHtml(p.group_name)}</strong>
-                <span style="font-size: 10px; color: var(--text-muted); display: block;">${this.escapeHtml(p.subject_name || '')} &bull; ${this.escapeHtml(p.teacher_name || '')}</span>
+              <td style="padding: 8px 10px;">
+                <strong style="color: #1e3a8a;">${this.escapeHtml(p.level_name ? `${p.level_name} - ${p.group_name}` : p.group_name)}</strong>
+                <span style="font-size: 10.5px; color: #64748b; display: block;">${this.escapeHtml(p.subject_name || '')}${p.teacher_name ? ' &bull; ' + this.escapeHtml(p.teacher_name) : ''}</span>
               </td>
-              <td>${this.escapeHtml(p.month_period)}</td>
-              <td style="text-align: right;">${net.toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right;">${Number(p.discount || 0).toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right; font-weight: 700; color: #10b981;">${paid.toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right; color: ${rem > 0 ? '#ef4444' : 'var(--text-muted)'}; font-weight: ${rem > 0 ? '700' : 'normal'};">${rem.toLocaleString('fr-FR')} DA</td>
+              <td style="padding: 8px 10px; color: #475569; text-align: center;">${this.escapeHtml(p.month_period)}</td>
+              <td style="text-align: right; padding: 8px 10px; font-weight: 600;">${net.toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 8px 10px; color: #16a34a; font-weight: 700;">${Number(p.discount || 0).toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 8px 10px; font-weight: 800; color: #15803d;">${paid.toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 8px 10px; color: ${rem > 0 ? '#ef4444' : '#64748b'}; font-weight: ${rem > 0 ? '800' : 'normal'};">${rem.toLocaleString('fr-FR')} DA</td>
             </tr>
           `;
         }).join('');
@@ -11567,20 +13252,58 @@ class EdumindApp {
     const methodLabels = {
       espece: isAr ? 'نقداً (Espèces)' : 'Espèces (Caisse)',
       baridimob: 'BaridiMob / CCP',
-      cheque: isAr ? 'شيك (Chèque)' : 'Chèque bancaire'
+      cheque: isAr ? 'شيك (Chèque)' : 'Chèque bancaire',
+      virement: isAr ? 'تحويل بنكي' : 'Virement'
     };
-    document.getElementById('rcptMethod').textContent = methodLabels[res.payment_method] || res.payment_method;
-    document.getElementById('rcptTotalPaid').textContent = `${Number(res.total_paid).toLocaleString('fr-FR')} DA`;
+    document.getElementById('rcptMethod').textContent = methodLabels[res.payment_method] || res.payment_method || 'نقداً';
 
-    const totalRemaining = parseFloat(res.total_remaining) || 0;
-    if (familyRemBox && familyRemVal) {
-      if (totalRemaining > 0) {
-        familyRemVal.textContent = `${totalRemaining.toLocaleString('fr-FR')} DA`;
-        familyRemBox.style.display = 'flex';
-      } else {
-        familyRemBox.style.display = 'none';
+    // Financial Totals on Receipt
+    const totalNetDue = res.total_net !== undefined
+      ? parseFloat(res.total_net)
+      : payments.reduce((sum, p) => sum + Math.max(0, (parseFloat(p.base_amount) || 0) - (parseFloat(p.discount) || 0)), 0);
+    const subtotalEl = document.getElementById('rcptSubtotalNet');
+    if (subtotalEl) subtotalEl.textContent = `${Number(totalNetDue).toLocaleString('fr-FR')} DA`;
+
+    const totalPaidVal = res.total_paid !== undefined
+      ? parseFloat(res.total_paid)
+      : payments.reduce((sum, p) => sum + (parseFloat(p.paid_amount) || 0), 0);
+    const paidEl = document.getElementById('rcptTotalPaid');
+    if (paidEl) paidEl.textContent = `${Number(totalPaidVal).toLocaleString('fr-FR')} DA`;
+
+    const totalRemainingThisTime = res.total_remaining !== undefined
+      ? parseFloat(res.total_remaining)
+      : payments.reduce((sum, p) => sum + (parseFloat(p.remaining_amount) || 0), 0);
+    const remEl = document.getElementById('rcptRemaining');
+    if (remEl) remEl.textContent = `${Number(totalRemainingThisTime).toLocaleString('fr-FR')} DA`;
+
+    // Overall Remaining Debt (Annual obligation minus total paid so far)
+    let overallDebt = (res.total_family_annual_debt !== undefined && res.total_family_annual_debt !== null)
+      ? Number(res.total_family_annual_debt)
+      : (res.total_family_debt !== undefined ? Number(res.total_family_debt) : totalRemainingThisTime);
+
+    if (overallDebt < totalRemainingThisTime) {
+      overallDebt = totalRemainingThisTime;
+    }
+
+    const totalDebtRow = document.getElementById('rcptRowTotalStudentDebt');
+    const totalDebtEl = document.getElementById('rcptTotalStudentDebt');
+    const debtTitleEl = document.getElementById('rcptDebtTitle');
+    const debtSubEl = document.getElementById('rcptDebtSubtitle');
+
+    if (totalDebtEl) totalDebtEl.textContent = `${Number(overallDebt).toLocaleString('fr-FR')} DA`;
+    if (debtTitleEl) {
+      debtTitleEl.textContent = isAr
+        ? 'المتبقي السنوي الإجمالي على العائلة (الواجب السنوي - مجموع المسدد) / RESTE ANNUEL TOTAL DÛ'
+        : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
+    }
+    if (debtSubEl) {
+      if (res.total_annual_obligation) {
+        debtSubEl.textContent = isAr
+          ? `(الواجب السنوي الصافي لكافة الأبناء: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`
+          : `(Total annuel: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`;
       }
     }
+    if (totalDebtRow) totalDebtRow.style.display = 'flex';
 
     document.getElementById('modalReceipt').classList.add('active');
   }
@@ -12500,7 +14223,7 @@ class EdumindApp {
     if (!list || list.length === 0) {
       tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 35px;">
         <i class="fa-solid fa-chalkboard-user" style="font-size: 28px; margin-bottom: 8px; opacity: 0.4; display: block;"></i>
-        ${isAr ? 'لم يتم العثور على أي أستاذ مطابق' : 'Aucun enseignant trouvé'}
+        ${isAr ? 'لم يتم العثور على أي أستاذ أو موظف' : 'Aucun enseignant ou employé trouvé'}
       </td></tr>`;
       return;
     }
@@ -12516,35 +14239,52 @@ class EdumindApp {
 
     try {
       tbody.innerHTML = list.map(t => {
+        const isEmployee = t.employee_type === 'employee';
         const fullName = `${this.escapeHtml(t.first_name || '')} ${this.escapeHtml(t.last_name || '')}`.trim();
         const gKey = t.grade || 'prof_titulaire';
         const gLabel = gradeLabels[gKey] || (isAr ? 'أستاذ تعليم' : 'Enseignant');
-        const formattedAssigned = this.formatGroupName(t.assigned_groups);
-        const assignedClasses = t.assigned_groups
-          ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 600; font-size: 11.5px;" title="${this.escapeHtml(formattedAssigned)}">
-              <i class="fa-solid fa-users-rectangle"></i> ${this.escapeHtml(formattedAssigned)}
+        const formattedAssigned = this.formatGroupName ? this.formatGroupName(t.assigned_groups) : (t.assigned_groups || '');
+        const assignedClasses = isEmployee
+          ? `<span style="color: var(--text-muted); font-size: 11.5px;">-</span>`
+          : (t.assigned_groups
+              ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 600; font-size: 11.5px;" title="${this.escapeHtml(formattedAssigned)}">
+                  <i class="fa-solid fa-users-rectangle"></i> ${this.escapeHtml(formattedAssigned)}
+                </span>`
+              : `<span style="color: var(--text-muted); font-size: 11.5px;">${isAr ? 'غير مسند' : 'Aucune classe'}</span>`);
+
+        const matriculeHtml = isEmployee
+          ? `<strong style="color: #6366f1; font-family: monospace;">${this.escapeHtml(t.matricule || '-')}</strong>`
+          : `<strong style="color: #f97316; font-family: monospace;">${this.escapeHtml(t.matricule || '-')}</strong>`;
+
+        const subjectHtml = isEmployee
+          ? `<span class="badge-pill" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5; font-weight: 600; font-size: 11.5px;">
+              <i class="fa-solid fa-briefcase"></i> ${isAr ? 'موظف / عامل' : 'Personnel'}
             </span>`
-          : `<span style="color: var(--text-muted); font-size: 11.5px;">${isAr ? 'غير مسند' : 'Aucune classe'}</span>`;
+          : this.escapeHtml(t.subject_name || '-');
+
+        const statusHtml = isEmployee
+          ? `<span class="badge-pill" style="background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 700; font-size: 11.5px;">
+              <i class="fa-solid fa-id-badge"></i> ${this.escapeHtml(t.job_title || (isAr ? 'موظف' : 'Employé'))}
+            </span>`
+          : `<span class="badge-pill" style="background: rgba(59, 130, 246, 0.12); color: #2563eb; font-weight: 600; font-size: 11.5px;">
+              ${gLabel}
+            </span>`;
 
         return `
           <tr>
-            <td><strong style="color: #f97316; font-family: monospace;">${this.escapeHtml(t.matricule || '-')}</strong></td>
+            <td>${matriculeHtml}</td>
             <td><strong>${fullName || '-'}</strong></td>
-            <td>${this.escapeHtml(t.subject_name || '-')}</td>
-            <td>
-              <span class="badge-pill" style="background: rgba(59, 130, 246, 0.12); color: #2563eb; font-weight: 600; font-size: 11.5px;">
-                ${gLabel}
-              </span>
-            </td>
+            <td>${subjectHtml}</td>
+            <td>${statusHtml}</td>
             <td>${this.escapeHtml(t.phone || '-')}</td>
             <td>${t.email ? `<span style="font-size: 12px; color: var(--text-muted);">${this.escapeHtml(t.email)}</span>` : '<span style="color: var(--text-muted);">-</span>'}</td>
             <td>${assignedClasses}</td>
             <td>
               <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="btn-action-badge" title="${isAr ? 'بطاقة الأستاذ' : 'Badge Enseignant'}" onclick="app.showTeacherCard(${t.id})">
+                <button class="btn-action-badge" title="${isEmployee ? (isAr ? 'بطاقة الموظف' : 'Badge Employé') : (isAr ? 'بطاقة الأستاذ' : 'Badge Enseignant')}" onclick="app.showTeacherCard ? app.showTeacherCard(${t.id}) : null">
                   <i class="fa-solid fa-id-badge"></i>
                 </button>
-                <button class="btn-icon" title="${isAr ? 'تعديل' : 'Modifier'}" onclick="app.editTeacher(${t.id})">
+                <button class="btn-icon" title="${isAr ? 'تعديل' : 'Modifier'}" onclick="${isEmployee ? `app.editEmployee(${t.id})` : `app.editTeacher(${t.id})`}">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </button>
                 <button class="btn-icon" style="color: #ef4444;" title="${isAr ? 'حذف' : 'Supprimer'}" onclick="app.deleteTeacher(${t.id})">
@@ -14573,6 +16313,368 @@ class EdumindApp {
   // -------------------------------------------------------------
   // ENSEIGNANTS (TEACHERS) MODAL & ACTIONS
   // -------------------------------------------------------------
+  
+  // -------------------------------------------------------------
+  // STAFF & TEACHERS CHOICE & EMPLOYEE ACTIONS
+  // -------------------------------------------------------------
+  openStaffTypeChoiceModal() {
+    const isAr = this.lang === 'ar';
+    const titleEl = document.getElementById('choiceModalTitle');
+    if (titleEl) {
+      titleEl.textContent = isAr ? 'إضافة فرد إلى الطاقم / عضو جديد' : 'Ajouter un Membre du Personnel / Nouveau Collaborateur';
+    }
+    const modal = document.getElementById('modalStaffTypeChoice');
+    if (modal) modal.classList.add('active');
+  }
+
+  chooseStaffType(type) {
+    const modal = document.getElementById('modalStaffTypeChoice');
+    if (modal) modal.classList.remove('active');
+
+    if (type === 'employee') {
+      this.openModalEmployee();
+    } else {
+      this.openModalTeacher();
+    }
+  }
+
+  async loadStaffJobs() {
+    const select = document.getElementById('employeeJobTitle');
+    if (!select) return;
+
+    try {
+      const res = await fetch('/api/staff-jobs');
+      const data = await res.json();
+      const isAr = this.lang === 'ar';
+      if (data.success && Array.isArray(data.jobs)) {
+        this.staffJobs = data.jobs;
+        const currentVal = select.value;
+        select.innerHTML = `<option value="">${isAr ? '-- اختر المهنة أو الوظيفة --' : '-- Choisir le métier / poste --'}</option>` +
+          data.jobs.map(j => `<option value="${this.escapeHtml(j)}">${this.escapeHtml(j)}</option>`).join('');
+        if (currentVal && data.jobs.includes(currentVal)) {
+          select.value = currentVal;
+        }
+        this.renderManageJobsBadges();
+        this.onEmployeeJobSelected();
+      }
+    } catch (e) {
+      console.error('Error loading staff jobs:', e);
+    }
+  }
+
+  onEmployeeJobSelected() {
+    const select = document.getElementById('employeeJobTitle');
+    const deleteBtn = document.getElementById('btnDeleteCurrentJob');
+    if (!select || !deleteBtn) return;
+    if (select.value) {
+      deleteBtn.style.display = 'inline-flex';
+      deleteBtn.title = `Supprimer "${select.value}" de la liste`;
+    } else {
+      deleteBtn.style.display = 'none';
+    }
+  }
+
+  toggleManageJobsContainer(force) {
+    const container = document.getElementById('manageJobsListContainer');
+    if (!container) return;
+    const shouldShow = force !== undefined ? force : (container.style.display === 'none' || !container.style.display);
+    container.style.display = shouldShow ? 'block' : 'none';
+    if (shouldShow) {
+      this.renderManageJobsBadges();
+    }
+  }
+
+  renderManageJobsBadges() {
+    const container = document.getElementById('manageJobsBadgesList');
+    if (!container) return;
+    const jobs = this.staffJobs || [];
+    const isAr = this.lang === 'ar';
+
+    if (jobs.length === 0) {
+      container.innerHTML = `<span style="font-size: 11.5px; color: var(--text-muted);">${isAr ? 'لا توجد مهن مسجلة' : 'Aucun métier enregistré'}</span>`;
+      return;
+    }
+
+    container.innerHTML = jobs.map(j => {
+      const safeJob = this.escapeHtml(j);
+      const jsonParam = JSON.stringify(j).replace(/"/g, '&quot;');
+      return `
+        <span class="badge-pill" style="background: white; border: 1px solid rgba(239, 68, 68, 0.25); color: var(--text-main); font-weight: 600; font-size: 12px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 8px; border-radius: 8px;">
+          <span>${safeJob}</span>
+          <button type="button" onclick="app.deleteStaffJob(${jsonParam})"
+                  style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 0 2px; font-size: 13px; display: flex; align-items: center;"
+                  title="${isAr ? 'حذف هذه المهنة' : 'Supprimer ce métier'}">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </span>
+      `;
+    }).join('');
+  }
+
+  async deleteCurrentJobTitle() {
+    const select = document.getElementById('employeeJobTitle');
+    const title = select ? select.value : '';
+    if (!title) return;
+    await this.deleteStaffJob(title);
+  }
+
+  async deleteStaffJob(title) {
+    const isAr = this.lang === 'ar';
+    const confirmMsg = isAr
+      ? `هل أنت متأكد من حذف المهنة "${title}" من قائمة الاختيارات؟`
+      : `Voulez-vous vraiment supprimer le métier "${title}" de la liste des choix ?`;
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      const res = await fetch('/api/staff-jobs', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title })
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(isAr ? 'تم حذف المهنة بنجاح' : 'Métier supprimé de la liste avec succès !', 'info');
+        await this.loadStaffJobs();
+      } else {
+        this.showToast(data.error || 'Erreur lors de la suppression', 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      this.showToast('Erreur de connexion', 'error');
+    }
+  }
+
+  toggleNewJobInput(force) {
+    const container = document.getElementById('newJobInputContainer');
+    if (!container) return;
+    const shouldShow = force !== undefined ? force : (container.style.display === 'none' || !container.style.display);
+    container.style.display = shouldShow ? 'block' : 'none';
+    if (shouldShow) {
+      const input = document.getElementById('newJobTitleInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    }
+  }
+
+  async saveNewJobTitle() {
+    const input = document.getElementById('newJobTitleInput');
+    const title = input ? input.value.trim() : '';
+    const isAr = this.lang === 'ar';
+
+    if (!title) {
+      this.showToast(isAr ? 'يرجى كتابة اسم المهنة أو الوظيفة' : 'Veuillez saisir le titre du métier', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/staff-jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title })
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(isAr ? 'تمت إضافة المهنة بنجاح' : 'Métier ajouté avec succès !', 'success');
+        await this.loadStaffJobs();
+        const select = document.getElementById('employeeJobTitle');
+        if (select) select.value = title;
+        this.onEmployeeJobSelected();
+        this.toggleNewJobInput(false);
+      } else {
+        this.showToast(data.error || 'Erreur lors de l\'ajout', 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      this.showToast('Erreur de connexion', 'error');
+    }
+  }
+
+  async openModalEmployee() {
+    const isAr = this.lang === 'ar';
+    const form = document.getElementById('employeeForm');
+    if (form) form.reset();
+
+    const titleEl = document.getElementById('modalEmployeeTitle');
+    if (titleEl) {
+      titleEl.innerHTML = `<i class="fa-solid fa-user-tie" style="color: #6366f1;"></i> <span>${isAr ? 'إضافة موظف / عامل عادي' : 'Ajouter un Employé Normal'}</span>`;
+    }
+
+    const idEl = document.getElementById('employeeId');
+    if (idEl) idEl.value = '';
+    const matEl = document.getElementById('employeeMatricule');
+    if (matEl) matEl.value = '';
+    const fnEl = document.getElementById('employeeFirstName');
+    if (fnEl) fnEl.value = '';
+    const lnEl = document.getElementById('employeeLastName');
+    if (lnEl) lnEl.value = '';
+    const phoneEl = document.getElementById('employeePhone');
+    if (phoneEl) phoneEl.value = '';
+
+    const saveBtn = document.getElementById('btnSaveEmployee');
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> ${isAr ? 'حفظ الموظف' : "Enregistrer l'Employé"}`;
+    }
+
+    this.toggleNewJobInput(false);
+    await this.loadStaffJobs();
+
+    if (this.setupInputRestrictions) this.setupInputRestrictions();
+    const modal = document.getElementById('modalEmployee');
+    if (modal) modal.classList.add('active');
+  }
+
+  async editEmployee(id) {
+    const isAr = this.lang === 'ar';
+    const t = (this.teachers || []).find(item => item.id === id);
+    if (!t) return;
+
+    await this.loadStaffJobs();
+
+    const titleEl = document.getElementById('modalEmployeeTitle');
+    if (titleEl) {
+      titleEl.innerHTML = `<i class="fa-solid fa-user-pen" style="color: #6366f1;"></i> <span>${isAr ? 'تعديل بيانات الموظف' : "Modifier l'Employé"}</span>`;
+    }
+
+    const idEl = document.getElementById('employeeId');
+    if (idEl) idEl.value = t.id;
+    const matEl = document.getElementById('employeeMatricule');
+    if (matEl) matEl.value = t.matricule || '';
+    const fnEl = document.getElementById('employeeFirstName');
+    if (fnEl) fnEl.value = t.first_name || '';
+    const lnEl = document.getElementById('employeeLastName');
+    if (lnEl) lnEl.value = t.last_name || '';
+    const phoneEl = document.getElementById('employeePhone');
+    if (phoneEl) phoneEl.value = t.phone || '';
+
+    const jobSelect = document.getElementById('employeeJobTitle');
+    if (jobSelect) {
+      if (t.job_title && !Array.from(jobSelect.options).some(o => o.value === t.job_title)) {
+        const opt = document.createElement('option');
+        opt.value = t.job_title;
+        opt.textContent = t.job_title;
+        jobSelect.appendChild(opt);
+      }
+      jobSelect.value = t.job_title || '';
+    }
+
+    const saveBtn = document.getElementById('btnSaveEmployee');
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> ${isAr ? 'حفظ التعديلات' : 'Mettre à jour l’Employé'}`;
+    }
+
+    this.toggleNewJobInput(false);
+    if (this.setupInputRestrictions) this.setupInputRestrictions();
+    const modal = document.getElementById('modalEmployee');
+    if (modal) modal.classList.add('active');
+  }
+
+  async saveEmployee() {
+    if (this._savingEmployee) return;
+
+    const isAr = this.lang === 'ar';
+    const id = document.getElementById('employeeId')?.value || '';
+    const firstName = (document.getElementById('employeeFirstName')?.value || '').trim();
+    const lastName = (document.getElementById('employeeLastName')?.value || '').trim();
+    const phone = (document.getElementById('employeePhone')?.value || '').trim();
+    const jobTitle = (document.getElementById('employeeJobTitle')?.value || '').trim();
+    const matricule = (document.getElementById('employeeMatricule')?.value || '').trim();
+
+    if (!firstName || !lastName) {
+      this.showToast(isAr ? 'يرجى إدخال الاسم واللقب للموظف' : 'Veuillez saisir le nom et prénom de l’employé.', 'warning');
+      return;
+    }
+
+    const namePattern = /^[a-zA-Z\u00C0-\u024F\u0600-\u06FF\s'\-]+$/;
+    if (!namePattern.test(firstName)) {
+      this.showToast(isAr ? 'اسم الموظف يجب أن يحتوي على حروف فقط' : 'Le prénom de l’employé ne doit contenir que des lettres', 'warning');
+      document.getElementById('employeeFirstName')?.focus();
+      return;
+    }
+    if (!namePattern.test(lastName)) {
+      this.showToast(isAr ? 'لقب الموظف يجب أن يحتوي على حروف فقط' : 'Le nom de l’employé ne doit contenir que des lettres', 'warning');
+      document.getElementById('employeeLastName')?.focus();
+      return;
+    }
+
+    if (phone) {
+      if (!/^\d+$/.test(phone)) {
+        this.showToast(isAr ? 'رقم هاتف الموظف يجب أن يتكون من أرقام فقط' : 'Le numéro de téléphone doit contenir des chiffres uniquement', 'warning');
+        document.getElementById('employeePhone')?.focus();
+        return;
+      }
+      if (!phone.startsWith('0')) {
+        this.showToast(isAr ? 'رقم الهاتف يجب أن يبدأ بالرقم 0 (مثال: 0550000000)' : 'Le numéro de téléphone doit obligatoirement commencer par 0 (ex: 0550000000)', 'warning');
+        document.getElementById('employeePhone')?.focus();
+        return;
+      }
+      if (phone.length !== 10) {
+        this.showToast(isAr ? 'رقم الهاتف يجب أن يتكون من 10 أرقام بالضبط (مثال: 0550000000)' : 'Le numéro de téléphone doit comporter exactement 10 chiffres (ex: 0550000000)', 'warning');
+        document.getElementById('employeePhone')?.focus();
+        return;
+      }
+    }
+
+    if (!jobTitle) {
+      this.showToast(isAr ? 'يرجى تحديد أو إضافة نوع المهنة / الوظيفة' : 'Veuillez sélectionner ou ajouter un type de métier.', 'warning');
+      document.getElementById('employeeJobTitle')?.focus();
+      return;
+    }
+
+    const payload = {
+      matricule,
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      employee_type: 'employee',
+      job_title: jobTitle,
+      grade: 'employe'
+    };
+
+    const url = id ? `/api/teachers/${id}` : '/api/teachers';
+    const method = id ? 'PUT' : 'POST';
+
+    const saveBtn = document.getElementById('btnSaveEmployee');
+    const originalBtnText = saveBtn ? saveBtn.innerHTML : '';
+    this._savingEmployee = true;
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${isAr ? 'جاري الحفظ...' : 'Enregistrement...'}`;
+    }
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.closeModals();
+        const form = document.getElementById('employeeForm');
+        if (form) form.reset();
+
+        this.playChime('success');
+        this.showToast(isAr ? 'تم حفظ بيانات الموظف بنجاح!' : 'Employé enregistré avec succès !', 'success');
+        await this.loadTeachers();
+      } else {
+        this.showToast(data.error || (isAr ? 'حدث خطأ أثناء الحفظ' : 'Erreur lors de l’enregistrement'), 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      this.showToast(isAr ? 'خطأ في الاتصال بالخادم' : 'Erreur réseau ou serveur', 'error');
+    } finally {
+      this._savingEmployee = false;
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalBtnText;
+      }
+    }
+  }
+
   async openModalTeacher() {
     await this.loadConfigurationData();
     const select = document.getElementById('teacherSubject');
@@ -17272,13 +19374,13 @@ class EdumindApp {
 
     // 1. Établissement
     const schoolNameInput = document.getElementById('settingSchoolName');
-    if (schoolNameInput) schoolNameInput.value = this.settings.school_name || 'Schoolaris';
+    if (schoolNameInput) schoolNameInput.value = this.settings.school_name || '';
     const schoolAddressInput = document.getElementById('settingSchoolAddress');
     if (schoolAddressInput) schoolAddressInput.value = this.settings.school_address || '';
     const schoolPhoneInput = document.getElementById('settingSchoolPhone');
-    if (schoolPhoneInput) schoolPhoneInput.value = this.settings.school_phone || '0550 000 000';
+    if (schoolPhoneInput) schoolPhoneInput.value = this.settings.school_phone || '';
     const schoolEmailInput = document.getElementById('settingSchoolEmail');
-    if (schoolEmailInput) schoolEmailInput.value = this.settings.school_email || 'contact@ecole.dz';
+    if (schoolEmailInput) schoolEmailInput.value = this.settings.school_email || '';
     const currencyInput = document.getElementById('settingCurrency');
     if (currencyInput) currencyInput.value = this.settings.currency || 'DA';
     const activeYearInput = document.getElementById('settingActiveYear');
@@ -18148,6 +20250,944 @@ class EdumindApp {
     } catch (err) {
       console.error(err);
       alert('خطأ أثناء إعداد ورقة الحضور للطباعة');
+    }
+  }
+
+  // ===========================================================================
+  // TARIFS & FRAIS SCOLAIRES (MULTI-ANNÉE, MODIFICATION MANUELLE & EXCEL)
+  // ===========================================================================
+  async loadTarifsView() {
+    try {
+      const yearSelect = document.getElementById('tarifsSchoolYearFilter');
+      const selectedYear = yearSelect ? yearSelect.value : '2026-2027';
+
+      const [tariffsRes, routesRes, extrasRes] = await Promise.all([
+        fetch(`/api/school-tariffs?school_year=${selectedYear}`),
+        fetch(`/api/transport-routes?school_year=${selectedYear}`),
+        fetch(`/api/school-extra-fees?school_year=${selectedYear}`)
+      ]);
+
+      const tariffsData = await tariffsRes.json();
+      const routesData = await routesRes.json();
+      const extrasData = await extrasRes.json();
+
+      this._tariffsCache = (tariffsData && tariffsData.success && Array.isArray(tariffsData.tariffs)) ? tariffsData.tariffs : [];
+      this._routesCache = (routesData && routesData.success && Array.isArray(routesData.routes)) ? routesData.routes : [];
+      this._extrasCache = (extrasData && extrasData.success && Array.isArray(extrasData.fees)) ? extrasData.fees : [];
+
+      // Update school year filter options
+      if (yearSelect && tariffsData.available_years && tariffsData.available_years.length > 0) {
+        const currentVal = yearSelect.value;
+        const allYearsText = this.lang === 'fr' ? 'Toutes les années' : 'جميع السنوات';
+        const opts = tariffsData.available_years.map(y => `<option value="${y}" ${y === currentVal ? 'selected' : ''}>${y}</option>`).join('');
+        yearSelect.innerHTML = opts + `<option value="all" ${currentVal === 'all' ? 'selected' : ''}>${allYearsText}</option>`;
+      }
+
+      // Update KPIs
+      const kpiLevels = document.getElementById('tarifsKpiLevelsCount');
+      if (kpiLevels) kpiLevels.textContent = this._tariffsCache.length;
+
+      const currencyStr = this.lang === 'fr' ? 'DA' : 'دج';
+      const kpiAvg = document.getElementById('tarifsKpiAvgAnnual');
+      if (kpiAvg) {
+        if (this._tariffsCache.length > 0) {
+          const totalAnnual = this._tariffsCache.reduce((sum, t) => sum + (Number(t.annual_fee) || 0), 0);
+          const avg = Math.round(totalAnnual / this._tariffsCache.length);
+          kpiAvg.textContent = `${avg.toLocaleString()} ${currencyStr}`;
+        } else {
+          kpiAvg.textContent = `0 ${currencyStr}`;
+        }
+      }
+
+      const kpiRoutes = document.getElementById('tarifsKpiRoutesCount');
+      if (kpiRoutes) kpiRoutes.textContent = this._routesCache.length;
+
+      const kpiExtras = document.getElementById('tarifsKpiExtrasCount');
+      if (kpiExtras) kpiExtras.textContent = this._extrasCache.length;
+
+      // Render tables
+      this.filterTarifsTable();
+      this.renderTransportTable(this._routesCache);
+      this.renderExtraFeesTable(this._extrasCache);
+    } catch (err) {
+      console.error('Error loading tarifs view:', err);
+    }
+  }
+
+  switchTarifsTab(tabName) {
+    const tabs = ['scolarite', 'transport', 'extras', 'excel'];
+    tabs.forEach(t => {
+      const btn = document.getElementById(`tabTarifsBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+      const pane = document.getElementById(`tabTarifsContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+      if (btn) {
+        if (t === tabName) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+      if (pane) {
+        pane.style.display = (t === tabName) ? 'block' : 'none';
+      }
+    });
+  }
+
+  onTarifsYearChange(year) {
+    this.loadTarifsView();
+  }
+
+  filterTarifsTable() {
+    const cycleFilter = document.getElementById('tarifsCycleFilter');
+    const selectedCycle = cycleFilter ? cycleFilter.value : 'all';
+    let filtered = this._tariffsCache || [];
+    if (selectedCycle !== 'all') {
+      filtered = filtered.filter(t => (t.cycle || '').toLowerCase() === selectedCycle.toLowerCase());
+    }
+    this.renderTarifsTable(filtered);
+  }
+
+  renderTarifsTable(tariffs) {
+    const tbody = document.getElementById('tarifsTableBody');
+    if (!tbody) return;
+
+    const isFr = this.lang === 'fr';
+    const curr = isFr ? 'DA' : 'دج';
+
+    if (!tariffs || tariffs.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+            <div style="font-size: 36px; color: #06b6d4; margin-bottom: 8px;"><i class="fa-solid fa-receipt"></i></div>
+            <strong style="font-size: 15px; display: block; margin-bottom: 6px;">
+              ${isFr ? 'Aucun tarif scolaire enregistré pour cette sélection' : 'لا توجد تسعيرات تمدرس مسجلة لهذه الفلترة'}
+            </strong>
+            <span style="font-size: 13px;">
+              ${isFr ? 'Cliquez sur "Nouveau Tarif" ou importez les prix directement via Excel.' : 'انقر على زر "إضافة تسعيرة" أو استورد الأسعار مباشرة من ملف Excel المرفق.'}
+            </span>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = tariffs.map(t => {
+      const cycleColors = {
+        'Maternelle': '#ec4899',
+        'Primaire': '#3b82f6',
+        'CEM': '#10b981',
+        'Lycee': '#8b5cf6'
+      };
+      const cycleColor = cycleColors[t.cycle] || '#06b6d4';
+
+      return `
+        <tr>
+          <td>
+            <div style="font-weight: 700; font-size: 14px; color: var(--text-color);">${t.level_name}</div>
+            ${t.notes ? `<span style="font-size: 11px; color: var(--text-muted);">${t.notes}</span>` : ''}
+          </td>
+          <td>
+            <span class="badge" style="background: ${cycleColor}15; color: ${cycleColor}; border: 1px solid ${cycleColor}40; font-weight: 700;">
+              ${t.cycle || 'CEM'}
+            </span>
+          </td>
+          <td style="text-align: right; font-weight: 600;">${Number(t.registration_fee || 0).toLocaleString()} ${curr}</td>
+          <td style="text-align: right; font-weight: 600; color: #3b82f6;">${Number(t.t1_fee || 0).toLocaleString()} ${curr}</td>
+          <td style="text-align: right; font-weight: 600; color: #3b82f6;">${Number(t.t2_fee || 0).toLocaleString()} ${curr}</td>
+          <td style="text-align: right; font-weight: 600; color: #3b82f6;">${Number(t.t3_fee || 0).toLocaleString()} ${curr}</td>
+          <td style="text-align: right;">
+            <span style="background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 14px; border: 1px solid rgba(16, 185, 129, 0.25);">
+              ${Number(t.annual_fee || 0).toLocaleString()} ${curr}
+            </span>
+          </td>
+          <td>
+            <span class="badge" style="background: rgba(255,255,255,0.06); font-size: 11px;">${t.school_year || '2026-2027'}</span>
+          </td>
+          <td style="text-align: center;">
+            <div style="display: flex; gap: 6px; justify-content: center;">
+              <button class="btn-icon" title="${isFr ? 'Modifier le tarif' : 'تعديل التسعيرة'}" onclick="app.openModalAddTariff(${t.id})">
+                <i class="fa-solid fa-pen-to-square" style="color: #06b6d4;"></i>
+              </button>
+              <button class="btn-icon" title="${isFr ? 'Supprimer le tarif' : 'حذف التسعيرة'}" onclick="app.deleteTariff(${t.id})">
+                <i class="fa-solid fa-trash" style="color: #ef4444;"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  renderTransportTable(routes) {
+    const tbody = document.getElementById('tarifsTransportTableBody');
+    if (!tbody) return;
+
+    const isFr = this.lang === 'fr';
+    const curr = isFr ? 'DA' : 'دج';
+
+    if (!routes || routes.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+            <div style="font-size: 36px; color: #f59e0b; margin-bottom: 8px;"><i class="fa-solid fa-bus"></i></div>
+            <strong style="font-size: 15px; display: block; margin-bottom: 6px;">
+              ${isFr ? 'Aucune ligne de transport enregistrée pour cette année' : 'لا توجد خطوط نقل مسجلة لهذه السنة'}
+            </strong>
+            <span style="font-size: 13px;">
+              ${isFr ? 'Cliquez sur "Nouvelle Ligne de Bus" ou importez les lignes depuis Excel.' : 'انقر على زر "إضافة مسار نقل جديد" أو استورد مسارات النقل من ملف Excel.'}
+            </span>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = routes.map(r => `
+      <tr>
+        <td style="font-weight: 700; color: var(--text-color);">${r.route_name}</td>
+        <td><i class="fa-solid fa-location-dot" style="color: #f59e0b; margin-left: 4px;"></i>${r.zone_name || '-'}</td>
+        <td style="text-align: right; font-weight: 600; color: #f59e0b;">${Number(r.t1_fee || 0).toLocaleString()} ${curr}</td>
+        <td style="text-align: right; font-weight: 600; color: #f59e0b;">${Number(r.t2_fee || 0).toLocaleString()} ${curr}</td>
+        <td style="text-align: right; font-weight: 600; color: #f59e0b;">${Number(r.t3_fee || 0).toLocaleString()} ${curr}</td>
+        <td style="text-align: right;">
+          <span style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 14px; border: 1px solid rgba(245, 158, 11, 0.25);">
+            ${Number(r.annual_fee || 0).toLocaleString()} ${curr}
+          </span>
+        </td>
+        <td>${r.bus_number ? `<span class="badge" style="background: rgba(255,255,255,0.06);">${r.bus_number}</span>` : '-'}</td>
+        <td>
+          <div style="font-size: 12px; font-weight: 600;">${r.driver_name || '-'}</div>
+          ${r.driver_phone ? `<span style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-phone" style="font-size: 10px;"></i> ${r.driver_phone}</span>` : ''}
+        </td>
+        <td style="text-align: center;">
+          <div style="display: flex; gap: 6px; justify-content: center;">
+            <button class="btn-icon" title="${isFr ? 'Modifier la ligne' : 'تعديل المسار'}" onclick="app.openModalAddTransportRoute(${r.id})">
+              <i class="fa-solid fa-pen-to-square" style="color: #f59e0b;"></i>
+            </button>
+            <button class="btn-icon" title="${isFr ? 'Supprimer la ligne' : 'حذف المسار'}" onclick="app.deleteTransportRoute(${r.id})">
+              <i class="fa-solid fa-trash" style="color: #ef4444;"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  renderExtraFeesTable(fees) {
+    const tbody = document.getElementById('tarifsExtrasTableBody');
+    if (!tbody) return;
+
+    const isFr = this.lang === 'fr';
+    const curr = isFr ? 'DA' : 'دج';
+
+    if (!fees || fees.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+            <div style="font-size: 36px; color: #a855f7; margin-bottom: 8px;"><i class="fa-solid fa-cubes"></i></div>
+            <strong style="font-size: 15px; display: block; margin-bottom: 6px;">
+              ${isFr ? 'Aucun frais ou service annexe enregistré' : 'لا توجد خدمات أو رسوم ملحقة مسجلة'}
+            </strong>
+            <span style="font-size: 13px;">
+              ${isFr ? 'Cliquez sur "Nouveau Frais / Service" pour ajouter cantine, assurance ou fournitures.' : 'انقر على زر "إضافة رسم / خدمة" لإضافة مصاريف الإطعام، التأمين أو الأنشطة.'}
+            </span>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const categoryLabels = {
+      'cantine': { label: isFr ? 'Cantine & Demi-Pension' : 'إطعام مدرسي', color: '#10b981' },
+      'assurance': { label: isFr ? 'Assurance & Inscription' : 'تأمين وتسجيل', color: '#3b82f6' },
+      'activite': { label: isFr ? 'Activités & Sorties' : 'أنشطة ورحلات', color: '#f59e0b' },
+      'fourniture': { label: isFr ? 'Fournitures & Livres' : 'مستلزمات وكتب', color: '#06b6d4' },
+      'autre': { label: isFr ? 'Autre service' : 'خدمات أخرى', color: '#a855f7' }
+    };
+
+    const periodLabels = {
+      'annual': isFr ? 'Annuel' : 'سنوي (Annuel)',
+      'trimester': isFr ? 'Trimestriel' : 'فصلي (Trimestriel)',
+      'monthly': isFr ? 'Mensuel' : 'شهري (Mensuel)',
+      'one_time': isFr ? 'Ponctuel' : 'مرة واحدة (Ponctuel)'
+    };
+
+    tbody.innerHTML = fees.map(f => {
+      const cat = categoryLabels[f.category] || categoryLabels['autre'];
+      return `
+        <tr>
+          <td style="font-weight: 700; color: var(--text-color);">${f.fee_name}</td>
+          <td>
+            <span class="badge" style="background: ${cat.color}15; color: ${cat.color}; border: 1px solid ${cat.color}40; font-weight: 700;">
+              ${cat.label}
+            </span>
+          </td>
+          <td>
+            <span class="badge" style="background: rgba(255,255,255,0.06); font-weight: 600;">
+              ${f.cycle === 'tous' ? (isFr ? 'Tous les cycles' : 'جميع الأطوار') : f.cycle}
+            </span>
+          </td>
+          <td style="text-align: right;">
+            <span style="background: rgba(168, 85, 247, 0.12); color: #a855f7; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 14px; border: 1px solid rgba(168, 85, 247, 0.25);">
+              ${Number(f.amount || 0).toLocaleString()} ${curr}
+            </span>
+          </td>
+          <td>
+            <span style="font-size: 12px; color: var(--text-muted);">${periodLabels[f.period_type] || f.period_type}</span>
+          </td>
+          <td style="font-size: 12px; color: var(--text-muted);">${f.notes || '-'}</td>
+          <td style="text-align: center;">
+            <div style="display: flex; gap: 6px; justify-content: center;">
+              <button class="btn-icon" title="${isFr ? 'Modifier le service' : 'تعديل الخدمة'}" onclick="app.openModalAddExtraFee(${f.id})">
+                <i class="fa-solid fa-pen-to-square" style="color: #a855f7;"></i>
+              </button>
+              <button class="btn-icon" title="${isFr ? 'Supprimer le service' : 'حذف الخدمة'}" onclick="app.deleteExtraFee(${f.id})">
+                <i class="fa-solid fa-trash" style="color: #ef4444;"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // --- Modal: Tariffs Actions ---
+  openModalAddTariff(id = null) {
+    const titleEl = document.getElementById('modalTariffTitle');
+    const form = document.getElementById('formTariff');
+    if (form) form.reset();
+
+    const isFr = this.lang === 'fr';
+    const currentYear = document.getElementById('tarifsSchoolYearFilter')?.value;
+    const yearVal = (currentYear && currentYear !== 'all') ? currentYear : '2026-2027';
+    const yearInput = document.getElementById('tariffSchoolYear');
+    if (yearInput) yearInput.value = yearVal;
+
+    document.getElementById('tariffId').value = id || '';
+
+    if (id) {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square" style="color: #06b6d4;"></i> <span data-i18n="modal_tariff_title_edit">${isFr ? 'Modifier le Tarif Scolaire' : 'تعديل تسعيرة تمدرس'}</span>`;
+      const item = (this._tariffsCache || []).find(t => t.id === id);
+      if (item) {
+        document.getElementById('tariffLevelName').value = item.level_name || '';
+        document.getElementById('tariffCycle').value = item.cycle || 'CEM';
+        document.getElementById('tariffRegistration').value = item.registration_fee || 0;
+        document.getElementById('tariffT1').value = item.t1_fee || 0;
+        document.getElementById('tariffT2').value = item.t2_fee || 0;
+        document.getElementById('tariffT3').value = item.t3_fee || 0;
+        document.getElementById('tariffAnnual').value = item.annual_fee || 0;
+        if (yearInput) yearInput.value = item.school_year || yearVal;
+        document.getElementById('tariffNotes').value = item.notes || '';
+      }
+    } else {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: #06b6d4;"></i> <span data-i18n="modal_tariff_title_add">${isFr ? 'Nouveau Tarif Scolaire' : 'إضافة تسعيرة تمدرس جديدة'}</span>`;
+    }
+
+    const modal = document.getElementById('modalTariff');
+    if (modal) modal.classList.add('active');
+  }
+
+  autoCalculateTariffTotal() {
+    const t1 = Number(document.getElementById('tariffT1')?.value) || 0;
+    const t2 = Number(document.getElementById('tariffT2')?.value) || 0;
+    const t3 = Number(document.getElementById('tariffT3')?.value) || 0;
+    const annInput = document.getElementById('tariffAnnual');
+    if (annInput) annInput.value = t1 + t2 + t3;
+  }
+
+  async saveTariff(event) {
+    try {
+      const id = document.getElementById('tariffId').value;
+      const level_name = document.getElementById('tariffLevelName').value.trim();
+      const cycle = document.getElementById('tariffCycle').value;
+      const registration_fee = Number(document.getElementById('tariffRegistration').value) || 0;
+      const t1_fee = Number(document.getElementById('tariffT1').value) || 0;
+      const t2_fee = Number(document.getElementById('tariffT2').value) || 0;
+      const t3_fee = Number(document.getElementById('tariffT3').value) || 0;
+      const annual_fee = Number(document.getElementById('tariffAnnual').value) || (t1_fee + t2_fee + t3_fee);
+      const school_year = document.getElementById('tariffSchoolYear').value.trim() || '2026-2027';
+      const notes = document.getElementById('tariffNotes').value.trim();
+
+      const payload = { level_name, cycle, registration_fee, t1_fee, t2_fee, t3_fee, annual_fee, school_year, notes };
+      const url = id ? `/api/school-tariffs/${id}` : '/api/school-tariffs';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.closeModals();
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حفظ التسعيرة');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  async deleteTariff(id) {
+    if (!confirm('هل أنت متأكد من حذف هذه التسعيرة؟')) return;
+    try {
+      const res = await fetch(`/api/school-tariffs/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حذف التسعيرة');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  // --- Modal: Transport Routes Actions ---
+  openModalAddTransportRoute(id = null) {
+    const titleEl = document.getElementById('modalTransportRouteTitle');
+    const form = document.getElementById('formTransportRoute');
+    if (form) form.reset();
+
+    const isFr = this.lang === 'fr';
+    document.getElementById('routeId').value = id || '';
+
+    if (id) {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square" style="color: #f59e0b;"></i> <span data-i18n="modal_route_title_edit">${isFr ? 'Modifier la Ligne de Transport' : 'تعديل خط نقل مدرسي'}</span>`;
+      const item = (this._routesCache || []).find(r => r.id === id);
+      if (item) {
+        document.getElementById('routeName').value = item.route_name || '';
+        document.getElementById('routeZone').value = item.zone_name || '';
+        document.getElementById('routeT1').value = item.t1_fee || 0;
+        document.getElementById('routeT2').value = item.t2_fee || 0;
+        document.getElementById('routeT3').value = item.t3_fee || 0;
+        document.getElementById('routeAnnual').value = item.annual_fee || 0;
+        document.getElementById('routeBusNo').value = item.bus_number || '';
+        document.getElementById('routeDriverName').value = item.driver_name || '';
+        document.getElementById('routeDriverPhone').value = item.driver_phone || '';
+      }
+    } else {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-bus" style="color: #f59e0b;"></i> <span data-i18n="modal_route_title_add">${isFr ? 'Nouvelle Ligne de Transport' : 'إضافة خط نقل مدرسي جديد'}</span>`;
+    }
+
+    const modal = document.getElementById('modalTransportRoute');
+    if (modal) modal.classList.add('active');
+  }
+
+  autoCalculateRouteTotal() {
+    const t1 = Number(document.getElementById('routeT1')?.value) || 0;
+    const t2 = Number(document.getElementById('routeT2')?.value) || 0;
+    const t3 = Number(document.getElementById('routeT3')?.value) || 0;
+    const annInput = document.getElementById('routeAnnual');
+    if (annInput) annInput.value = t1 + t2 + t3;
+  }
+
+  async saveTransportRoute(event) {
+    try {
+      const id = document.getElementById('routeId').value;
+      const route_name = document.getElementById('routeName').value.trim();
+      const zone_name = document.getElementById('routeZone').value.trim();
+      const t1_fee = Number(document.getElementById('routeT1').value) || 0;
+      const t2_fee = Number(document.getElementById('routeT2').value) || 0;
+      const t3_fee = Number(document.getElementById('routeT3').value) || 0;
+      const annual_fee = Number(document.getElementById('routeAnnual').value) || (t1_fee + t2_fee + t3_fee);
+      const bus_number = document.getElementById('routeBusNo').value.trim();
+      const driver_name = document.getElementById('routeDriverName').value.trim();
+      const driver_phone = document.getElementById('routeDriverPhone').value.trim();
+      const currentYear = document.getElementById('tarifsSchoolYearFilter')?.value;
+      const school_year = (currentYear && currentYear !== 'all') ? currentYear : '2026-2027';
+
+      const payload = { route_name, zone_name, t1_fee, t2_fee, t3_fee, annual_fee, school_year, bus_number, driver_name, driver_phone };
+      const url = id ? `/api/transport-routes/${id}` : '/api/transport-routes';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.closeModals();
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حفظ المسار');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  async deleteTransportRoute(id) {
+    if (!confirm('هل أنت متأكد من حذف هذا المسار؟')) return;
+    try {
+      const res = await fetch(`/api/transport-routes/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حذف المسار');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  // --- Modal: Extra Fees Actions ---
+  openModalAddExtraFee(id = null) {
+    const titleEl = document.getElementById('modalExtraFeeTitle');
+    const form = document.getElementById('formExtraFee');
+    if (form) form.reset();
+
+    const isFr = this.lang === 'fr';
+    document.getElementById('extraFeeId').value = id || '';
+
+    if (id) {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square" style="color: #a855f7;"></i> <span data-i18n="modal_extra_title_edit">${isFr ? 'Modifier le Frais / Service' : 'تعديل رسم أو خدمة ملحقة'}</span>`;
+      const item = (this._extrasCache || []).find(f => f.id === id);
+      if (item) {
+        document.getElementById('extraFeeName').value = item.fee_name || '';
+        document.getElementById('extraFeeCategory').value = item.category || 'autre';
+        document.getElementById('extraFeeCycle').value = item.cycle || 'tous';
+        document.getElementById('extraFeeAmount').value = item.amount || 0;
+        document.getElementById('extraFeePeriod').value = item.period_type || 'annual';
+        document.getElementById('extraFeeNotes').value = item.notes || '';
+      }
+    } else {
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-cubes" style="color: #a855f7;"></i> <span data-i18n="modal_extra_title_add">${isFr ? 'Nouveau Frais / Service' : 'إضافة رسم أو خدمة جديدة'}</span>`;
+    }
+
+    const modal = document.getElementById('modalExtraFee');
+    if (modal) modal.classList.add('active');
+  }
+
+  async saveExtraFee(event) {
+    try {
+      const id = document.getElementById('extraFeeId').value;
+      const fee_name = document.getElementById('extraFeeName').value.trim();
+      const category = document.getElementById('extraFeeCategory').value;
+      const cycle = document.getElementById('extraFeeCycle').value;
+      const amount = Number(document.getElementById('extraFeeAmount').value) || 0;
+      const period_type = document.getElementById('extraFeePeriod').value;
+      const notes = document.getElementById('extraFeeNotes').value.trim();
+      const currentYear = document.getElementById('tarifsSchoolYearFilter')?.value;
+      const school_year = (currentYear && currentYear !== 'all') ? currentYear : '2026-2027';
+
+      const payload = { fee_name, category, cycle, amount, period_type, school_year, notes };
+      const url = id ? `/api/school-extra-fees/${id}` : '/api/school-extra-fees';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.closeModals();
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حفظ الخدمة');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  async deleteExtraFee(id) {
+    if (!confirm('هل أنت متأكد من حذف هذه الخدمة؟')) return;
+    try {
+      const res = await fetch(`/api/school-extra-fees/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حذف الخدمة');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  // --- Modal: Duplicate Year Actions ---
+  openModalDuplicateYear() {
+    const selectFrom = document.getElementById('dupFromYear');
+    const inputTo = document.getElementById('dupToYear');
+    const yearSelect = document.getElementById('tarifsSchoolYearFilter');
+
+    if (selectFrom && yearSelect) {
+      const opts = Array.from(yearSelect.options)
+        .filter(o => o.value !== 'all')
+        .map(o => `<option value="${o.value}">${o.value}</option>`)
+        .join('');
+      selectFrom.innerHTML = opts;
+    }
+
+    if (inputTo) {
+      const current = selectFrom?.value || '2026-2027';
+      const parts = current.split('-').map(Number);
+      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        inputTo.value = `${parts[0] + 1}-${parts[1] + 1}`;
+      } else {
+        inputTo.value = '2027-2028';
+      }
+    }
+
+    const modal = document.getElementById('modalDuplicateYear');
+    if (modal) modal.classList.add('active');
+  }
+
+  async submitDuplicateYear(event) {
+    try {
+      const from_year = document.getElementById('dupFromYear').value;
+      const to_year = document.getElementById('dupToYear').value.trim();
+      const increase_percent = Number(document.getElementById('dupIncreasePercent').value) || 0;
+      const copy_transport = document.getElementById('dupCopyTransport').checked;
+      const copy_extras = document.getElementById('dupCopyExtras').checked;
+
+      if (!to_year) {
+        alert('يرجى تحديد السنة الدراسية المستهدفة');
+        return;
+      }
+
+      const res = await fetch('/api/school-tariffs/copy-year', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from_year, to_year, increase_percent, copy_transport, copy_extras })
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.closeModals();
+        alert(`✅ تم نسخ الأسعار بنجاح إلى السنة الدراسية (${to_year}) بمجموع (${data.count}) تسعيرة تمدرس.`);
+        const yearSelect = document.getElementById('tarifsSchoolYearFilter');
+        if (yearSelect) yearSelect.value = to_year;
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء نسخ الأسعار');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  // --- Excel Import & Export ---
+  openModalImportTariffsExcel() {
+    this.switchTarifsTab('excel');
+  }
+
+  async importPreloadedMiddleSchoolExcel() {
+    try {
+      const currentYear = document.getElementById('tarifsSchoolYearFilter')?.value;
+      const school_year = (currentYear && currentYear !== 'all') ? currentYear : '2026-2027';
+
+      if (!confirm(`هل تريد استيراد وتسجيل أسعار الطور المتوسط وخطوط النقل للسنة الدراسية (${school_year})؟`)) {
+        return;
+      }
+
+      const res = await fetch('/api/school-tariffs/load-default-middle-excel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ school_year })
+      });
+
+      if (!res.ok) {
+        let errDetail = '';
+        try {
+          const errData = await res.json();
+          errDetail = errData.error || errData.message;
+        } catch(e) {
+          errDetail = `رمز الخطأ: ${res.status}`;
+        }
+        throw new Error(errDetail || 'فشل الاتصال بالخادم');
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ ${data.message}\n• تم تسجيل ${data.insertedTariffs} مستويات تعليمية\n• تم تسجيل ${data.insertedRoutes} مسارات نقل مدرسي`);
+        this.switchTarifsTab('scolarite');
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'حدث خطأ أثناء استيراد الملف');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  onTarifsExcelFileSelected(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const sheetName = wb.SheetNames[0];
+        const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 });
+
+        this.parseAndPreviewTariffsExcel(rows);
+      } catch (err) {
+        alert('خطأ في قراءة ملف Excel: ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  parseAndPreviewTariffsExcel(rows) {
+    const tariffs = [];
+    const routes = [];
+
+    // Simple heuristic parser for school tariffs & transport
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i];
+      if (!Array.isArray(r) || r.length < 2) continue;
+
+      const col0 = String(r[0] || '').trim();
+      const col1 = Number(r[1]) || 0;
+      const col2 = Number(r[2]) || 0;
+      const col3 = Number(r[3]) || 0;
+      const col4 = Number(r[4]) || 0;
+
+      // Check if it's a tariff level (e.g., أولى متوسط, ثانية, ابتدائي, etc.)
+      if (col0.includes('متوسط') || col0.includes('ابتدائي') || col0.includes('تحضيري') || col0.includes('ثانوي') || col0.includes('1AM') || col0.includes('2AM') || col0.includes('3AM') || col0.includes('4AM')) {
+        let cycle = 'CEM';
+        if (col0.includes('ابتدائي')) cycle = 'Primaire';
+        else if (col0.includes('تحضيري')) cycle = 'Maternelle';
+        else if (col0.includes('ثانوي')) cycle = 'Lycee';
+
+        tariffs.push({
+          level_name: col0,
+          cycle,
+          annual_fee: col1,
+          t1_fee: col2,
+          t2_fee: col3,
+          t3_fee: col4,
+          registration_fee: 0
+        });
+      }
+      // Check if it's a transport line (routes)
+      else if (col1 > 0 && (col0.includes('خط') || col0.includes('منايل') || col0.includes('يسر') || col0.includes('ناصرية') || col0.includes('جنات') || col0.includes('دلس') || col0.includes('بغلية') || (col2 > 0 && col3 > 0))) {
+        routes.push({
+          route_name: col0.startsWith('خط') ? col0 : `خط ${col0}`,
+          zone_name: col0.replace('خط', '').trim(),
+          annual_fee: col1,
+          t1_fee: col2,
+          t2_fee: col3,
+          t3_fee: col4
+        });
+      }
+    }
+
+    this._pendingExcelTariffs = tariffs;
+    this._pendingExcelRoutes = routes;
+
+    const previewDiv = document.getElementById('tarifsExcelPreviewTables');
+    const container = document.getElementById('tarifsExcelPreviewContainer');
+    if (!previewDiv || !container) return;
+
+    const isFr = this.lang === 'fr';
+    const curr = isFr ? 'DA' : 'دج';
+
+    let html = `
+      <div style="margin-bottom: 16px;">
+        <h5 style="color: #06b6d4; font-size: 14px; margin-bottom: 8px;">
+          <i class="fa-solid fa-graduation-cap"></i> ${isFr ? `Frais de Scolarité Détectés (${tariffs.length} niveaux)` : `تكاليف التمدرس المكتشفة (${tariffs.length} مستويات)`}
+        </h5>
+        <div class="table-responsive">
+          <table class="data-table" style="font-size: 13px; margin: 0;">
+            <thead>
+              <tr>
+                <th>${isFr ? 'Niveau Scolaire' : 'المستوى الدراسي'}</th>
+                <th>${isFr ? 'Cycle' : 'الطور التعليمي'}</th>
+                <th style="text-align: right;">${isFr ? '1er Trimestre (T1)' : 'الشطر الأول (T1)'}</th>
+                <th style="text-align: right;">${isFr ? '2ème Trimestre (T2)' : 'الشطر الثاني (T2)'}</th>
+                <th style="text-align: right;">${isFr ? '3ème Trimestre (T3)' : 'الشطر الثالث (T3)'}</th>
+                <th style="text-align: right; color: #10b981;">${isFr ? 'Total Annuel' : 'المجموع السنوي'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tariffs.map(t => `
+                <tr>
+                  <td><strong>${t.level_name}</strong></td>
+                  <td><span class="badge" style="background: rgba(6,182,212,0.15); color: #06b6d4;">${t.cycle}</span></td>
+                  <td style="text-align: right; color: #3b82f6; font-weight: 600;">${t.t1_fee.toLocaleString()} ${curr}</td>
+                  <td style="text-align: right; color: #3b82f6; font-weight: 600;">${t.t2_fee.toLocaleString()} ${curr}</td>
+                  <td style="text-align: right; color: #3b82f6; font-weight: 600;">${t.t3_fee.toLocaleString()} ${curr}</td>
+                  <td style="text-align: right; color: #10b981; font-weight: 800;">${t.annual_fee.toLocaleString()} ${curr}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    if (routes.length > 0) {
+      html += `
+        <div>
+          <h5 style="color: #f59e0b; font-size: 14px; margin-bottom: 8px;">
+            <i class="fa-solid fa-bus"></i> ${isFr ? `Lignes de Transport Détectées (${routes.length} lignes)` : `مسارات النقل المكتشفة (${routes.length} خطوط)`}
+          </h5>
+          <div class="table-responsive">
+            <table class="data-table" style="font-size: 13px; margin: 0;">
+              <thead>
+                <tr>
+                  <th>${isFr ? 'Ligne / Trajet' : 'اسم الخط / المسار'}</th>
+                  <th>${isFr ? 'Zone / Quartier' : 'المنطقة / الحي'}</th>
+                  <th style="text-align: right;">${isFr ? '1er Trimestre (T1)' : 'الشطر الأول (T1)'}</th>
+                  <th style="text-align: right;">${isFr ? '2ème Trimestre (T2)' : 'الشطر الثاني (T2)'}</th>
+                  <th style="text-align: right;">${isFr ? '3ème Trimestre (T3)' : 'الشطر الثالث (T3)'}</th>
+                  <th style="text-align: right; color: #f59e0b;">${isFr ? 'Total Annuel' : 'المجموع السنوي'}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${routes.map(r => `
+                  <tr>
+                    <td><strong>${r.route_name}</strong></td>
+                    <td>${r.zone_name}</td>
+                    <td style="text-align: right; color: #f59e0b; font-weight: 600;">${r.t1_fee.toLocaleString()} ${curr}</td>
+                    <td style="text-align: right; color: #f59e0b; font-weight: 600;">${r.t2_fee.toLocaleString()} ${curr}</td>
+                    <td style="text-align: right; color: #f59e0b; font-weight: 600;">${r.t3_fee.toLocaleString()} ${curr}</td>
+                    <td style="text-align: right; color: #f59e0b; font-weight: 800;">${r.annual_fee.toLocaleString()} ${curr}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    previewDiv.innerHTML = html;
+    container.style.display = 'block';
+  }
+
+  async confirmTarifsExcelImport() {
+    try {
+      if (!this._pendingExcelTariffs && !this._pendingExcelRoutes) {
+        alert('لا توجد بيانات مستوردة للحفظ');
+        return;
+      }
+      const currentYear = document.getElementById('tarifsSchoolYearFilter')?.value;
+      const school_year = (currentYear && currentYear !== 'all') ? currentYear : '2026-2027';
+
+      const res = await fetch('/api/school-tariffs/import-excel-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          school_year,
+          tariffs: this._pendingExcelTariffs || [],
+          routes: this._pendingExcelRoutes || [],
+          overwrite: true
+        })
+      });
+
+      if (!res.ok) {
+        let errDetail = '';
+        try {
+          const errData = await res.json();
+          errDetail = errData.error || errData.message;
+        } catch(e) {
+          errDetail = `رمز الخطأ: ${res.status}`;
+        }
+        throw new Error(errDetail || 'فشل الاتصال بالخادم');
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ تم استيراد وتحديث الأسعار بنجاح في قاعدة البيانات للسنة (${school_year})`);
+        document.getElementById('tarifsExcelPreviewContainer').style.display = 'none';
+        this.switchTarifsTab('scolarite');
+        this.loadTarifsView();
+      } else {
+        alert(data.error || 'خطأ أثناء حفظ البيانات');
+      }
+    } catch (e) {
+      alert('خطأ في الاتصال بالخادم: ' + e.message);
+    }
+  }
+
+  exportTarifsToExcel() {
+    try {
+      if (typeof XLSX === 'undefined') {
+        alert('مكتبة SheetJS غير متوفرة');
+        return;
+      }
+      const year = document.getElementById('tarifsSchoolYearFilter')?.value || '2026-2027';
+      const wb = XLSX.utils.book_new();
+
+      // Sheet 1: Tariffs
+      const tariffsData = (this._tariffsCache || []).map(t => ({
+        'المستوى': t.level_name,
+        'الطور': t.cycle,
+        'حقوق التسجيل': t.registration_fee || 0,
+        'الشطر الأول': t.t1_fee || 0,
+        'الشطر الثاني': t.t2_fee || 0,
+        'الشطر الثالث': t.t3_fee || 0,
+        'المجموع السنوي': t.annual_fee || 0,
+        'السنة الدراسية': t.school_year || year,
+        'ملاحظات': t.notes || ''
+      }));
+      const wsTariffs = XLSX.utils.json_to_sheet(tariffsData);
+      XLSX.utils.book_append_sheet(wb, wsTariffs, 'تكاليف التمدرس');
+
+      // Sheet 2: Transport
+      const routesData = (this._routesCache || []).map(r => ({
+        'اسم الخط': r.route_name,
+        'المنطقة': r.zone_name,
+        'الشطر الأول': r.t1_fee || 0,
+        'الشطر الثاني': r.t2_fee || 0,
+        'الشطر الثالث': r.t3_fee || 0,
+        'المجموع السنوي': r.annual_fee || 0,
+        'رقم الحافلة': r.bus_number || '',
+        'السائق': r.driver_name || '',
+        'الهاتف': r.driver_phone || ''
+      }));
+      const wsRoutes = XLSX.utils.json_to_sheet(routesData);
+      XLSX.utils.book_append_sheet(wb, wsRoutes, 'النقل المدرسي');
+
+      // Sheet 3: Extras
+      const extrasData = (this._extrasCache || []).map(e => ({
+        'اسم الخدمة': e.fee_name,
+        'الفئة': e.category,
+        'الطور': e.cycle,
+        'المبلغ': e.amount || 0,
+        'دورية الدفع': e.period_type,
+        'ملاحظات': e.notes || ''
+      }));
+      const wsExtras = XLSX.utils.json_to_sheet(extrasData);
+      XLSX.utils.book_append_sheet(wb, wsExtras, 'الخدمات الملحقة');
+
+      XLSX.writeFile(wb, `EDUMIND_Tarifs_Scolaires_${year}.xlsx`);
+    } catch (e) {
+      alert('خطأ أثناء تصدير ملف Excel: ' + e.message);
+    }
+  }
+
+  downloadTariffsExcelTemplate() {
+    try {
+      if (typeof XLSX === 'undefined') {
+        alert('مكتبة SheetJS غير متوفرة');
+        return;
+      }
+      const wb = XLSX.utils.book_new();
+
+      const sampleTariffs = [
+        { 'المستوى': 'أولى متوسط (1AM)', 'الطور': 'CEM', 'حقوق التسجيل': 3000, 'الشطر الأول': 112000, 'الشطر الثاني': 85000, 'الشطر الثالث': 57000, 'المجموع السنوي': 254000 },
+        { 'المستوى': 'ثانية متوسط (2AM)', 'الطور': 'CEM', 'حقوق التسجيل': 3000, 'الشطر الأول': 117000, 'الشطر الثاني': 90000, 'الشطر الثالث': 57000, 'المجموع السنوي': 264000 },
+        { 'المستوى': 'ثالثة متوسط (3AM)', 'الطور': 'CEM', 'حقوق التسجيل': 3000, 'الشطر الأول': 121000, 'الشطر الثاني': 93000, 'الشطر الثالث': 60000, 'المجموع السنوي': 274000 },
+        { 'المستوى': 'رابعة متوسط (4AM)', 'الطور': 'CEM', 'حقوق التسجيل': 3000, 'الشطر الأول': 124000, 'الشطر الثاني': 100000, 'الشطر الثالث': 60000, 'المجموع السنوي': 284000 }
+      ];
+
+      const sampleRoutes = [
+        { 'اسم الخط': 'خط برج منايل', 'المنطقة': 'برج منايل', 'الشطر الأول': 16000, 'الشطر الثاني': 16000, 'الشطر الثالث': 8000, 'المجموع السنوي': 40000 },
+        { 'اسم الخط': 'خط يسر', 'المنطقة': 'يسر', 'الشطر الأول': 22000, 'الشطر الثاني': 18000, 'الشطر الثالث': 10000, 'المجموع السنوي': 50000 }
+      ];
+
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sampleTariffs), 'تكاليف التمدرس');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sampleRoutes), 'النقل المدرسي');
+
+      XLSX.writeFile(wb, 'نموذج_تكاليف_التمدرس_EDUMIND.xlsx');
+    } catch (e) {
+      alert('خطأ أثناء تحميل النموذج: ' + e.message);
     }
   }
 
