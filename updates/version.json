@@ -1,7 +1,7 @@
 {
-  "version": "1.0.5",
-  "releaseDate": "2026-10-21",
-  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.5.zip",
-  "notes": "تحسينات الدفع المالي المتعدد (دراسة ونقل)، وتسهيل البحث عن الأولياء، وضبط الحساب الذكي للديون المتبقية في الوصولات",
-  "notes_ar": "تحسينات الدفع المالي المتعدد (دراسة ونقل)، وتسهيل البحث عن الأولياء، وضبط الحساب الذكي للديون المتبقية في الوصولات"
+  "version": "1.0.6",
+  "releaseDate": "2026-10-25",
+  "zipUrl": "https://raw.githubusercontent.com/BELMAHDI6/EDUMIND-PRIVEE/main/updates/edumind_privee_patch_v1.0.6.zip",
+  "notes": "تحسين وتصغير مقاس وصل الاستلام، دعم طباعة نسختين في ورقة A4 (للإدارة والولي) ووصل A5، وتصحيح حساب ديون الأولياء والتسعيرة",
+  "notes_ar": "تحسين وتصغير مقاس وصل الاستلام، دعم طباعة نسختين في ورقة A4 (للإدارة والولي) ووصل A5، وتصحيح حساب ديون الأولياء والتسعيرة"
 }

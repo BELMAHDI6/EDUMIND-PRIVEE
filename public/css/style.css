@@ -2035,7 +2035,7 @@ body.rtl .receipt-table {
 
   #bulletinPaiePrintArea,
   .printable-area {
-    position: absolute;
+    position: relative;
     left: 0;
     top: 0;
     width: 100%;
@@ -6969,8 +6969,15 @@ body.entrance-kiosk-active #attendanceEntranceView {
 }
 @media print {
   @page {
-    size: A5 landscape;
-    margin: 8mm;
+    size: auto;
+    margin: 5mm 8mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   body * {
@@ -6986,37 +6993,226 @@ body.entrance-kiosk-active #attendanceEntranceView {
 
   #bulletinPaiePrintArea,
   .printable-area {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0 !important;
-    padding: 10px 15px !important;
+    margin: 0 auto !important;
+    padding: 8px 12px !important;
     box-shadow: none !important;
     border: 1px solid #94a3b8 !important;
+    border-radius: 6px !important;
     background: #fff !important;
     color: #000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  .receipt-table th {
+  /* Ultra-compact receipt styling for 1-page fit (A5 or A4) */
+  .receipt-card {
+    padding: 8px 12px !important;
+    font-size: 11px !important;
+  }
+
+  .receipt-card .receipt-header {
+    margin-bottom: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .receipt-card .receipt-header h2 {
+    font-size: 16px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .receipt-card .receipt-header p {
+    font-size: 10px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .receipt-badge-title {
+    font-size: 11px !important;
+    padding: 3px 8px !important;
+    border: 1px solid #94a3b8 !important;
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+  }
+
+  .receipt-card .receipt-grid {
+    gap: 4px 8px !important;
+    padding: 6px 10px !important;
+    margin-bottom: 6px !important;
+    font-size: 10.5px !important;
+  }
+
+  .receipt-card .receipt-table {
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+    font-size: 10px !important;
+  }
+
+  .receipt-card .receipt-table th,
+  .receipt-card .receipt-table td {
+    padding: 3px 6px !important;
+    line-height: 1.25 !important;
+  }
+
+  .receipt-card .receipt-table th {
     background: #f1f5f9 !important;
     color: #0f172a !important;
     border: 1px solid #cbd5e1 !important;
+    font-weight: 800 !important;
   }
 
-  .receipt-table td {
+  .receipt-card .receipt-table td {
     border: 1px solid #e2e8f0 !important;
     color: #0f172a !important;
   }
 
-  .receipt-badge-title {
-    border: 1px solid #94a3b8 !important;
-    background: #f8fafc !important;
-    color: #0f172a !important;
+  .receipt-card .financial-summary-grid {
+    gap: 6px !important;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
   }
+
+  .receipt-card .financial-summary-card {
+    padding: 4px 8px !important;
+  }
+
+  .receipt-card .financial-summary-card strong {
+    font-size: 14px !important;
+  }
+
+  .receipt-card .receipt-debt-box {
+    padding: 5px 10px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .receipt-card .receipt-debt-box strong {
+    font-size: 14px !important;
+  }
+
+  .receipt-card .receipt-footer {
+    margin-top: 6px !important;
+    padding-top: 4px !important;
+  }
+
+  .receipt-card .receipt-footer .signatures {
+    margin-bottom: 12px !important;
+  }
+
+  .receipt-card .receipt-footer p {
+    font-size: 8.5px !important;
+  }
+
+  /* Dual A4 Mode Handling: Top copy (Admin) & Bottom copy (Client) */
+  body.print-mode-a4-dual #printableReceipt {
+    display: none !important;
+  }
+
+  body.print-mode-a4-dual #printableReceiptA4Dual {
+    display: block !important;
+    visibility: visible !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  body.print-mode-a4-dual #printableReceiptA4Dual * {
+    visibility: visible !important;
+  }
+
+  body:not(.print-mode-a4-dual) #printableReceiptA4Dual {
+    display: none !important;
+  }
+
+  /* Ultra-compact styling when in Dual A4 mode so BOTH copies fit on one A4 */
+  .receipt-dual-a4 .receipt-card {
+    padding: 6px 10px !important;
+    margin-bottom: 2px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    font-size: 10px !important;
+  }
+
+  .receipt-dual-a4 .receipt-header {
+    margin-bottom: 3px !important;
+    padding-bottom: 3px !important;
+  }
+
+  .receipt-dual-a4 .receipt-header h2 {
+    font-size: 13.5px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .receipt-dual-a4 .receipt-badge-title {
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+  }
+
+  .receipt-dual-a4 .receipt-grid {
+    gap: 2px 6px !important;
+    padding: 4px 8px !important;
+    margin-bottom: 4px !important;
+    font-size: 9.5px !important;
+  }
+
+  .receipt-dual-a4 .receipt-table {
+    margin-top: 2px !important;
+    margin-bottom: 3px !important;
+    font-size: 9px !important;
+  }
+
+  .receipt-dual-a4 .receipt-table th,
+  .receipt-dual-a4 .receipt-table td {
+    padding: 2px 5px !important;
+    line-height: 1.2 !important;
+  }
+
+  .receipt-dual-a4 .financial-summary-grid {
+    gap: 4px !important;
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .receipt-dual-a4 .financial-summary-card {
+    padding: 2px 6px !important;
+  }
+
+  .receipt-dual-a4 .financial-summary-card strong {
+    font-size: 12px !important;
+  }
+
+  .receipt-dual-a4 .receipt-debt-box {
+    padding: 3px 6px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .receipt-dual-a4 .receipt-debt-box strong {
+    font-size: 12px !important;
+  }
+
+  .receipt-dual-a4 .receipt-footer {
+    margin-top: 3px !important;
+    padding-top: 2px !important;
+  }
+
+  .receipt-dual-a4 .receipt-footer .signatures {
+    margin-bottom: 6px !important;
+    font-size: 9px !important;
+  }
+
+  .receipt-dual-a4 .receipt-cut-divider {
+    margin: 4px 0 !important;
+    padding: 2px 0 !important;
+  }
+}
+
+#printableReceiptA4Dual {
+  display: none;
 }
 
 /* ==================== SEARCHABLE PARENT COMBOBOX ==================== */

@@ -1585,18 +1585,39 @@ app.get('/api/parents', (req, res) => {
                  SELECT SUM(paid_amount) 
                  FROM payments 
                  WHERE student_id = s.id
-               ), 0) as total_paid
+               ), 0) as total_paid,
+               COALESCE((
+                 SELECT SUM(total_amount) 
+                 FROM school_invoices 
+                 WHERE student_id = s.id
+               ), 0) as total_invoices_billed,
+               COALESCE((
+                 SELECT SUM(paid_amount) 
+                 FROM school_invoices 
+                 WHERE student_id = s.id
+               ), 0) as total_invoices_paid,
+               COALESCE((
+                 SELECT SUM(remaining_amount) 
+                 FROM school_invoices 
+                 WHERE student_id = s.id
+               ), 0) as total_invoices_remaining
         FROM students s
         LEFT JOIN levels l ON s.level_id = l.id
         WHERE s.parent_id = ? AND s.active = 1
         ORDER BY s.first_name ASC
       `, [p.id]);
 
+      children.forEach(c => {
+        const groupsDebt = Math.max(0, Number(c.total_billed || 0) - Number(c.total_paid || 0));
+        const invoiceDebt = Number(c.total_invoices_remaining || 0);
+        c.total_student_debt = groupsDebt + invoiceDebt;
+      });
+
       p.children = children;
       p.children_count = children.length;
-      p.total_billed = children.reduce((sum, c) => sum + Number(c.total_billed || 0), 0);
-      p.total_paid = children.reduce((sum, c) => sum + Number(c.total_paid || 0), 0);
-      p.total_debt = Math.max(0, p.total_billed - p.total_paid);
+      p.total_billed = children.reduce((sum, c) => sum + Number(c.total_billed || 0) + Number(c.total_invoices_billed || 0), 0);
+      p.total_paid = children.reduce((sum, c) => sum + Number(c.total_paid || 0) + Number(c.total_invoices_paid || 0), 0);
+      p.total_debt = children.reduce((sum, c) => sum + Number(c.total_student_debt || 0), 0);
     });
 
     res.json({ success: true, parents });
@@ -1690,9 +1711,9 @@ app.get('/api/parents/:id', (req, res) => {
     const all_tariffs = DB.queryAll("SELECT * FROM school_tariffs ORDER BY id ASC");
     const all_routes = DB.queryAll("SELECT * FROM transport_routes WHERE active = 1 ORDER BY id ASC");
 
-    const totalBilled = children.reduce((sum, c) => sum + c.total_billed, 0);
-    const totalPaid = children.reduce((sum, c) => sum + c.total_paid, 0);
-    const totalDebt = Math.max(0, totalBilled - totalPaid);
+    const totalBilled = children.reduce((sum, c) => sum + (c.total_billed || 0) + (c.invoices ? c.invoices.reduce((s, inv) => s + (parseFloat(inv.total_amount) || 0), 0) : 0), 0);
+    const totalPaid = children.reduce((sum, c) => sum + (c.total_paid || 0) + (c.invoices ? c.invoices.reduce((s, inv) => s + (parseFloat(inv.paid_amount) || 0), 0) : 0), 0);
+    const totalDebt = children.reduce((sum, c) => sum + (c.total_student_debt || 0) + Math.max(0, (c.total_billed || 0) - (c.total_paid || 0)), 0);
 
     // Collect unpaid enrollments for all children of this parent
     const childIds = children.map(c => c.id);
@@ -6242,16 +6263,22 @@ function getStudentSmartAnnualFinancials(studentId) {
 
   let tariff = null;
   if (student.level_id) {
-    tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_id = ?", [student.level_id]);
+    tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_id = ? ORDER BY id DESC LIMIT 1", [student.level_id]);
   }
-  const annualTuition = tariff ? (parseFloat(tariff.annual_fee) || 0) : 0;
+  if (!tariff) {
+    const lvl = DB.queryOne("SELECT name FROM levels WHERE id = ?", [student.level_id]);
+    if (lvl) {
+      tariff = DB.queryOne("SELECT * FROM school_tariffs WHERE level_name = ? ORDER BY id DESC LIMIT 1", [lvl.name]);
+    }
+  }
+  const annualTuition = tariff ? (parseFloat(tariff.annual_fee) || ((parseFloat(tariff.t1_fee)||0) + (parseFloat(tariff.t2_fee)||0) + (parseFloat(tariff.t3_fee)||0))) : 0;
   const regFee = tariff ? (parseFloat(tariff.registration_fee) || 0) : 0;
 
   let annualTransport = 0;
   const routeId = student.transport_route_id || (DB.queryOne("SELECT transport_route_id FROM school_invoices WHERE student_id = ? AND transport_route_id IS NOT NULL LIMIT 1", [studentId])?.transport_route_id);
   if (routeId) {
     const route = DB.queryOne("SELECT * FROM transport_routes WHERE id = ?", [routeId]);
-    annualTransport = route ? (parseFloat(route.annual_fee) || 0) : 0;
+    annualTransport = route ? (parseFloat(route.annual_fee) || parseFloat(route.round_trip_annual_fee) || ((parseFloat(route.t1_fee)||0) + (parseFloat(route.t2_fee)||0) + (parseFloat(route.t3_fee)||0))) : 0;
   }
 
   // Sum of all discounts granted across all invoices of this student

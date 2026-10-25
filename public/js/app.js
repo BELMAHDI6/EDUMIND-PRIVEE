@@ -11139,24 +11139,60 @@ class EdumindApp {
     const totalDebtEl = document.getElementById('rcptTotalStudentDebt');
     const debtTitleEl = document.getElementById('rcptDebtTitle');
     const debtSubEl = document.getElementById('rcptDebtSubtitle');
+    const debtWrap = document.getElementById('rcptDebtTitleWrap');
+    const debtIcon = document.getElementById('rcptDebtIcon');
 
-    if (totalDebtEl) {
-      totalDebtEl.textContent = `${totalDebt.toLocaleString('fr-FR')} DA`;
-    }
-    if (debtTitleEl) {
-      debtTitleEl.textContent = isAr
-        ? 'المتبقي السنوي الإجمالي على التلميذ (الواجب السنوي - مجموع المدفوع) / RESTE ANNUEL TOTAL DÛ'
-        : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
-    }
-    if (debtSubEl) {
-      if (p.total_annual_obligation !== undefined && p.total_annual_obligation !== null) {
-        debtSubEl.textContent = isAr
-          ? `(الواجب السنوي الصافي: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`
-          : `(Total annuel: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`;
-      }
-    }
     if (totalDebtRow) {
       totalDebtRow.style.display = 'flex';
+      if (totalDebt <= 0) {
+        totalDebtRow.style.background = '#f0fdf4';
+        totalDebtRow.style.border = '1.5px solid #16a34a';
+        if (debtWrap) debtWrap.style.color = '#15803d';
+        if (debtIcon) {
+          debtIcon.className = 'fa-solid fa-circle-check';
+          debtIcon.style.color = '#16a34a';
+        }
+        if (debtTitleEl) {
+          debtTitleEl.textContent = isAr
+            ? 'الوضعية المالية مسواة بالكامل (لا توجد أي ديون متأخرة) / SITUATION EN RÈGLE'
+            : 'Situation financière en règle (Aucune dette)';
+        }
+        if (debtSubEl) {
+          debtSubEl.style.color = '#166534';
+          debtSubEl.textContent = isAr
+            ? `(تم تسديد كامل الواجب السنوي: ${Number(p.total_annual_obligation || paidAmt).toLocaleString('fr-FR')} DA)`
+            : `(Total annuel réglé: ${Number(p.total_annual_obligation || paidAmt).toLocaleString('fr-FR')} DA)`;
+        }
+        if (totalDebtEl) {
+          totalDebtEl.style.color = '#15803d';
+          totalDebtEl.textContent = '0 DA';
+        }
+      } else {
+        totalDebtRow.style.background = '#fff1f2';
+        totalDebtRow.style.border = '1.5px dashed #f43f5e';
+        if (debtWrap) debtWrap.style.color = '#be123c';
+        if (debtIcon) {
+          debtIcon.className = 'fa-solid fa-triangle-exclamation';
+          debtIcon.style.color = '#e11d48';
+        }
+        if (debtTitleEl) {
+          debtTitleEl.textContent = isAr
+            ? 'المتبقي السنوي الإجمالي على التلميذ (الواجب السنوي - مجموع المدفوع) / RESTE ANNUEL TOTAL DÛ'
+            : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
+        }
+        if (debtSubEl) {
+          debtSubEl.style.color = '#9f1239';
+          if (p.total_annual_obligation !== undefined && p.total_annual_obligation !== null) {
+            debtSubEl.textContent = isAr
+              ? `(الواجب السنوي الصافي: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`
+              : `(Total annuel: ${Number(p.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(p.total_annual_paid_so_far || paidAmt).toLocaleString('fr-FR')} DA)`;
+          }
+        }
+        if (totalDebtEl) {
+          totalDebtEl.style.color = '#be123c';
+          totalDebtEl.textContent = `${totalDebt.toLocaleString('fr-FR')} DA`;
+        }
+      }
     }
 
     document.getElementById('modalReceipt').classList.add('active');
@@ -12554,15 +12590,22 @@ class EdumindApp {
           } else {
             const tNum = parseInt(activePeriod.replace('T', ''), 10) || 1;
             tuitionFee = parseFloat(tariff['t' + tNum + '_fee']) || 0;
-            const inv = invoices.find(i => i.payment_period_type === 'trimester' && parseInt(i.trimester_number, 10) === tNum && parseFloat(i.tuition_fee) > 0);
-            if (inv && parseFloat(inv.remaining_amount) <= 0) {
+            // Check if annual tuition was already paid
+            const annualPaidInv = invoices.find(i => i.payment_period_type === 'annual' && parseFloat(i.tuition_fee) > 0 && parseFloat(i.remaining_amount) <= 0);
+            if (annualPaidInv) {
               isTuitionPaid = true;
               tuitionRemaining = 0;
-            } else if (inv) {
-              isTuitionPartial = true;
-              tuitionRemaining = parseFloat(inv.remaining_amount) || 0;
             } else {
-              tuitionRemaining = tuitionFee;
+              const inv = invoices.find(i => i.payment_period_type === 'trimester' && parseInt(i.trimester_number, 10) === tNum && parseFloat(i.tuition_fee) > 0);
+              if (inv && parseFloat(inv.remaining_amount) <= 0) {
+                isTuitionPaid = true;
+                tuitionRemaining = 0;
+              } else if (inv) {
+                isTuitionPartial = true;
+                tuitionRemaining = parseFloat(inv.remaining_amount) || 0;
+              } else {
+                tuitionRemaining = tuitionFee;
+              }
             }
           }
         }
@@ -13224,25 +13267,26 @@ class EdumindApp {
       familyTable.style.display = 'table';
       if (familyBody) {
         familyBody.innerHTML = payments.map((p, idx) => {
-          const net = Math.max(0, (parseFloat(p.base_amount) || 0) - (parseFloat(p.discount) || 0));
+          const base = parseFloat(p.base_amount) || 0;
+          const net = Math.max(0, base - (parseFloat(p.discount) || 0));
           const paid = parseFloat(p.paid_amount) || 0;
           const rem = parseFloat(p.remaining_amount) || 0;
           return `
             <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="text-align: center; padding: 8px;">${idx + 1}</td>
-              <td style="padding: 8px 10px;">
-                <strong style="color: #0f172a; font-size: 13px;">${this.escapeHtml(p.first_name || '')} ${this.escapeHtml(p.last_name || '')}</strong>
-                <span style="font-size: 10.5px; color: #64748b; display: block; font-family: monospace;">${this.escapeHtml(p.matricule || '')}</span>
+              <td style="text-align: center; padding: 6px 8px;">${idx + 1}</td>
+              <td style="padding: 6px 10px;">
+                <strong style="color: #0f172a; font-size: 12px;">${this.escapeHtml(p.first_name || '')} ${this.escapeHtml(p.last_name || '')}</strong>
+                <span style="font-size: 10px; color: #64748b; display: block; font-family: monospace;">${this.escapeHtml(p.matricule || '')}</span>
               </td>
-              <td style="padding: 8px 10px;">
-                <strong style="color: #1e3a8a;">${this.escapeHtml(p.level_name ? `${p.level_name} - ${p.group_name}` : p.group_name)}</strong>
-                <span style="font-size: 10.5px; color: #64748b; display: block;">${this.escapeHtml(p.subject_name || '')}${p.teacher_name ? ' &bull; ' + this.escapeHtml(p.teacher_name) : ''}</span>
+              <td style="padding: 6px 10px;">
+                <strong style="color: #1e3a8a; font-size: 11.5px;">${this.escapeHtml(p.level_name ? `${p.level_name} - ${p.group_name}` : p.group_name)}</strong>
+                <span style="font-size: 10px; color: #64748b; display: block;">${this.escapeHtml(p.subject_name || '')}${p.teacher_name ? ' &bull; ' + this.escapeHtml(p.teacher_name) : ''}</span>
               </td>
-              <td style="padding: 8px 10px; color: #475569; text-align: center;">${this.escapeHtml(p.month_period)}</td>
-              <td style="text-align: right; padding: 8px 10px; font-weight: 600;">${net.toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right; padding: 8px 10px; color: #16a34a; font-weight: 700;">${Number(p.discount || 0).toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right; padding: 8px 10px; font-weight: 800; color: #15803d;">${paid.toLocaleString('fr-FR')} DA</td>
-              <td style="text-align: right; padding: 8px 10px; color: ${rem > 0 ? '#ef4444' : '#64748b'}; font-weight: ${rem > 0 ? '800' : 'normal'};">${rem.toLocaleString('fr-FR')} DA</td>
+              <td style="padding: 6px 10px; color: #475569; text-align: center; font-size: 11px;">${this.escapeHtml(p.month_period)}</td>
+              <td style="text-align: right; padding: 6px 10px; font-weight: 600; font-size: 11.5px;">${base.toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 6px 10px; color: #16a34a; font-weight: 700; font-size: 11.5px;">${Number(p.discount || 0).toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 6px 10px; font-weight: 800; color: #15803d; font-size: 11.5px;">${paid.toLocaleString('fr-FR')} DA</td>
+              <td style="text-align: right; padding: 6px 10px; color: ${rem > 0 ? '#ef4444' : '#64748b'}; font-weight: ${rem > 0 ? '800' : 'normal'}; font-size: 11.5px;">${rem.toLocaleString('fr-FR')} DA</td>
             </tr>
           `;
         }).join('');
@@ -13289,23 +13333,127 @@ class EdumindApp {
     const totalDebtEl = document.getElementById('rcptTotalStudentDebt');
     const debtTitleEl = document.getElementById('rcptDebtTitle');
     const debtSubEl = document.getElementById('rcptDebtSubtitle');
+    const debtWrap = document.getElementById('rcptDebtTitleWrap');
+    const debtIcon = document.getElementById('rcptDebtIcon');
 
-    if (totalDebtEl) totalDebtEl.textContent = `${Number(overallDebt).toLocaleString('fr-FR')} DA`;
-    if (debtTitleEl) {
-      debtTitleEl.textContent = isAr
-        ? 'المتبقي السنوي الإجمالي على العائلة (الواجب السنوي - مجموع المسدد) / RESTE ANNUEL TOTAL DÛ'
-        : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
-    }
-    if (debtSubEl) {
-      if (res.total_annual_obligation) {
-        debtSubEl.textContent = isAr
-          ? `(الواجب السنوي الصافي لكافة الأبناء: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`
-          : `(Total annuel: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`;
+    if (totalDebtRow) {
+      totalDebtRow.style.display = 'flex';
+      if (overallDebt <= 0) {
+        totalDebtRow.style.background = '#f0fdf4';
+        totalDebtRow.style.border = '1.5px solid #16a34a';
+        if (debtWrap) debtWrap.style.color = '#15803d';
+        if (debtIcon) {
+          debtIcon.className = 'fa-solid fa-circle-check';
+          debtIcon.style.color = '#16a34a';
+        }
+        if (debtTitleEl) {
+          debtTitleEl.textContent = isAr
+            ? 'الوضعية المالية مسواة بالكامل (لا توجد أي ديون متأخرة) / SITUATION EN RÈGLE'
+            : 'Situation financière en règle (Aucune dette)';
+        }
+        if (debtSubEl) {
+          debtSubEl.style.color = '#166534';
+          debtSubEl.textContent = isAr
+            ? `(تم تسديد كامل الواجب السنوي لكافة الأبناء: ${Number(res.total_annual_obligation || totalPaidVal).toLocaleString('fr-FR')} DA)`
+            : `(Total annuel réglé: ${Number(res.total_annual_obligation || totalPaidVal).toLocaleString('fr-FR')} DA)`;
+        }
+        if (totalDebtEl) {
+          totalDebtEl.style.color = '#15803d';
+          totalDebtEl.textContent = '0 DA';
+        }
+      } else {
+        totalDebtRow.style.background = '#fff1f2';
+        totalDebtRow.style.border = '1.5px dashed #f43f5e';
+        if (debtWrap) debtWrap.style.color = '#be123c';
+        if (debtIcon) {
+          debtIcon.className = 'fa-solid fa-triangle-exclamation';
+          debtIcon.style.color = '#e11d48';
+        }
+        if (debtTitleEl) {
+          debtTitleEl.textContent = isAr
+            ? 'المتبقي السنوي الإجمالي على العائلة / RESTE ANNUEL TOTAL DÛ'
+            : 'RESTE ANNUEL TOTAL DÛ (Annuel dû - Total versé à ce jour)';
+        }
+        if (debtSubEl) {
+          debtSubEl.style.color = '#9f1239';
+          if (res.total_annual_obligation) {
+            debtSubEl.textContent = isAr
+              ? `(الواجب السنوي الصافي لكافة الأبناء: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • مجموع المسدد حتى الآن: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`
+              : `(Total annuel: ${Number(res.total_annual_obligation).toLocaleString('fr-FR')} DA • Payé à ce jour: ${Number(res.total_annual_paid_so_far || totalPaidVal).toLocaleString('fr-FR')} DA)`;
+          }
+        }
+        if (totalDebtEl) {
+          totalDebtEl.style.color = '#be123c';
+          totalDebtEl.textContent = `${Number(overallDebt).toLocaleString('fr-FR')} DA`;
+        }
       }
     }
-    if (totalDebtRow) totalDebtRow.style.display = 'flex';
 
     document.getElementById('modalReceipt').classList.add('active');
+  }
+
+  printReceiptA4Double() {
+    const orig = document.getElementById('printableReceipt');
+    if (!orig) return window.print();
+
+    let dualContainer = document.getElementById('printableReceiptA4Dual');
+    if (!dualContainer) {
+      dualContainer = document.createElement('div');
+      dualContainer.id = 'printableReceiptA4Dual';
+      dualContainer.className = 'printable-area receipt-dual-a4';
+      document.body.appendChild(dualContainer);
+    }
+
+    // Top Copy: Administration Copy
+    const copyAdmin = orig.cloneNode(true);
+    copyAdmin.id = 'rcptCopyAdmin';
+    copyAdmin.classList.remove('printable-area');
+    const badgeAdmin = copyAdmin.querySelector('.receipt-badge-title');
+    if (badgeAdmin) {
+      badgeAdmin.innerHTML += ' &bull; <span style="font-weight:900; color:#1e40af; background:#dbeafe; padding:1px 5px; border-radius:3px; margin-right:4px;">نسخة الإدارة (Établissement)</span>';
+    }
+
+    // Bottom Copy: Client / Parent Copy
+    const copyClient = orig.cloneNode(true);
+    copyClient.id = 'rcptCopyClient';
+    copyClient.classList.remove('printable-area');
+    const badgeClient = copyClient.querySelector('.receipt-badge-title');
+    if (badgeClient) {
+      badgeClient.innerHTML += ' &bull; <span style="font-weight:900; color:#15803d; background:#dcfce7; padding:1px 5px; border-radius:3px; margin-right:4px;">نسخة الولي (Déposant)</span>';
+    }
+
+    // Cutting divider
+    const cutDivider = document.createElement('div');
+    cutDivider.className = 'receipt-cut-divider';
+    cutDivider.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; margin: 3px 0; color: #64748b; font-size: 9.5px; font-weight: 700; gap: 8px;">
+        <span style="border-bottom: 1.5px dashed #94a3b8; flex: 1;"></span>
+        <span style="display: inline-flex; align-items: center; gap: 4px; background: #fff; padding: 0 6px;">
+          <i class="fa-solid fa-scissors"></i> قص هنا للاحتفاظ بنسخة وتسليم نسخة الولي / DÉCOUPER ICI
+        </span>
+        <span style="border-bottom: 1.5px dashed #94a3b8; flex: 1;"></span>
+      </div>
+    `;
+
+    dualContainer.innerHTML = '';
+    dualContainer.appendChild(copyAdmin);
+    dualContainer.appendChild(cutDivider);
+    dualContainer.appendChild(copyClient);
+
+    document.body.classList.remove('print-mode-a5');
+    document.body.classList.add('print-mode-a4-dual');
+
+    setTimeout(() => {
+      window.print();
+    }, 100);
+  }
+
+  printReceiptA5Single() {
+    document.body.classList.remove('print-mode-a4-dual');
+    document.body.classList.add('print-mode-a5');
+    setTimeout(() => {
+      window.print();
+    }, 100);
   }
 
   // -------------------------------------------------------------
