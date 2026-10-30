@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const DB = require('./database');
+const GoogleSheetsSync = require('./google_sheets_sync');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -15,6 +16,30 @@ app.use('/api', (req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
+  next();
+});
+
+// Auto-sync middleware: triggers auto cloud export on successful mutations of relevant school entities
+app.use((req, res, next) => {
+  const method = req.method.toUpperCase();
+  if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+    const p = req.path;
+    const isTarget =
+      p.startsWith('/api/teachers') ||
+      p.startsWith('/api/groups') ||
+      p.startsWith('/api/students') ||
+      p.startsWith('/api/enrollments') ||
+      p.startsWith('/api/room-schedules') ||
+      p.startsWith('/api/schedules');
+
+    if (isTarget && !p.startsWith('/api/sync') && !p.includes('/payout') && !p.includes('/earnings')) {
+      res.on('finish', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          GoogleSheetsSync.scheduleAutoSync();
+        }
+      });
+    }
+  }
   next();
 });
 
@@ -6577,6 +6602,320 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('message', (msg) => {
   if (msg === 'shutdown') gracefulShutdown('IPC');
+});
+
+// ==========================================================================
+// GOOGLE SHEETS ATTENDANCE SYNC & TEACHER MOBILE CREDENTIALS
+// ==========================================================================
+
+app.get('/api/sync/sheets/config', (req, res) => {
+  try {
+    const url = GoogleSheetsSync.getScriptUrl();
+    const enabled = GoogleSheetsSync.isSyncEnabled();
+    const schoolRow = DB.queryOne("SELECT value FROM settings WHERE key = 'school_name'");
+    const schoolName = (schoolRow && schoolRow.value) ? schoolRow.value : 'مؤسسة EDUMIND Privée';
+    res.json({ success: true, url, enabled, schoolName });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sync/sheets/config', (req, res) => {
+  try {
+    const { url, enabled } = req.body;
+    let saved = url;
+    if (url !== undefined) {
+      saved = GoogleSheetsSync.setScriptUrl(url);
+    }
+    if (enabled !== undefined) {
+      GoogleSheetsSync.setSyncEnabled(!!enabled);
+    }
+    const currentEnabled = GoogleSheetsSync.isSyncEnabled();
+    res.json({ success: true, url: saved || GoogleSheetsSync.getScriptUrl(), enabled: currentEnabled });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sync/sheets/test', async (req, res) => {
+  try {
+    const { url } = req.body;
+    const testResult = await GoogleSheetsSync.testConnection(url);
+    res.json(testResult);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sync/sheets/export', async (req, res) => {
+  try {
+    const result = await GoogleSheetsSync.exportDataToSheets();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sync/sheets/import-attendances', async (req, res) => {
+  try {
+    const result = await GoogleSheetsSync.importAttendancesFromSheets();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sync/sheets/full-sync', async (req, res) => {
+  try {
+    const exportResult = await GoogleSheetsSync.exportDataToSheets();
+    const importResult = await GoogleSheetsSync.importAttendancesFromSheets();
+    res.json({
+      success: true,
+      export: exportResult,
+      import: importResult,
+      message: 'Synchronisation globale avec Google Sheets terminée avec succès.'
+    });
+  } catch (err) {
+    const errorMsg = (err.message && err.message.includes('fetch failed'))
+      ? 'Impossible de joindre Google Sheets (Vérifiez votre connexion Internet)'
+      : (err.message || 'Erreur lors de la synchronisation');
+    res.status(500).json({ success: false, error: errorMsg });
+  }
+});
+
+// Periodic background polling: auto-import any new attendances from mobile phones every 2 minutes
+setInterval(async () => {
+  try {
+    if (!GoogleSheetsSync.isSyncEnabled() || !GoogleSheetsSync.getScriptUrl()) {
+      return;
+    }
+    const res = await GoogleSheetsSync.importAttendancesFromSheets();
+    if (res && res.count > 0) {
+      console.log(`📥 [GoogleSheetsSync] ${res.count} absence(s) importée(s) automatiquement depuis les téléphones des enseignants.`);
+    }
+  } catch (_) {
+    // Non-blocking background sync
+  }
+}, 2 * 60 * 1000);
+
+app.post('/api/teachers/:id/mobile-credentials', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { phone, password, mobile_pin } = req.body;
+    const result = await GoogleSheetsSync.updateTeacherCredentials(id, { phone, password, mobile_pin });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ======================================================================
+// DISCIPLINE & ABSENCES (Registre d'absences, retards & billets d'entrée)
+// ======================================================================
+
+// 1. Get List of Absences with Filters
+app.get('/api/discipline-absences', (req, res) => {
+  try {
+    const { date, start_date, end_date, group_id, period_type, is_justified, search, limit = 500 } = req.query;
+
+    let query = `
+      SELECT da.*,
+             s.matricule, s.first_name, s.last_name, s.gender, s.photo_url,
+             s.phone as student_phone, s.parent_name, s.parent_phone,
+             g.name as group_name, lvl.name as level_name
+      FROM discipline_absences da
+      JOIN students s ON da.student_id = s.id
+      LEFT JOIN groups g ON da.group_id = g.id
+      LEFT JOIN levels lvl ON s.level_id = lvl.id
+      WHERE 1=1
+    `;
+    const params = [];
+
+    if (date) {
+      query += ` AND (da.absence_date = ? OR da.absence_date LIKE ? OR substr(da.absence_date, 1, 10) = ?)`;
+      params.push(date, `${date}%`, date);
+    } else {
+      if (start_date) {
+        query += ` AND (da.absence_date >= ? OR substr(da.absence_date, 1, 10) >= ?)`;
+        params.push(start_date, start_date);
+      }
+      if (end_date) {
+        query += ` AND (da.absence_date <= ? OR substr(da.absence_date, 1, 10) <= ?)`;
+        params.push(end_date, end_date);
+      }
+    }
+
+    if (group_id && group_id !== 'all') {
+      query += ` AND da.group_id = ?`;
+      params.push(group_id);
+    }
+
+    if (period_type && period_type !== 'all') {
+      if (period_type === 'absence') {
+        query += ` AND da.period_type IN ('absence', 'absent')`;
+      } else {
+        query += ` AND da.period_type = ?`;
+        params.push(period_type);
+      }
+    }
+
+    if (is_justified !== undefined && is_justified !== 'all') {
+      query += ` AND da.is_justified = ?`;
+      params.push(is_justified == '1' ? 1 : 0);
+    }
+
+    if (search && search.trim()) {
+      const term = `%${search.trim()}%`;
+      query += ` AND (s.first_name LIKE ? OR s.last_name LIKE ? OR s.matricule LIKE ? OR (s.first_name || ' ' || s.last_name) LIKE ?)`;
+      params.push(term, term, term, term);
+    }
+
+    query += ` ORDER BY da.absence_date DESC, da.id DESC LIMIT ?`;
+    params.push(parseInt(limit, 10) || 500);
+
+    const absences = DB.queryAll(query, params);
+    res.json({ success: true, absences, count: absences.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 2. Absence Statistics (Today & This Month)
+app.get('/api/discipline-absences/stats', (req, res) => {
+  try {
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const monthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+
+    const todayTotal = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date = ? OR substr(absence_date, 1, 10) = ?)`,
+      [today, today]
+    ).count;
+
+    const todayAbsences = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date = ? OR substr(absence_date, 1, 10) = ?) AND period_type IN ('absence', 'absent')`,
+      [today, today]
+    ).count;
+
+    const todayLates = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date = ? OR substr(absence_date, 1, 10) = ?) AND period_type = 'late'`,
+      [today, today]
+    ).count;
+
+    const todayUnjustified = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date = ? OR substr(absence_date, 1, 10) = ?) AND is_justified = 0`,
+      [today, today]
+    ).count;
+
+    const monthTotal = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date >= ? OR substr(absence_date, 1, 10) >= ?)`,
+      [monthStart, monthStart]
+    ).count;
+
+    const monthUnjustified = DB.queryOne(
+      `SELECT COUNT(*) as count FROM discipline_absences WHERE (absence_date >= ? OR substr(absence_date, 1, 10) >= ?) AND is_justified = 0`,
+      [monthStart, monthStart]
+    ).count;
+
+    res.json({
+      success: true,
+      stats: {
+        todayTotal,
+        todayAbsences,
+        todayLates,
+        todayUnjustified,
+        monthTotal,
+        monthUnjustified,
+        today
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 3. Create Manual Absence / Retard
+app.post('/api/discipline-absences', (req, res) => {
+  try {
+    const { student_id, group_id, absence_date, time_slot, period_type = 'absence', subject_name, is_justified = 0, justification_reason, notes } = req.body;
+
+    if (!student_id || !absence_date) {
+      return res.status(400).json({ success: false, error: 'student_id et absence_date requis' });
+    }
+
+    const result = DB.run(`
+      INSERT INTO discipline_absences (
+        student_id, group_id, absence_date, time_slot, period_type,
+        subject_name, is_justified, justification_reason,
+        justified_at, notes, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `, [
+      student_id,
+      group_id || null,
+      absence_date,
+      time_slot || '08:00 - 09:00',
+      period_type,
+      subject_name || '',
+      is_justified ? 1 : 0,
+      justification_reason || null,
+      is_justified ? new Date().toISOString() : null,
+      notes || null
+    ]);
+
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 4. Justify an Absence
+app.put('/api/discipline-absences/:id/justify', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { justification_reason, issue_billet = false, notes } = req.body;
+
+    const existing = DB.queryOne(`SELECT * FROM discipline_absences WHERE id = ?`, [id]);
+    if (!existing) {
+      return res.status(404).json({ success: false, error: 'Enregistrement non trouvé' });
+    }
+
+    const billetNumber = issue_billet ? `BIL-${new Date().getFullYear()}-${String(id).padStart(4, '0')}` : existing.billet_number;
+    const billetIssuedAt = issue_billet ? new Date().toISOString() : existing.billet_issued_at;
+
+    DB.run(`
+      UPDATE discipline_absences
+      SET is_justified = 1,
+          justification_reason = ?,
+          justified_at = CURRENT_TIMESTAMP,
+          billet_issued = ?,
+          billet_number = ?,
+          billet_issued_at = ?,
+          notes = COALESCE(?, notes)
+      WHERE id = ?
+    `, [
+      justification_reason || 'تبرير إداري',
+      issue_billet ? 1 : 0,
+      billetNumber,
+      billetIssuedAt,
+      notes || null,
+      id
+    ]);
+
+    res.json({ success: true, id, billetNumber });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 5. Delete Absence
+app.delete('/api/discipline-absences/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    DB.run(`DELETE FROM discipline_absences WHERE id = ?`, [id]);
+    res.json({ success: true, id });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // Internal shutdown endpoint for Electron Desktop
